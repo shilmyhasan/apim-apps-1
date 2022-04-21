@@ -4,7 +4,7 @@
     <groupId>org.wso2.carbon.apimgt.ui</groupId>
     <artifactId>apim.ui.apps</artifactId>
     <packaging>pom</packaging>
-    <version>9.0.311</version>
+    <version>9.0.311.1-SNAPSHOT</version>
     <name>WSO2 API Manager UI - Parent</name>
     <url>https://wso2.org</url>
 
@@ -141,5 +141,5 @@
         <carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
         <!-- APIM UI Component Version -->
         <carbon.apimgt.ui.version>${project.version}</carbon.apimgt.ui.version>
-    </properties>
+    <project.scm.id>wso2-scm-server</project.scm.id></properties>
 </project>
