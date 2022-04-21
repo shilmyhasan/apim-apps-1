@@ -160,9 +160,10 @@ function SourceDownload(props) {
                 className={classes.iconStyle}
             >
                 <MUILink
-                    href='#'
+                    to='#'
                     onClick={() => downloadSwagger(api.id, selectedEndpoint.environmentName)}
                     className={classes.downloadLink}
+                    id='swagger-download-btn'
                 >
                     <CloudDownloadRounded className={classes.buttonIcon} />
                     <FormattedMessage

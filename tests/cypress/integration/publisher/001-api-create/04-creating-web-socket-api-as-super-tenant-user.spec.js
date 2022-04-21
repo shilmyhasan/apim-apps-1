@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  * Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License.
  * You may obtain a copy of the License at
@@ -54,7 +54,7 @@ describe("Create websocket api - super tenant", () => {
         cy.get('#itest-api-name-version').contains(`v${random_number}`);
 
         // Test is done. Now delete the api
-        cy.get(`#itest-id-deleteapi-icon-button`).click();
+        cy.get(`#itest-id-deleteapi-icon-button`).click({force: true});
         cy.get(`#itest-id-deleteconf`).click();
     }
     it("Create websocket API from url", () => {
