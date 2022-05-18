@@ -90,6 +90,8 @@ sudo apt-get update -y
 sleep 300
 sudo killall apt apt-get dpkg
 sudo dpkg --configure -a
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+chmod 644 /usr/share/keyrings/nodesource.gpg
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 npm -v
 if [[ $? -ne 0 ]]
