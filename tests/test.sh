@@ -5,6 +5,7 @@ set -o xtrace
 
 HOME=`pwd`
 TEST_SCRIPT=test.sh
+MVNSTATE=1
 
 function usage()
 {
@@ -152,6 +153,7 @@ node ./upload_email
 ######
 
 mvn clean install
+MVNSTATE=$?
 
 echo `pwd`
 #=============== Copy Surefire Reports ===========================================
