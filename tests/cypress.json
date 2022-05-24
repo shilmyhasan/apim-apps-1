@@ -1,6 +1,23 @@
 {
     "chromeWebSecurity": false,
-    "pageLoadTimeout": 11195,
-    "defaultCommandTimeout": 10456,
+    "pageLoadTimeout": 100000,
+    "defaultCommandTimeout": 10000,
+    "baseUrl": "https://localhost:9443",
+    "screenshotsFolder": "cypress/screenshots",
+    "screenshotOnRunFailure":true,
+    "experimentalInteractiveRunEvents": true,
+    "reporter": "cypress-multi-reporters",
+    "reporterOptions": {
+      "inlineAssets": true,
+      "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+      "mochaJunitReporterReporterOptions": {
+        "mochaFile": "cypress/reports/junit/results-[hash].xml"
+      },
+      "cypressMochawesomeReporterReporterOptions": {
+        "charts": true,
+        "reportPageTitle": "custom-title"
+      }
+    },
+    "video": false,
     "scrollBehavior" : "nearest"
 }
