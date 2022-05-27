@@ -91,7 +91,7 @@ function renderInput(inputProps) {
                     classes={{ root: classNames(classes.inputRoot, 'api-search-textbox') }}
                     InputProps={{
                         inputRef: ref,
-                        className: classes.input,
+                        className: classNames(classes.input, 'search-utils-input-area'),
                         classes: { focused: classes.inputFocused },
                         startAdornment: (
                             <InputAdornment position='start'>

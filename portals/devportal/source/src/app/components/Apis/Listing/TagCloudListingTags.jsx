@@ -56,7 +56,8 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 200,
         paddingLeft: theme.spacing(2),
         background: theme.custom.tagCloud.leftMenu.titleBackground,
-        color: theme.palette.getContrastText(theme.custom.tagCloud.leftMenu.titleBackground),
+        color: theme.custom.tagCloud.leftMenu.sliderColor
+        || theme.palette.getContrastText(theme.custom.tagCloud.leftMenu.titleBackground),
         height: theme.custom.infoBar.height,
         alignItems: 'center',
         display: 'flex',
@@ -112,7 +113,12 @@ function TagCloudListingTags(props) {
                     <FormattedMessage defaultMessage='API Groups' id='Apis.Listing.TagCloudListingTags.title' />
                 </Typography>
             )}
-            <List component='nav' aria-label='main mailbox folders' className={classNames({ [classes.mainPageList]: mainPage })}>
+            <List
+                component='nav'
+                aria-label='main mailbox folders'
+                className={classNames({ [classes.mainPageAllApis]: mainPage },
+                    'tag-cloud-listing-wrapper')}
+            >
                 {Object.keys(apisTagCloudGroup).map((keyInner) => {
                     return (
                         <ApiTagThumb

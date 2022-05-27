@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /*
  *  Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +18,7 @@
  */
 
 import React, { useReducer } from 'react';
+import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import AuthManager from 'AppData/AuthManager';
 import Settings from 'Settings';
@@ -26,12 +28,12 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import ChangePasswordBase from './ChangePasswordBase';
-import PageNotFound from 'AppComponents/Base/Errors/PageNotFound'
+import PageNotFound from 'AppComponents/Base/Errors/PageNotFound';
 import API from 'AppData/api';
 import Alert from 'AppComponents/Shared/Alert';
 import Progress from 'AppComponents/Shared/Progress';
 import { useSettingsContext } from 'AppComponents/Shared/SettingsContext';
+import ChangePasswordBase from './ChangePasswordBase';
 
 const useStyles = makeStyles((theme) => ({
     mandatoryStarText: {
@@ -66,7 +68,7 @@ const ChangePassword = () => {
             passwordPolicyPattern,
             passwordPolicyMinLength,
             passwordPolicyMaxLength,
-        }
+        },
     } = useSettingsContext();
     const classes = useStyles();
     const username = AuthManager.getUser().name;
@@ -186,18 +188,18 @@ const ChangePassword = () => {
                 <FormattedMessage
                     id='Change.Password.password.mismatch'
                     defaultMessage={'Password doesn\'t match'}
-                />
+                />,
             );
         } else {
             const restApi = new API();
             return restApi
                 .changePassword(currentPassword, newPassword)
-                .then((res) => {
+                .then(() => {
                     Alert.success(
                         <FormattedMessage
                             id='Change.Password.password.changed.success'
                             defaultMessage='User password changed successfully. Please use the new password on next sign in'
-                        />
+                        />,
                     );
                     window.history.back();
                 })
@@ -209,7 +211,7 @@ const ChangePassword = () => {
                                 <FormattedMessage
                                     id='Change.Password.password.change.disabled'
                                     defaultMessage='Password change disabled'
-                                />
+                                />,
                             );
                             break;
                         case 901451:
@@ -217,7 +219,7 @@ const ChangePassword = () => {
                                 <FormattedMessage
                                     id='Change.Password.current.password.incorrect'
                                     defaultMessage='Current password is incorrect'
-                                />
+                                />,
                             );
                             break;
                         case 901452:
@@ -225,9 +227,10 @@ const ChangePassword = () => {
                                 <FormattedMessage
                                     id='Change.Password.password.pattern.invalid'
                                     defaultMessage='Invalid password pattern'
-                                />
+                                />,
                             );
                             break;
+                        default:
                     }
                 });
         }
@@ -280,10 +283,10 @@ const ChangePassword = () => {
     // otherwise, display page not found.
     if (IsPasswordChangeEnabled) {
         return (
-            <ChangePasswordBase title={title}>
+            <ChangePasswordBase title={title} className='change-password-form-wrapper'>
                 <Box py={2} display='flex' justifyContent='center'>
                     <Grid item xs={10} md={9}>
-                        <Box component='div' m={2}>
+                        <Box component='div' m={2} className='change-password-form'>
                             <Grid
                                 container
                                 mt={2}
@@ -294,7 +297,7 @@ const ChangePassword = () => {
                             >
                                 <TextField
                                     classes={{
-                                        root: classes.mandatoryStarText,
+                                        root: classNames(classes.mandatoryStarText, 'change-password-current'),
                                     }}
                                     required
                                     id='current-password'
@@ -303,16 +306,26 @@ const ChangePassword = () => {
                                     name='currentPassword'
                                     value={currentPassword}
                                     onChange={handleChange}
-                                    label={<FormattedMessage id='Settings.ChangePasswordForm.current.password' defaultMessage='Current Password' />}
+                                    label={(
+                                        <FormattedMessage
+                                            id='Settings.ChangePasswordForm.current.password'
+                                            defaultMessage='Current Password'
+                                        />
+                                    )}
                                     fullWidth
                                     error={validateCurrentPasswordChange()}
-                                    helperText={<FormattedMessage id='Settings.ChangePasswordForm.enter.current.password' defaultMessage='Enter Current Password' />}
+                                    helperText={(
+                                        <FormattedMessage
+                                            id='Settings.ChangePasswordForm.enter.current.password'
+                                            defaultMessage='Enter Current Password'
+                                        />
+                                    )}
                                     variant='outlined'
                                     type='password'
                                 />
                                 <TextField
                                     classes={{
-                                        root: classes.mandatoryStarText,
+                                        root: classNames(classes.mandatoryStarText, 'change-password-new'),
                                     }}
                                     margin='dense'
                                     id='new-password'
@@ -326,27 +339,40 @@ const ChangePassword = () => {
                                     fullWidth
                                     error={validatePasswordChange()}
                                     helperText={validatePasswordChange()
-                                        || <FormattedMessage id='Settings.ChangePasswordForm.enter.new.password' defaultMessage='Enter a New Password' />}
+                                        || (
+                                            <FormattedMessage
+                                                id='Settings.ChangePasswordForm.enter.new.password'
+                                                defaultMessage='Enter a New Password'
+                                            />
+                                        )}
                                     variant='outlined'
                                     type='password'
                                 />
                                 <TextField
                                     classes={{
-                                        root: classes.mandatoryStarText,
+                                        root: classNames(classes.mandatoryStarText, 'change-password-new-repeat'),
                                     }}
                                     margin='dense'
                                     id='repeated-new-password'
                                     name='repeatedNewPassword'
                                     value={repeatedNewPassword}
                                     onChange={handleChange}
-                                    label={
-                                        <FormattedMessage id='Settings.ChangePasswordForm.confirm.new.password' defaultMessage='Confirm new Password' />
-                                    }
+                                    label={(
+                                        <FormattedMessage
+                                            id='Settings.ChangePasswordForm.confirm.new.password'
+                                            defaultMessage='Confirm new Password'
+                                        />
+                                    )}
                                     required
                                     fullWidth
                                     error={validateRepeatedPassword()}
                                     helperText={validateRepeatedPassword()
-                                        || <FormattedMessage id='Settings.ChangePasswordForm.confirmationOf.new.password' defaultMessage='Confirmation of new Password' />}
+                                        || (
+                                            <FormattedMessage
+                                                id='Settings.ChangePasswordForm.confirmationOf.new.password'
+                                                defaultMessage='Confirmation of new Password'
+                                            />
+                                        )}
                                     variant='outlined'
                                     type='password'
                                 />
@@ -357,7 +383,7 @@ const ChangePassword = () => {
                                             color='primary'
                                             variant='contained'
                                             onClick={handleSave}
-                                            className={classes.passwordChangeForm}
+                                            className={classNames(classes.passwordChangeForm, 'change-password-save')}
                                         >
                                             <FormattedMessage
                                                 id='Settings.ChangePasswordForm.Save.Button.text'
@@ -368,6 +394,7 @@ const ChangePassword = () => {
                                     <Box mx={1}>
                                         <Button
                                             onClick={() => window.history.back()}
+                                            className='change-password-cancel'
                                         >
                                             <FormattedMessage
                                                 id='Settings.ChangePasswordForm.Cancel.Button.text'
@@ -385,7 +412,6 @@ const ChangePassword = () => {
     } else {
         return <PageNotFound />;
     }
-
 };
 
 export default ChangePassword;

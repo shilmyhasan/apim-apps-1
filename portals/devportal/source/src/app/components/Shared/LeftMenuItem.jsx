@@ -95,14 +95,14 @@ const styles = (theme) => ({
     leftLInkText_NoTextWhenSmall: {
         [theme.breakpoints.down('sm')]: {
             display: 'none !important',
-        }
+        },
     },
     submenu: {
         paddingLeft: 12,
         [theme.breakpoints.down('sm')]: {
             paddingLeft: 0,
             color: theme.palette.grey[500],
-        }
+        },
     },
 });
 /**
@@ -122,6 +122,7 @@ function LeftMenuItem(props) {
     const { iconSize } = leftMenu;
     const ditectCurrentMenu = (location = null) => {
         if (!location) {
+            // eslint-disable-next-line no-param-reassign
             location = window.location;
         }
         const { pathname } = location;
@@ -133,8 +134,6 @@ function LeftMenuItem(props) {
         } else {
             setSelected(false);
         }
-
-
     };
     useEffect(() => {
         ditectCurrentMenu();
@@ -149,87 +148,91 @@ function LeftMenuItem(props) {
         activeBackground = leftMenu.leftMenuActiveSubmenu;
     }
     return (
-        <BootstrapTooltip title={props.text} placement="right">
+        <BootstrapTooltip title={props.text} placement='right'>
             <div>
-            <Link
-                className={classNames(
-                    classes.leftLInk,
+                <Link
+                    className={classNames(
+                        classes.leftLInk,
+                        {
+                            [classes.leftLink_IconLeft]: leftMenu === 'icon left',
+                            [classes.submenu]: submenu,
+                            // eslint-disable-next-line quote-props
+                            'selected': selected,
+                        },
+                        'leftLInk',
+                    )}
+                    to={to}
+                    style={{ backgroundColor: activeBackground }}
+                    title={text}
+                    id={id}
+                >
                     {
-                        [classes.leftLink_IconLeft]: leftMenu === 'icon left',
-                        [classes.submenu]: submenu,
-                        'selected': selected,
-                    },
-                    'leftLInk',
-                )}
-                to={to}
-                style={{ backgroundColor: activeBackground }}
-                title={text}
-                id={id}
-            >
-                {
                     // If the icon pro ( which is coming from the React Material library )
                     // is coming we add css class and render.
                     // If leftMenu='no icon' at the theme object we hide the icon. Also we add static classes to
                     // allow customers theme
                     // the product without compiling.
-                    Icon ? (
-                        React.cloneElement(Icon, {
-                            className: classNames(
-                                classes.leftLink_Icon,
-                                {
-                                    [classes.noIcon]: leftMenu.style === 'no icon',
-                                    [classes.submenu]: submenu,
-                                },
-                                'leftLink_Icon',
-                            ),
-                        })
-                    ) : (
+                        Icon ? (
+                            <span className={`${route.replace(/[^a-zA-Z ]/g, '-')}-left-menu-icon`}>
+                                {React.cloneElement(Icon, {
+                                    className: classNames(
+                                        classes.leftLink_Icon,
+                                        {
+                                            [classes.noIcon]: leftMenu.style === 'no icon',
+                                            [classes.submenu]: submenu,
+                                        },
+                                        'leftLink_Icon',
+                                    ),
+                                })}
+
+                            </span>
+                        ) : (
                             // We can also add custom icons
-                            <CustomIcon
-                                strokeColor={submenu ? '#cccccc' : strokeColor}
-                                width={submenu ? iconSize - 10 : iconSize}
-                                height={submenu ? iconSize - 10 : iconSize}
-                                icon={props.iconText}
-                                aria-label={ text + ' icon'}
-                                className={classNames(
-                                    classes.leftLInk,
-                                    {
-                                        [classes.noIcon]: leftMenu.style === 'no icon',
-                                    },
-                                    'leftLink_Icon',
-                                )}
-                            />
-
-                        )}
-                {open && (
-                    <Typography
-                        className={classNames(
-                            classes.leftLInkText,
-                            {
-                                [classes.leftLInkText_IconLeft]: leftMenu.style === 'icon left',
-                                [classes.leftLInkText_NoText]: leftMenu.style === 'no text',
-                            },
-                            classes.leftLInkText_NoTextWhenSmall,
-                            'leftLInkText',
-                        )}
-                    >
-                        {props.text}
-                    </Typography>
-                )}
-                {!open && (
-                    <Typography
-                        className={classNames(
-                            {
-                                [classes.leftLInkText_IconLeft]: leftMenu.style === 'icon left',
-                            },
-                            classes.leftLInkText_NoTextWhenSmall,
-                            'leftLInkText',
-                        )}
-                    />
-                )}
-
-
-            </Link>
+                            <span className={`${route.replace(/[^a-zA-Z ]/g, '-')}-left-menu-icon`}>
+                                <CustomIcon
+                                    strokeColor={submenu ? '#cccccc' : strokeColor}
+                                    width={submenu ? iconSize - 10 : iconSize}
+                                    height={submenu ? iconSize - 10 : iconSize}
+                                    icon={props.iconText}
+                                    aria-label={text + ' icon'}
+                                    className={classNames(
+                                        classes.leftLInk,
+                                        {
+                                            [classes.noIcon]: leftMenu.style === 'no icon',
+                                        },
+                                        'leftLink_Icon',
+                                    )}
+                                />
+                            </span>
+                        )
+                    }
+                    {open && (
+                        <Typography
+                            className={classNames(
+                                classes.leftLInkText,
+                                {
+                                    [classes.leftLInkText_IconLeft]: leftMenu.style === 'icon left',
+                                    [classes.leftLInkText_NoText]: leftMenu.style === 'no text',
+                                },
+                                classes.leftLInkText_NoTextWhenSmall,
+                                'leftLInkText',
+                            )}
+                        >
+                            {props.text}
+                        </Typography>
+                    )}
+                    {!open && (
+                        <Typography
+                            className={classNames(
+                                {
+                                    [classes.leftLInkText_IconLeft]: leftMenu.style === 'icon left',
+                                },
+                                classes.leftLInkText_NoTextWhenSmall,
+                                'leftLInkText',
+                            )}
+                        />
+                    )}
+                </Link>
             </div>
         </BootstrapTooltip>
     );

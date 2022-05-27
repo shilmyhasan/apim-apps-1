@@ -129,7 +129,8 @@ const styles = (theme) => ({
     sliderButton: {
         fontWeight: 200,
         background: theme.custom.tagCloud.leftMenu.sliderBackground,
-        color: theme.palette.getContrastText(theme.custom.tagCloud.leftMenu.sliderBackground),
+        color: theme.custom.tagCloud.leftMenu.sliderColor
+            || theme.palette.getContrastText(theme.custom.tagCloud.leftMenu.titleBackground),
         height: theme.custom.infoBar.height,
         alignItems: 'center',
         display: 'flex',

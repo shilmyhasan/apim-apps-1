@@ -56,7 +56,7 @@ function GlobalNavBar(props) {
                         <ListItem component='div' classes={{ root: classes.listItemRoot }}>
                             <ListItemIcon classes={{
                                 root: classNames({ [classes.smallIcon]: !drawerView },
-                                    'heder-menu-icon-home', 'header-menu-icon'),
+                                    'header-menu-icon-home', 'header-menu-icon'),
                             }}
                             >
                                 <Icon
@@ -76,7 +76,7 @@ function GlobalNavBar(props) {
                                     primary: classNames({
                                         [classes.selectedText]: selected === 'home',
                                         [classes.listText]: selected !== 'home',
-                                    }),
+                                    }, 'header-menu-text-home'),
                                 }}
                                 primary={intl.formatMessage({
                                     id: 'Base.Header.GlobalNavbar.menu.home',
@@ -99,7 +99,7 @@ function GlobalNavBar(props) {
                 <ListItem component='div' classes={{ root: classes.listItemRoot }}>
                     <ListItemIcon classes={{
                         root: classNames({ [classes.smallIcon]: !drawerView },
-                            'heder-menu-icon-apis', 'header-menu-icon'),
+                            'header-menu-icon-apis', 'header-menu-icon'),
                     }}
                     >
                         <CustomIcon
@@ -116,7 +116,7 @@ function GlobalNavBar(props) {
                             primary: classNames({
                                 [classes.selectedText]: selected === 'apis',
                                 [classes.listText]: selected !== 'apis',
-                            }),
+                            }, 'header-menu-text-apis'),
                         }}
                         primary={intl.formatMessage({
                             id: 'Base.Header.GlobalNavbar.menu.apis',
@@ -139,7 +139,7 @@ function GlobalNavBar(props) {
                 <ListItem component='div' classes={{ root: classes.listItemRoot }}>
                     <ListItemIcon classes={{
                         root: classNames({ [classes.smallIcon]: !drawerView },
-                            'heder-menu-icon-applications', 'header-menu-icon'),
+                            'header-menu-icon-applications', 'header-menu-icon'),
                     }}
                     >
                         <CustomIcon
@@ -156,7 +156,7 @@ function GlobalNavBar(props) {
                             primary: classNames({
                                 [classes.selectedText]: selected === 'applications',
                                 [classes.listText]: selected !== 'applications',
-                            }),
+                            }, 'header-menu-text-applications'),
                         }}
                         primary={intl.formatMessage({
                             id: 'Base.Header.GlobalNavbar.menu.applications',

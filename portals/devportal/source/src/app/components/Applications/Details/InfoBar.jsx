@@ -375,6 +375,7 @@ class InfoBar extends React.Component {
                                         style={{ padding: '4px' }}
                                         color='default'
                                         classes={{ label: classes.iconButton }}
+                                        className='application-info-bar-edit-button'
                                         aria-label={(
                                             <FormattedMessage
                                                 id='Applications.Details.InfoBar.edit'
@@ -400,6 +401,7 @@ class InfoBar extends React.Component {
                                     disabled={AuthManager.getUser().name !== applicationOwner}
                                     color='default'
                                     classes={{ label: classes.iconButton }}
+                                    className='application-info-bar-delete-button'
                                     aria-label={(
                                         <FormattedMessage
                                             id='Applications.Details.InfoBar.delete'

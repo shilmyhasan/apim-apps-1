@@ -19,6 +19,7 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import { Link, withRouter } from 'react-router-dom';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import AppBar from '@material-ui/core/AppBar';
@@ -338,6 +339,7 @@ class Layout extends React.Component {
                 },
                 appBar: {
                     showSearch,
+                    logoHeight,
                 },
                 footer: {
                     active: footerActive, text: footerText, footerHTML, dangerMode,
@@ -446,7 +448,7 @@ class Layout extends React.Component {
                                         <Icon className={classes.menuIcon}>menu</Icon>
                                     </IconButton>
                                 </Hidden>
-                                <Link to='/' id='logoLink' aria-label='Go to home page'>
+                                <Link to='/' id='logoLink' aria-label='Go to home page' style={{ height: logoHeight || 'auto' }}>
                                     <img
                                         alt={(
                                             <FormattedMessage
@@ -576,7 +578,9 @@ class Layout extends React.Component {
                                                                 <MenuList>
                                                                     {this.getPasswordChangeEnabled()
                                                                         ? (
-                                                                            <MenuItem className={classes.logoutLink}>
+                                                                            <MenuItem className={classNames(classes.logoutLink,
+                                                                                'user-menu-change-password-link')}
+                                                                            >
                                                                                 <Link
                                                                                     to='/settings/change-password/'
                                                                                     onClick={this.handleCloseUserMenu}
@@ -591,7 +595,7 @@ class Layout extends React.Component {
                                                                         : null}
                                                                     <MenuItem
                                                                         onClick={this.doOIDCLogout}
-                                                                        className={classes.logoutLink}
+                                                                        className={classNames(classes.logoutLink, 'user-menu-logout-link')}
                                                                         id='logout-link'
                                                                     >
                                                                         <FormattedMessage
@@ -623,7 +627,7 @@ class Layout extends React.Component {
                             </Toolbar>
                         </AppBar>
                         <main>
-                            <div className={classes.contentWrapper}>{children}</div>
+                            <div className={classNames(classes.contentWrapper, 'main-content-wrapper')}>{children}</div>
                         </main>
                         {footerActive && <div className={classes.push} />}
                     </div>
@@ -632,7 +636,7 @@ class Layout extends React.Component {
                             {footerHTML && footerHTML !== '' ? (
                                 <>
                                     {!dangerMode && (<ReactSafeHtml html={footerHTML} />)}
-                                    {dangerMode && (<div contentEditable='true' dangerouslySetInnerHTML={{ __html: footerHTML }} />)}
+                                    {dangerMode && (<div dangerouslySetInnerHTML={{ __html: footerHTML }} />)}
                                 </>
                             ) : (
                                 <Typography noWrap>
