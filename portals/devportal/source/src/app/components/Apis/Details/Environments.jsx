@@ -18,6 +18,7 @@
  */
 import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
@@ -206,7 +207,7 @@ function Environments(props) {
                                 </>
                             )}
                             <Box display='flex' flexDirection='column' width='100%'>
-                                <Box py={0.5} display='flex' alignItems='center' width='100%' flexDirection='row'>
+                                <Box py={0.5} display='flex' alignItems='center' width='100%' flexDirection='row' position='relative'>
                                     <Tooltip
                                         title={(
                                             <Typography color='inherit'>
@@ -233,7 +234,7 @@ function Environments(props) {
                                             || selectedEndpoint.URLs.ws}
                                         />
                                     </Tooltip>
-                                    <Avatar className={classes.avatar} sizes={30}>
+                                    <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
                                         <Tooltip
                                             title={
                                                 urlCopied
@@ -290,7 +291,7 @@ function Environments(props) {
                                                     || selectedEndpoint.URLs.ws}
                                                 />
                                             </Tooltip>
-                                            <Avatar className={classes.avatar} sizes={30}>
+                                            <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
                                                 <Tooltip
                                                     title={urlCopied
                                                         ? intl.formatMessage({
@@ -362,7 +363,7 @@ function Environments(props) {
                                             value={advertiseInfo.apiExternalProductionEndpoint}
                                         />
                                     </Tooltip>
-                                    <Avatar className={classes.avatar} sizes={30}>
+                                    <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
                                         <Tooltip
                                             title={
                                                 urlCopied
@@ -414,7 +415,7 @@ function Environments(props) {
                                                         value={advertiseInfo.apiExternalSandboxEndpoint}
                                                     />
                                                 </Tooltip>
-                                                <Avatar className={classes.avatar} sizes={30}>
+                                                <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
                                                     <Tooltip
                                                         title={urlCopied
                                                             ? intl.formatMessage({

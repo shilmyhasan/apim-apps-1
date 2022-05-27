@@ -212,7 +212,7 @@ function Overview(props) {
             <div className={classes.root}>
                 <Table className={classes.table}>
                     <TableBody>
-                        <TableRow>
+                        <TableRow className='app-description-row'>
                             <TableCell component='th' scope='row' className={classes.leftCol}>
                                 <div className={classes.iconAligner}>
                                     <Icon className={classes.iconEven}>description</Icon>
@@ -232,7 +232,7 @@ function Overview(props) {
                         </TableRow>
                         {tierDescription
                             && (
-                                <TableRow>
+                                <TableRow className='app-business-plan-row'>
                                     <TableCell component='th' scope='row' className={classes.leftCol}>
                                         <div className={classes.iconAligner}>
                                             <Icon className={classes.iconOdd}>settings_input_component</Icon>
@@ -256,7 +256,7 @@ function Overview(props) {
                                         )}
                                 </TableRow>
                             )}
-                        <TableRow>
+                        <TableRow className='app-workflow-status-row'>
                             <TableCell component='th' scope='row' className={classes.leftCol}>
                                 <div className={classes.iconAligner}>
                                     <Icon className={classes.iconOdd}>assignment_turned_in</Icon>
@@ -274,7 +274,7 @@ function Overview(props) {
                                 {application.status}
                             </TableCell>
                         </TableRow>
-                        <TableRow>
+                        <TableRow className='app-owner-row'>
                             <TableCell component='th' scope='row' className={classes.leftCol}>
                                 <div className={classes.iconAligner}>
                                     <Icon className={classes.iconEven}>account_box</Icon>
@@ -297,7 +297,7 @@ function Overview(props) {
                                 Object.keys(application.attributes).map((attr, index) => {
                                     const attrValue = application.attributes[attr];
                                     return (
-                                        <TableRow key={attr}>
+                                        <TableRow key={attr} className='app-web-asset-row'>
                                             <TableCell component='th' scope='row' className={classes.leftCol}>
                                                 <div className={classes.iconAligner}>
                                                     <Icon className={classNames(
