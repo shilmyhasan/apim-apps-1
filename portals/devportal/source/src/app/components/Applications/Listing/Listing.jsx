@@ -18,7 +18,6 @@
  */
 
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -382,8 +381,21 @@ class Listing extends Component {
             id: 'Applications.Listing.Listing.application.deleted.successfully',
         }, { name: app.name });
         const promisedDelete = Application.deleteApp(deletingId);
-        promisedDelete.then((ok) => {
-            if (ok) {
+        promisedDelete.then((status) => {
+            if (status === 201) {
+                newData.delete(deletingId);
+                Alert.info(intl.formatMessage({
+                    defaultMessage: 'Delete request created for application {name}',
+                    id: 'Applications.Listing.Listing.application.deleting.requested',
+                }, { name: app.name }));
+                this.toggleDeleteConfirmation();
+                // Page is reduced by 1, when there is only one application in a
+                // particular page and it is deleted (except when in first page)
+                if (newData.size === 0 && page !== 0) {
+                    this.setState((state) => ({ page: state.page - 1 }));
+                }
+                this.updateApps();
+            } else if (status === 200) {
                 newData.delete(deletingId);
                 Alert.info(message);
                 this.toggleDeleteConfirmation();
@@ -418,10 +430,10 @@ class Listing extends Component {
         const strokeColorMain = theme.palette.getContrastText(theme.custom.infoBar.background);
         const paginationEnabled = totalApps > Listing.rowsPerPage;
         return (
-            <div className={classNames(classes.content, 'applications-content-wrapper')}>
-                <div className={classNames(classes.root, 'applications-content-header')}>
+            <div className={classes.content}>
+                <div className={classes.root}>
                     <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center'>
-                        <div className={classNames(classes.mainIconWrapper, 'application-listing-icon-wrapper')}>
+                        <div className={classes.mainIconWrapper}>
                             <CustomIcon strokeColor={strokeColorMain} width={42} height={42} icon='applications' />
                         </div>
                         <div className={classes.mainTitleWrapper}>
