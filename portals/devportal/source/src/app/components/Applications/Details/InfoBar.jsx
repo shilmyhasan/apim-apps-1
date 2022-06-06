@@ -274,12 +274,18 @@ class InfoBar extends React.Component {
         const { applicationId, intl, application } = this.props;
         const promisedDelete = Application.deleteApp(applicationId);
         let message = intl.formatMessage({
-            defaultMessage: 'Application {name} deleted successfully!',
+            defaultMessage: 'In Application {name} deleted successfully!',
             id: 'Applications.Details.InfoBar.application.deleted.successfully',
         }, { name: application.name });
-        promisedDelete.then((ok) => {
-            if (ok) {
+        promisedDelete.then((status) => {
+            if (status === 200) {
                 Alert.info(message);
+                this.toggleDeleteConfirmation();
+            } else if (status === 201) {
+                Alert.info(intl.formatMessage({
+                    defaultMessage: 'Delete request created for application {name}',
+                    id: 'Applications.Listing.Listing.application.deleting.requested',
+                }, { name: application.name }));
                 this.toggleDeleteConfirmation();
             }
             this.props.history.push('/applications');
@@ -375,14 +381,12 @@ class InfoBar extends React.Component {
                                         style={{ padding: '4px' }}
                                         color='default'
                                         classes={{ label: classes.iconButton }}
-                                        className='application-info-bar-edit-button'
                                         aria-label={(
                                             <FormattedMessage
                                                 id='Applications.Details.InfoBar.edit'
                                                 defaultMessage='Edit'
                                             />
                                         )}
-                                        id='edit-application'
                                     >
                                         <Icon>edit</Icon>
                                         <Typography variant='caption' style={{ marginTop: '2px' }}>
@@ -398,10 +402,10 @@ class InfoBar extends React.Component {
                             <Grid item xs={1} m={1} className={classes.button}>
                                 <Button
                                     onClick={this.handleDeleteConfimation}
-                                    disabled={AuthManager.getUser().name !== applicationOwner}
+                                    disabled={AuthManager.getUser().name !== applicationOwner
+                                        || this.props.application.status === 'DELETE_PENDING'}
                                     color='default'
                                     classes={{ label: classes.iconButton }}
-                                    className='application-info-bar-delete-button'
                                     aria-label={(
                                         <FormattedMessage
                                             id='Applications.Details.InfoBar.delete'
