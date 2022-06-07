@@ -37,7 +37,7 @@ describe("Publisher Read-Only Mode", () => {
 
         //create an API from publisher portal
         cy.loginToPublisher(creatorPublisher, creatorpublisherPassword);
-        cy.createAndPublishAPIByRestAPIDesign(apiName,apiVersion,apiContext);
+        cy.createAndPublishRESTAPIByRestAPIfromScratch(apiName,apiVersion,apiContext);
 
         cy.get('#itest-api-details-portal-config-acc').click();
 
@@ -67,7 +67,7 @@ describe("Publisher Read-Only Mode", () => {
         cy.createResource('api','20KPerMin',"POST",'testuri','sampledesc','sample summary',false,'creatorscope','tname','Query','Number',true);
 
         //set policy
-        cy.get('#left-menu-policies',{timeout: 30000}).scrollIntoView().click(); 
+        cy.get('#left-menu-policies',{timeout: 30000}).click(); 
         const dataTransfer = new DataTransfer();
         cy.contains('Add Header').trigger('dragstart',{
             dataTransfer
@@ -79,7 +79,6 @@ describe("Publisher Read-Only Mode", () => {
         cy.get('#headerValue').type('abc');
         cy.get('[data-testid="policy-attached-details-save"]').click();
         cy.get('[data-testid="custom-select-save-button"]').scrollIntoView().click();
-        cy.timeout(3000);
 
         //add property
         cy.get('#left-menu-itemproperties',{timeout: 30000}).scrollIntoView().click();
