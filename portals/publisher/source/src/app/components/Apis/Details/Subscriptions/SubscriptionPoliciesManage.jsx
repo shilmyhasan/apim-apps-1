@@ -112,9 +112,9 @@ class SubscriptionPoliciesManage extends Component {
         Following logic identifies that special case.
         */
         let migratedCase = false;
-        if(Object.keys(subscriptionPolicies).length !== 0 && policies && policies.length > 0) {
+        if(Object.keys(subscriptionPolicies).length !== 0 && api.policies && api.policies.length > 0) {
             const checkedPolicies = subscriptionPolicies.filter(subPolicy => {
-                const foundSamePolicy = policies.find( pVal => pVal === subPolicy.displayName); 
+                const foundSamePolicy = api.policies.find( pVal => pVal === subPolicy.displayName); 
                 return foundSamePolicy && foundSamePolicy.length > 0 
             });
             migratedCase = checkedPolicies.length === 0;
@@ -174,7 +174,7 @@ class SubscriptionPoliciesManage extends Component {
                                             Note that this is an irreversible operation.`}
                                         />
                                     </Box>
-                                    {policies.map((policy) => (<FormControlLabel
+                                    {api.policies.map((policy) => (<FormControlLabel
                                         data-testid={'policy-checkbox-' + policy.toLowerCase()}
                                         key={policy}
                                         control={(
