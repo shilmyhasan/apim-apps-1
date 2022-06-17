@@ -232,7 +232,6 @@ function Environments(props) {
                                             || selectedEndpoint.URLs.http
                                             || selectedEndpoint.URLs.wss
                                             || selectedEndpoint.URLs.ws}
-                                            data-testid='http-url'
                                         />
                                     </Tooltip>
                                     <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
@@ -290,7 +289,6 @@ function Environments(props) {
                                                     inputProps={{ 'aria-label': 'api url' }}
                                                     value={selectedEndpoint.URLs.wss
                                                     || selectedEndpoint.URLs.ws}
-                                                    data-testid='websocket-url'
                                                 />
                                             </Tooltip>
                                             <Avatar className={classNames(classes.avatar, 'endpoint-url-copy-btn')} sizes={30}>
