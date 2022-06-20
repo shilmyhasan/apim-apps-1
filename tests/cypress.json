@@ -19,5 +19,10 @@
       }
     },
     "video": false,
-    "scrollBehavior" : "nearest"
+    "scrollBehavior" : "nearest",
+    "ignoreTestFiles": [
+      "cypress/integration/publisher/004-endpoints/07-mock-api-and-test.spec.js",
+      "cypress/integration/publisher/005-design-config/00-add-thumbnail-image.spec.js",
+      "cypress/integration/publisher/011-lifecycle/02-deploy-as-prototype.spec.js"
+    ]
 }

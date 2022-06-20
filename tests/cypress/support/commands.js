@@ -161,20 +161,6 @@ Cypress.Commands.add('deleteAllApis', () => {
     })
 });
 
-Cypress.Commands.add('deploySampleAPI', () => {
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`)
-    cy.get('#itest-rest-api-create-menu').click()
-    cy.get('#itest-id-deploy-sample').click()
-    cy.get('#itest-api-name-version', { timeout: 10000 }).should('be.visible');
-    cy.url().should('contains', '/overview');
-    cy.get("#itest-api-name-version").contains('PizzaShackAPI');
-    cy.intercept('**/apis/**').as('apiGet');
-    cy.wait('@apiGet', {timeout: 3000}).then((res) => {
-        const apiUUID =  res.response.body.id;
-        return { uuid: apiUUID };
-    });
-})
-
 Cypress.Commands.add('createAnAPI', (name, type = 'REST') => {
     const random_number = Math.floor(Date.now() / 1000);
     const randomName = `0sample_api_${random_number}`;
@@ -237,9 +223,7 @@ Cypress.Commands.add('createAndPublishAPIByRestAPIDesign', (name = null, version
     const apiName = name ? name : `0sample_api_${random_number}`;
     const apiVersion = version ? version : `v${random_number}`;
     const apiContext = context ? context : `/sample_context_${random_number}`;
-    cy.get('#itest-rest-api-create-menu', { timeout: 30000 });
-    cy.get('#itest-rest-api-create-menu').click();
-    cy.get('#itest-id-landing-rest-create-default').click();
+    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/rest`,{ timeout: 30000 });
     cy.get('#itest-id-apiname-input').type(apiName);
     cy.get('#itest-id-apicontext-input').click();
     cy.get('#itest-id-apicontext-input').type(apiContext);
@@ -353,9 +337,6 @@ Cypress.Commands.add('logoutFromDevportal', (referer = '/devportal/apis') => {
 })
 
 Cypress.Commands.add('logoutFromPublisher', () => {
-    cy.get('#profile-menu-btn', { timeout: 30000 });
-    cy.get('#profile-menu-btn').click();
-    cy.get('#itest-logout').click();
-    cy.get('#usernameUserInput').should('exist');
+    cy.visit(`${Utils.getAppOrigin()}/publisher/services/logout`);
 })
 
