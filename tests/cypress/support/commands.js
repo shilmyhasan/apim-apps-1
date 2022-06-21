@@ -266,6 +266,7 @@ Cypress.Commands.add('createGraphqlAPIfromFile', (name,version,context,filepath)
     cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
     cy.get('#itest-api-name-version').contains(version);
 })
+  
 
 
 Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
