@@ -19,5 +19,8 @@
       }
     },
     "video": false,
-    "scrollBehavior" : "nearest"
-}
+    "scrollBehavior" : "nearest",
+    "e2e": {
+      "excludeSpecPattern": "**/*.skip.js"
+    }
+  }
