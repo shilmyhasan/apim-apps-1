@@ -74,6 +74,8 @@ function get_prop {
     echo $prop
 }
 
+cat ${INPUT_DIR}/deployment.properties
+
 PRODUCT_VERSION=$(get_prop 'ProductVersion')
 
 if [[ -z "$PRODUCT_VERSION" ]]
@@ -113,7 +115,6 @@ sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-
 export LC_CTYPE="en_US.UTF-8"
 cd $HOME
 
-sleep 2000
 npm install cypress
 npm install --save-dev cypress-file-upload
 npm install --save  nodemailer
@@ -122,17 +123,16 @@ npm install styliner
 npm i --save-dev cypress-mochawesome-reporter
 npm i --save-dev mocha-junit-reporter
 npm i --save-dev cypress-multi-reporters
-VAR=`grep "PublisherUrl" ../../../../data-bucket/deployment.properties |cut -d'=' -f2`
-VAR2=${VAR//[\\]}
-export CYPRESS_BASE_URL=${VAR2//\/publisher}
 
-VAR3=`grep "s3secretKey" ../../../../data-bucket/deployment.properties |cut -d'=' -f2`
-export S3_SECRET_KEY=${VAR3}
-VAR4=`grep "s3accessKey" ../../../../data-bucket/deployment.properties |cut -d'=' -f2`
-export S3_ACCESS_KEY=${VAR4}
+$(grep -w "${1}" "${INPUT_DIR}/deployment.properties" | cut -d'=' -f2)
+BASE_URL=$(get_prop 'PublisherUrl')
+echo $BASE_URL
 
-VAR5=`grep "TEST_PLAN_ID" ../../../../data-bucket/deployment.properties |cut -d'=' -f2`
-export TEST_PLAN_ID=${VAR5}
+export CYPRESS_BASE_URL=${BASE_URL//\/publisher}
+echo $CYPRESS_BASE_URL;
+
+export S3_SECRET_KEY=$(get_prop 's3secretKey')
+export S3_ACCESS_KEY=$(get_prop 's3accessKey')
 
 VAR6=`grep "TESTGRID_EMAIL_PASSWORD" ../../../../data-bucket/deployment.properties | head -1 | cut -d'=' -f2`
 export TESTGRID_EMAIL_PASSWORD=${VAR6}
@@ -146,11 +146,13 @@ npm run delete:reportFolderHTML
 npm run delete:reportFolderJUnit
 npm run delete:reportFolderReport
 npm run pre-test
+nohup Xvfb :99 > /dev/null 2>&1 &
+export DISPLAY=:99
 npm run test
+pkill Xvfb
 npm run report:merge
 npm run report:generate
-mv  ./cypress/reports/html/mochawesome-bundle.html  ./cypress/reports/html/mochawesome-bundle-${TEST_PLAN_ID}.html
-
+node ./upload_email
 ######
 
 mvn clean install
@@ -169,5 +171,3 @@ find . -name "aggregate-surefire-report" -exec cp --parents -r {} ${OUTPUT_DIR}/
 
 echo "Generating Scenario Code Coverage Reports"
 source ${HOME}/code-coverage/code-coverage.sh
-
-generate_code_coverage ${INPUT_DIR} ${OUTPUT_DIR}

@@ -30,7 +30,7 @@ describe("Mock the api response and test it", () => {
         TODO
     */
     it("Mock the api response and test it", () => {
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/openapi`);
+        cy.visit(`/publisher/apis/create/openapi`);
         cy.get('#open-api-file-select-radio').click();
 
         // upload the swagger

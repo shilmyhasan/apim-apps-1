@@ -31,7 +31,7 @@ describe("Runtime configuration", () => {
     it.only("Add Authorization Header for the api", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             const customAuthHeader = '-custom';
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/runtime-configuration`);
+            cy.visit(`/publisher/apis/${apiId}/runtime-configuration`);
             cy.get('#applicationLevel').click();
             cy.get('#itest-id-headerName-input').focus().type(customAuthHeader);
             cy.get('#save-runtime-configurations').click();

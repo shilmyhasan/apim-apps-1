@@ -41,9 +41,9 @@ describe("Subscription blocking", () => {
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
                 cy.createApp(appName, appDescription);
-                cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+                cy.visit(`/devportal/apis?tenant=carbon.super`);
                 cy.url().should('contain', '/apis?tenant=carbon.super');
-                cy.visit(`${Utils.getAppOrigin()}/devportal/apis/${apiId}/credentials?tenant=carbon.super`);
+                cy.visit(`/devportal/apis/${apiId}/credentials?tenant=carbon.super`);
                 // Click and select the new application
                 cy.get('#application-subscribe', { timeout: 300000 }).should('be.visible');
 
@@ -55,7 +55,7 @@ describe("Subscription blocking", () => {
                 // Subscription blocking port in the publisher side.
                 cy.logoutFromDevportal();
                 cy.loginToPublisher(publisher, password);
-                cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+                cy.visit(`/publisher/apis/${apiId}/overview`);
 
 
                 // click the left menu to go to subscriptions page.
@@ -73,7 +73,7 @@ describe("Subscription blocking", () => {
 
     after(() => {
         cy.loginToDevportal(developer, password);
-        cy.visit(`${Utils.getAppOrigin()}/devportal/applications?tenant=carbon.super`);
+        cy.visit(`/devportal/applications?tenant=carbon.super`);
         cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
         cy.get(`#delete-${appName}-btn`).click();
         cy.get(`#itest-confirm-application-delete`).click();

@@ -11,7 +11,6 @@ const SECRET = '';
 const BUCKET_NAME = 'apim-3.2.0-ui-testing';
 var secretAccessKey = process.env.S3_SECRET_KEY;
 var accessKeyId = process.env.S3_ACCESS_KEY;
-var testPlanId = process.env.TEST_PLAN_ID;
 var testGridEmailPWD = process.env.TESTGRID_EMAIL_PASSWORD;
 
 
@@ -27,7 +26,7 @@ const uploadFile = (fileName) => {
   // Setting up S3 upload parameters
   const params = {
       Bucket: BUCKET_NAME,
-      Key: 'mochawesome-bundle-' + testPlanId + '.html', // File name you want to save as in S3
+      Key: 'mochawesome-bundle.html', // File name you want to save as in S3
       Body: fileContent,
       ACL: 'public-read',
       ContentType : "text/html"
@@ -52,9 +51,9 @@ const uploadFile = (fileName) => {
       });
 
       var mailOptions = {
-          from: "TestGrid Team <testgrid@gmail.com>",
-          to: "prasanna@wso2.com,vimukthi@wso2.com,rosens@wso2.com,nandika@wso2.com",
-          subject: `WSO2 APIM 3.2.0 UI TESTS ${testPlanId}`,
+          from: "TestGrid Team <testgrid@wso2.com>",
+          to: "prasanna@wso2.com,vimukthi@wso2.com,rosens@wso2.com,nandika@wso2.com,dhanushka@wso2.com",
+          subject: `WSO2 APIM 4.1.0 UI TESTS`,
           html: content
       }
 
@@ -68,4 +67,4 @@ const uploadFile = (fileName) => {
       });
   });
 };
-uploadFile('./cypress/reports/html/mochawesome-bundle-' + testPlanId + '.html');
+uploadFile('./cypress/reports/html/mochawesome-bundle.html');

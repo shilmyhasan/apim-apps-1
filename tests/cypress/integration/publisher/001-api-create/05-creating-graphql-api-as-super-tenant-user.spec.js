@@ -23,7 +23,7 @@ describe("Create GraphQl API from file", () => {
         cy.loginToPublisher(publisher, password);
         const random_number = Math.floor(Date.now() / 1000);
         const randomName = `sample_api_${random_number}`;
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/graphQL`);
+        cy.visit(`/publisher/apis/create/graphQL`);
 
         // upload the graphql file
         cy.get('[data-testid="browse-to-upload-btn"]').then(function () {

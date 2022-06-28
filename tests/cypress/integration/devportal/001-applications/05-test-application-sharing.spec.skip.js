@@ -47,7 +47,7 @@ describe("Invoke API Product", () => {
             cy.logoutFromPublisher();
 
             //Create Users in Devportal
-            cy.visit(`${Utils.getAppOrigin()}/devportal/apis`);
+            cy.visit(`/devportal/apis`);
             cy.get('#itest-devportal-sign-in').click();
             cy.get('#registerLink').click();
 
@@ -89,7 +89,7 @@ describe("Invoke API Product", () => {
             cy.loginToDevportal(user1, password);
 
             //Test with Oath2 Token
-            cy.visit(`${Utils.getAppOrigin()}/devportal/applications/create`);
+            cy.visit(`/devportal/applications/create`);
             cy.get('#application-name').click();
             cy.get('#application-name').type(appName);
             cy.get('#application-group-id').click();
@@ -103,7 +103,7 @@ describe("Invoke API Product", () => {
 
             //Log into developer portal as user 2
             cy.loginToDevportal(user2, password);
-            cy.visit(`${Utils.getAppOrigin()}/devportal/applications`);
+            cy.visit(`/devportal/applications`);
             cy.contains('App_A1').click();
 
             cy.location('pathname').then((pathName) => {
@@ -120,10 +120,10 @@ describe("Invoke API Product", () => {
 
                 //Log into developer portal as user 1
                 cy.loginToDevportal(user1, password);
-                cy.visit(`${Utils.getAppOrigin()}/devportal/applications/${uuidApp}/subscriptions`);
+                cy.visit(`/devportal/applications/${uuidApp}/subscriptions`);
             });
 
-            cy.visit(`${Utils.getAppOrigin()}/devportal/applications`);
+            cy.visit(`/devportal/applications`);
             cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
             cy.get(`#delete-${appName}-btn`).click();
             cy.get(`#itest-confirm-application-delete`).click();
@@ -136,7 +136,7 @@ describe("Invoke API Product", () => {
         //Delete Users
         cy.loginToPublisher(publisher, password);
         cy.deleteApi(apiName, apiVersion);
-        cy.visit(`${Utils.getAppOrigin()}/carbon/user/user-mgt.jsp`);
+        cy.visit(`/carbon/user/user-mgt.jsp`);
         cy.deleteUser(user1);
         cy.deleteUser(user2);
         cy.deleteUser(publisher);

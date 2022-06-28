@@ -28,7 +28,7 @@ describe("Lifecycle changes", () => {
     })
     it.only("Block demote retire api", () => {
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-portal-config-acc').click();
             cy.get('#left-menu-itemsubscriptions').click();
             cy.get('[data-testid="policy-checkbox-silver"]').click();

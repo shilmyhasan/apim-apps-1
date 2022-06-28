@@ -34,7 +34,7 @@ describe("Anonymous view apis", () => {
             Utils.publishAPI(apiId).then((serverResponse) => {
                 console.log(serverResponse);
                 cy.logoutFromPublisher();
-                cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+                cy.visit(`/devportal/apis?tenant=carbon.super`);
 
                 // After publishing the api appears in devportal with a delay.
                 // We need to keep refresing and look for the api in the listing page
@@ -72,7 +72,7 @@ describe("Anonymous view apis", () => {
     })
 
     it.only("Download swagger", () => {
-        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+        cy.visit(`/devportal/apis?tenant=carbon.super`);
         cy.url().should('contain', '/apis?tenant=carbon.super');
 
         cy.get(`[title="${apiName}"]`, { timeout: 30000 });
@@ -98,7 +98,7 @@ describe("Anonymous view apis", () => {
 
     it.only("Download client sdks", () => {
         cy.loginToDevportal(developer, password);
-        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+        cy.visit(`/devportal/apis?tenant=carbon.super`);
         cy.url().should('contain', '/apis?tenant=carbon.super');
         cy.get(`[title="${apiName}"]`, { timeout: 30000 });
         cy.get(`[title="${apiName}"]`).click();

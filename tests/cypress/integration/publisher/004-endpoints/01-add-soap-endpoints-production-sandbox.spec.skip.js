@@ -28,7 +28,7 @@ describe("Add production sandbox endpoints for SOAP", () => {
 
     it.only("Add production sandbox endpoints for SOAP", () => {
         Utils.addAPI({}).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemendpoints').click();
             cy.get('[data-testid="http/soapendpoint-add-btn"]').click();

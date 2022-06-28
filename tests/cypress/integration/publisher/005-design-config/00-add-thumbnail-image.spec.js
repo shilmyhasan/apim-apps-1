@@ -31,7 +31,7 @@ describe("Upload thumbnail", () => {
     })
     it.only("Upload thumbnail", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
 
             cy.get('#itest-api-details-portal-config-acc').click();
             cy.get('#left-menu-itemDesignConfigurations').click();

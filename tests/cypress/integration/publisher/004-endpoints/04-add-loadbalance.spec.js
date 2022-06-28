@@ -28,7 +28,7 @@ describe("Endpoint testing", () => {
 
     it.only("Add REST endpoints for production and sandbox endpoints with LOAD balanced", () => {
         Utils.addAPI({}).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemendpoints').click();
             cy.get('[data-testid="http/restendpoint-add-btn"]').click();

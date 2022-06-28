@@ -26,7 +26,7 @@ describe("Deploy sample api", () => {
     })
 
     it.only("Deploy sample api", () => {
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+        cy.visit(`/publisher/apis`);
         cy.intercept(
             {
                 method: 'GET',

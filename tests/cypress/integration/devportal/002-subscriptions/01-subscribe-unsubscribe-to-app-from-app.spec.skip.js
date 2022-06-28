@@ -36,7 +36,7 @@ describe("Anonymous view apis", () => {
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
                 cy.createApp(appName, appDescription);
-                cy.visit(`${Utils.getAppOrigin()}/devportal/applications?tenant=carbon.super`);
+                cy.visit(`/devportal/applications?tenant=carbon.super`);
                 cy.get(`#itest-application-list-table td a`).contains(appName).click();
 
                 // Go to application subscription page
