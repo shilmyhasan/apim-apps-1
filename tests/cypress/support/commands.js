@@ -314,7 +314,7 @@ Cypress.Commands.add('addBusinessInfo', (businessOwnerName,businessOwnerEmail,te
 Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,uripattern,description=null,summary=null,security=true,scope,parametername=null,parametertype=null,datatype=null,required=false) => {
     const uriId=httpverb.toLowerCase()+'\/'+uripattern;
 
-    if(ratelimitlevel=="api"){
+    if(ratelimitlevel == "api"){
         cy.get('#api-rate-limiting-api-level').click();
         cy.get('#operation_throttling_policy').click();
         cy.contains('li',limitinglevel).click();
@@ -333,16 +333,16 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
     cy.get(`[id="${uriId}"]`, { timeout: 30000 }).click();
 
     
-    if(description!= null){
+    if(description != null){
         cy.get(`[data-testid="description-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="description-${uriId}"]`).type(description);
 
     }
-    if(summary!=null){
+    if(summary != null){
         cy.get(`[data-testid="summary-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="summary-${uriId}"]`).type(summary);
     }
-    if(security==false){
+    if(security == false){
         cy.get(`[data-testid="security-${uriId}"]`).click();
     }else{
         cy.get(`[id="${uriId}-operation-scope-select"]`, { timeout: 30000 }).click();
@@ -350,14 +350,14 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
         cy.get('#menu-').click();
     }
 
-    if(ratelimitlevel=="operation"){
+    if(ratelimitlevel == "operation"){
         cy.get(`[id="${uriId}-operation_throttling_policy-label"]`).click();
         cy.contains('li',limitinglevel).click();
     }
 
 
     //parameters
-    if(parametertype!=null){
+    if(parametertype != null){
         cy.get(`[id="param-${uriId}"]`).click();
         cy.contains('li',parametertype).click();
         cy.get(`[id="name-${uriId}"]`).type(parametername);
