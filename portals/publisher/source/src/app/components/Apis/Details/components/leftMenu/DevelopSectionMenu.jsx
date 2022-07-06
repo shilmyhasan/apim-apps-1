@@ -346,6 +346,7 @@ export default function DevelopSectionMenu(props) {
                                         })}
                                         to={pathPrefix + 'monetization'}
                                         Icon={<MonetizationIcon />}
+                                        id='left-menu-monetization-prod'
                                     />
                                 )}
                             </>
