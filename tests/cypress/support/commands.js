@@ -129,7 +129,6 @@ Cypress.Commands.add('addNewTenantUser', (
 Cypress.Commands.add('deleteUser', (name) => {
     cy.get(`[onClick="deleteUser(\\'${name}\\')"]`).click();
     cy.get('.ui-dialog  .ui-dialog-buttonpane button:first-child').click();
-
     cy.get('#messagebox-info p').contains(`User ${name} is deleted successfully.`).should('exist');
     cy.get('.ui-dialog-buttonpane button').click();
 });
@@ -223,7 +222,7 @@ Cypress.Commands.add('createAndPublishAPIByRestAPIDesign', (name = null, version
     const apiName = name ? name : `0sample_api_${random_number}`;
     const apiVersion = version ? version : `v${random_number}`;
     const apiContext = context ? context : `/sample_context_${random_number}`;
-    cy.visit(`/publisher/apis/create/rest`, { timeout: 30000 });
+    cy.visit(`/publisher/apis/create/rest`,{ timeout: 30000 });
     cy.get('#itest-id-apiname-input').type(apiName);
     cy.get('#itest-id-apicontext-input').click();
     cy.get('#itest-id-apicontext-input').type(apiContext);
@@ -231,12 +230,254 @@ Cypress.Commands.add('createAndPublishAPIByRestAPIDesign', (name = null, version
     cy.get('#itest-id-apiversion-input').type(apiVersion);
     cy.get('#itest-id-apiendpoint-input').click();
     cy.get('#itest-id-apiendpoint-input').type(`https://apis.wso2.com/sample${random_number}`);
-    cy.get('#itest-id-apiversion-input').click();
     cy.get('#itest-id-apicreatedefault-createnpublish').click();
 
     // Wait for the api to load
     cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
     cy.get('#itest-api-name-version').contains(apiVersion);
+})
+
+
+Cypress.Commands.add('createGraphqlAPIfromFile', (name,version,context,filepath)=>{
+
+    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/graphQL`);
+
+    // upload the graphql file
+    cy.get('[data-testid="browse-to-upload-btn"]',{timeout:6000}).then(function () {
+        cy.get('input[type="file"]').attachFile(filepath)
+    });
+
+    // Wait to upload and go to next page
+    cy.get('[data-testid="uploaded-list-graphql"]', {timeout: 6000}).should('be.visible');
+    cy.get('[data-testid="create-graphql-next-btn"]').click();
+
+    // Filling the form
+    cy.get('#itest-id-apiname-input').type(name);
+    cy.get('#itest-id-apicontext-input').click();
+    cy.get('#itest-id-apicontext-input').type(context);
+    cy.get('#itest-id-apiversion-input').click();
+    cy.get('#itest-id-apiversion-input').type(version);
+    cy.get('#itest-id-apiendpoint-input').click();
+    cy.get('#itest-id-apiendpoint-input').type('http://localhost:8080/graphql');
+    // Saving the form
+    cy.get('[data-testid="itest-create-graphql-api-button"]').click();
+
+    //Checking the version in the overview
+    cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
+    cy.get('#itest-api-name-version').contains(version);
+})
+  
+
+
+Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
+    
+    //const filename=filepath.split( '/' ).last;
+    var filename = filepath.replace(/^.*[\\\/]/, '');
+    var uploadedDefinitionPanel=null;
+
+    cy.contains('button', 'Import Definition').click();
+    // upload the graphql file
+    cy.get('[data-testid="browse-to-upload-btn"]').then(function () {
+        cy.get('input[type="file"]').attachFile(filepath)
+    });
+
+    cy.contains('h2','Import GraphQL Schema Definition').should('exist');
+    uploadedDefinitionPanel=cy.get('[data-testid="uploaded-list-graphql"]').get('li').get('[data-testid="uploaded-list-content-graphql"]')
+    uploadedDefinitionPanel.contains(`[data-testid="file-input-${filename}"]`,filename).should('be.visible');
+    uploadedDefinitionPanel.get('[data-testid="btn-delete-imported-file"]').should('be.visible');
+    cy.get('#import-open-api-btn').click();
+
+    cy.get('.react-monaco-editor-container',{timeout:3000}).get('.monaco-editor textarea:first')
+    .type('{cmd}f',{force:true});
+    cy.get('.find-part .input').type('modified schema file');
+    cy.contains('.find-actions','1 of').should('be.visible');
+   
+})
+
+
+Cypress.Commands.add('createLocalScope', (name, displayname='sample display name',description='sample description',roles=[]) => {
+
+    cy.get('#name',{timeout:3000}).type(name,{force:true});
+    cy.get('#displayName',{timeout: 30000 }).type(displayname);
+    cy.get('#description',{timeout: 30000 }).type(description);
+
+    roles.forEach(role => {
+        cy.get('#roles-input',{timeout: 30000 }).type(role+'\n');
+    });
+    cy.get('#scope-save-btn').click();
+    
+    //check the table and verify whether entered scope names exist
+    cy.get('table').get('tbody').find("tr")
+    .then((rows) => {
+        var ele=null;
+        rows.toArray().every((element) => {
+            if (element.innerHTML.includes(name)) {
+              ele=element;
+              return false;
+            }
+          });
+          expect(ele.innerHTML).to.include(name);
+    });
+
+})
+
+Cypress.Commands.add('addDocument', (name,summary,type,source) => {
+    
+    cy.get('[data-testid="add-document-btn"]',{timeout:3000}).click();
+    cy.get('#doc-name',{timeout: 30000}).type(name);
+    cy.get('#doc-summary').click();
+    cy.get('#doc-summary',{timeout: 30000}).type(summary);
+    cy.contains('label',type).click();
+    cy.contains('label',source).click();
+    cy.get('#add-document-btn').scrollIntoView();
+    cy.get('#add-document-btn').click();
+    cy.get('#add-content-back-to-listing-btn').click();
+
+    cy.get('table a').contains(name).should('be.visible');
+})
+
+Cypress.Commands.add('addComment', (comment) => {
+    
+    cy.get('[data-testid="new-comment-field"]',{timeout: 30000 }).type(comment);
+    cy.get('#add-comment-btn').click();
+    
+    cy.contains('p',comment).should('exist');
+})
+
+Cypress.Commands.add('addBusinessInfo', (businessOwnerName,businessOwnerEmail,techOwnerName,techOwnerEmail) => {
+    
+    cy.get('#name').click({timeout: 30000 }).type(businessOwnerName);
+    cy.get('#Email').click({timeout: 30000 }).type(businessOwnerEmail);
+    cy.get('#TOname').click({timeout: 30000 }).type(techOwnerName);
+    cy.get('#TOemail').click({timeout: 30000 }).type(techOwnerEmail);
+
+    cy.get('#business-info-save').click();
+
+    cy.get('#business-info-save').then(function () {
+        cy.get('#name').should('have.value', businessOwnerName);
+        cy.get('#Email').should('have.value', businessOwnerEmail);
+        cy.get('#TOname').should('have.value', techOwnerName);
+        cy.get('#TOemail').should('have.value', techOwnerEmail);
+    });
+
+})
+
+/**
+ * Creates a resource for a given http verb
+ * Stuff with  more arguments.
+ * @method createResource creates a resource for a given (one) httpverb
+ * @param {string} ratelimitlevel  any of the following 2 : api | operation
+ * @param {string} limitinglevel 10KPerMin | 20KOPerMin | 50KPerMin | Unlimited
+ * @param {string} httpverb GET | POST | PUT | DELETE | PATCH | HEAD | OPTIONS
+ * @param {string} uripattern
+ * @param {string} description about the API
+ * @param {string} summary about API
+ * @param {boolean} security true | false
+ * @param {string} scope name of the scope | null
+ * @param {string} parametername
+ * @param {string} parametertype   Query | Header | Cookie | Body | null
+ * @param {string} datatype   Integer | Number | String | Boolean | null
+ * @param {boolean} required  true | false
+ */
+
+Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,uripattern,description=null,summary=null,security=true,scope,parametername=null,parametertype=null,datatype=null,required=false) => {
+    const uriId=httpverb.toLowerCase()+'\/'+uripattern;
+
+    if(ratelimitlevel == "api"){
+        cy.get('#api-rate-limiting-api-level').click();
+        cy.get('#operation_throttling_policy').click();
+        cy.contains('li',limitinglevel).click();
+    }else{
+        cy.get('#api-rate-limiting-operation-level').click();
+    }
+    cy.get('#add-operation-selection-dropdown').click();
+    cy.contains('li',httpverb).click();
+    
+    //colapse dropdown
+    cy.get('#menu-verbs').click();
+    
+    cy.get('#operation-target').type(uripattern);
+    cy.get('#add-operation-button').click();
+    
+    cy.get(`[id="${uriId}"]`, { timeout: 30000 }).click();
+
+    
+    if(description != null){
+        cy.get(`[data-testid="description-${uriId}"]`, { timeout: 30000 }).click();
+        cy.get(`[data-testid="description-${uriId}"]`).type(description);
+
+    }
+    if(summary != null){
+        cy.get(`[data-testid="summary-${uriId}"]`, { timeout: 30000 }).click();
+        cy.get(`[data-testid="summary-${uriId}"]`).type(summary);
+    }
+    if(security == false){
+        cy.get(`[data-testid="security-${uriId}"]`).click();
+    }else{
+        cy.get(`[id="${uriId}-operation-scope-select"]`, { timeout: 30000 }).click();
+        cy.contains('li',scope).click();
+        cy.get('#menu-').click();
+    }
+
+    if(ratelimitlevel == "operation"){
+        cy.get(`[id="${uriId}-operation_throttling_policy-label"]`).click();
+        cy.contains('li',limitinglevel).click();
+    }
+
+
+    //parameters
+    if(parametertype != null){
+        cy.get(`[id="param-${uriId}"]`).click();
+        cy.contains('li',parametertype).click();
+        cy.get(`[id="name-${uriId}"]`).type(parametername);
+        cy.get(`[id="data-${uriId}"]`).click();
+        cy.get(`[id="data-${uriId}/${datatype.toLowerCase()}"]`).click();
+        if(required){
+            cy.get(`[data-testid="required-${uriId}"]`).click();
+        }
+        cy.get(`[id="param-${uriId}-add-btn"]`).click();
+        cy.contains('td',parametername).should('exist');
+    }
+    cy.get('#resources-save-operations', { timeout: 30000 }).click();
+
+})
+
+
+Cypress.Commands.add('addProperty',(name,value,ifSendToDevPortal)=>{
+    cy.get('#add-new-property',{ timeout: 30000 }).click();
+    cy.get('#property-name').type(name);
+    cy.get('#property-value').type(value);
+
+    if(ifSendToDevPortal)
+        cy.contains('label','Show in devportal').click();
+    cy.get('#properties-add-btn').should('exist');
+    cy.get('#properties-add-btn').click();
+
+    //verifying that the property added
+    cy.get('tr').contains('td',name);
+
+    //save the property
+    cy.get('[data-testid="custom-select-save-button"]',{timeout:3000}).click();
+
+    cy.intercept('PUT','*api/am/publisher/v3/apis',res=>{
+        expect(res).property('status').to.equal(200);
+        cy.get('[data-testid="custom-select-save-button"]').should('not.be.disabled');
+
+        //check the table and verify whether property saved
+        cy.get('table').get('tbody').find("tr")
+        .then((rows) => {
+            var ele=null;
+            rows.toArray().every((element) => {
+                if (element.innerHTML.includes(name)) {
+                    ele=element;
+                    return false;
+                }
+                });
+                expect(ele.innerHTML).to.include(name);
+        });
+
+    }).as("saveProperty");
+
 })
 
 Cypress.Commands.add('createAPIWithoutEndpoint', (name, type = 'REST') => {
@@ -353,4 +594,104 @@ Cypress.Commands.add('logoutFromDevportal', (referer = '/devportal/apis') => {
 Cypress.Commands.add('logoutFromPublisher', () => {
     cy.visit(`/publisher/services/logout`);
 })
+
+Cypress.Commands.add('publishThirdPartyApi', (apiName = null) => {
+
+    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+
+    //check if other protocol option is added in AsyncApi
+    cy.get('#itest-streaming-api-create-menu', { timeout: 30000 });
+    cy.get('#itest-streaming-api-create-menu').click();
+    cy.get('#itest-id-create-streaming-api-import').click();
+    cy.get('#outlined-full-width').type('https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml');
+    cy.get('#outlined-full-width').should('have.value','https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml');
+    cy.get('button span').contains('Next').should('not.be.disabled');
+    cy.get('button span').contains('Next').click();
+    cy.get('#mui-component-select-protocol').click();
+    cy.get('#other').should('exist');
+    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+
+    //select rest-api option from the menu item
+    cy.get('#itest-rest-api-create-menu', { timeout: 30000 });
+    cy.get('#itest-rest-api-create-menu').click();;
+    cy.get('#itest-id-landing-rest-create-default').click();
+    cy.get('#itest-id-apiname-input').type('ThirdPartyApi');
+    cy.get('#itest-id-apicontext-input').type('/thirdpartyapi');
+    cy.get('#itest-id-apiversion-input').type('1.0.0');
+    cy.get('#itest-id-apiendpoint-input').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/api`);
+    cy.get('#itest-create-default-api-button').click();
+
+    //Mark as third party api
+    cy.get('#itest-api-details-portal-config-acc').click();
+    cy.get('#left-menu-itemDesignConfigurations').click();
+    cy.get('[name="advertised"]:first').click();
+    cy.get('[name="apiExternalProductionEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/externalapi`);
+    cy.get('[name="apiExternalSandboxEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/externalapi`);
+    cy.get('[name="originalDevPortalUrl"]').type('http://www.mocky.io/v2/5ec501532f00009700dc2dc1');
+    cy.get('#design-config-save-btn').click();
+    cy.get('#itest-api-details-portal-config-acc').click();
+
+    //publish
+    cy.get('#left-menu-itemlifecycle').click();
+    cy.get('[data-testid="Publish-btn"]').should('exist');
+    cy.get('[data-testid="Deploy as a Prototype-btn"]').should('exist');
+    cy.get('[data-testid="Publish-btn"]').click();
+
+    //check if the api is third-party and published
+    cy.get('[data-testid="itest-api-state"]').contains('PUBLISHED').should('exist');
+    cy.get('[data-testid="itest-third-party-api-label"]').contains('Third Party').should('exist');
+
+    //Check if the subscriptions,runtime config, resources, scopes, monetization, test console sections are present
+    cy.get('#itest-api-details-portal-config-acc').click();
+    cy.get('#left-menu-itemsubscriptions').should('exist');
+    cy.get('#left-menu-itemsubscriptions').click();
+    cy.get('[name="Unlimited"]').click();
+    cy.get('#subscriptions-save-btn').click();
+    cy.get('#itest-api-details-portal-config-acc').click();
+    cy.get('#itest-api-details-api-config-acc').click();
+    cy.get('#left-menu-itemRuntimeConfigurations').should('exist');
+    cy.get('#left-menu-itemresources').should('exist');
+    cy.get('#left-menu-itemLocalScopes').should('exist');
+    cy.get('#left-menu-monetization-prod').should('exist');
+    cy.get('#itest-api-details-api-config-acc').click();
+    cy.get('#left-menu-itemTestConsole').should('exist');
+
+    //Check if the api is not deployable
+    cy.get('#left-menu-itemdeployments').click();
+    cy.get('[data-testid="third-party-api-deployment-dialog"]').contains('This API is marked as a third party API. The requests are not proxied through the gateway. Hence, deployments are not required.').should('exist');
+    cy.get('#deploy-btn').should('be.disabled');
+
+    //Check if prompts when switching to a regular api
+    cy.get('#itest-api-details-portal-config-acc').click();
+    cy.get('#left-menu-itemDesignConfigurations').click();
+    cy.get('[name="advertised"]:last').click();
+    cy.get('[data-testid="itest-update-api-confirmation"]').should('exist');
+
+    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.get('[data-testid="itest-api-lifecycleState"] span').contains('PUBLISHED').should('exist');
+    cy.get('[data-testid="third-party-api-card-label"]').should('exist');
+
+})
+
+Cypress.Commands.add('viewThirdPartyApi', (apiName = null) => {
+    cy.get('[area-label="Go to ThirdPartyApi"]').click();
+
+    //Check if the subscriptions, tryout, comments and SDKs sections are present
+    cy.get('#left-menu-credentials').should('exist');
+    cy.get('#left-menu-test').should('exist');
+    cy.get('#left-menu-comments').should('exist');
+    cy.get('#left-menu-sdk').should('exist');
+
+    //Visit Original Developer Portal
+    cy.get('#left-menu-credentials').click();
+    cy.get('[data-testid="itest-original-devportal-link"]').should('exist');
+    cy.get('[data-testid="itest-no-tier-dialog"]').contains('No tiers are available for the API.').should('exist');
+
+    //Check if authorization header and value can be customized
+    cy.get('#left-menu-test').click();
+    cy.get('#advAuthHeader').should('exist');
+    cy.get('#advAuthHeaderValue').should('exist');
+
+})
+
 

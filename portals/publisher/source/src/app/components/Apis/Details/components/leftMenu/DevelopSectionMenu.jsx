@@ -321,6 +321,8 @@ export default function DevelopSectionMenu(props) {
                                 route='policies'
                                 to={pathPrefix + 'policies'}
                                 Icon={<PoliciesIcon />}
+                                data-testid='left-menu-policies'
+                                id='left-menu-policies'
                             />
                         )}
 
@@ -344,6 +346,7 @@ export default function DevelopSectionMenu(props) {
                                         })}
                                         to={pathPrefix + 'monetization'}
                                         Icon={<MonetizationIcon />}
+                                        id='left-menu-monetization-prod'
                                     />
                                 )}
                             </>
@@ -357,6 +360,7 @@ export default function DevelopSectionMenu(props) {
                                 })}
                                 to={pathPrefix + 'monetization'}
                                 Icon={<MonetizationIcon />}
+                                id='left-menu-monetization-prod'
                             />
                         )}
                     </div>
