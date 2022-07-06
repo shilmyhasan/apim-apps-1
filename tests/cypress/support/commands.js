@@ -411,7 +411,7 @@ Cypress.Commands.add('publishThirdPartyApi', (apiName = null) => {
     cy.get('#left-menu-itemRuntimeConfigurations').should('exist');
     cy.get('#left-menu-itemresources').should('exist');
     cy.get('#left-menu-itemLocalScopes').should('exist');
-    cy.get('#left-menu-itemMonetization').should('exist');
+    cy.get('#left-menu-monetization-prod').should('exist');
     cy.get('#itest-api-details-api-config-acc').click();
     cy.get('#left-menu-itemTestConsole').should('exist');
 
