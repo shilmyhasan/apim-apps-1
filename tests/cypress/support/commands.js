@@ -243,7 +243,7 @@ Cypress.Commands.add('createAndPublishAPIByRestAPIDesign', (name = null, version
 
 Cypress.Commands.add('createGraphqlAPIfromFile', (name,version,context,filepath)=>{
 
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/graphQL`);
+    cy.visit(`/publisher/apis/create/graphQL`);
 
     // upload the graphql file
     cy.get('[data-testid="browse-to-upload-btn"]',{timeout:6000}).then(function () {

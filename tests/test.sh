@@ -123,6 +123,7 @@ npm install styliner
 npm i --save-dev cypress-mochawesome-reporter
 npm i --save-dev mocha-junit-reporter
 npm i --save-dev cypress-multi-reporters
+npm i babel-plugin-module-resolver
 
 $(grep -w "${1}" "${INPUT_DIR}/deployment.properties" | cut -d'=' -f2)
 BASE_URL=$(get_prop 'PublisherUrl')
@@ -133,13 +134,12 @@ echo $CYPRESS_BASE_URL;
 
 export S3_SECRET_KEY=$(get_prop 's3secretKey')
 export S3_ACCESS_KEY=$(get_prop 's3accessKey')
-
-VAR6=`grep "TESTGRID_EMAIL_PASSWORD" ../../../../data-bucket/deployment.properties | head -1 | cut -d'=' -f2`
-export TESTGRID_EMAIL_PASSWORD=${VAR6}
+export TESTGRID_EMAIL_PASSWORD=$(get_prop 'testgridEmailPassword')
 
 npm install --save-dev cypress-multi-reporters mocha-junit-reporter
 npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
 npm install --save-dev mocha
+npm install --save-dev @cypress/browserify-preprocessor
 npm install junit-report-merger --save-dev
 npm i --save aws-sdk
 npm run delete:reportFolderHTML
@@ -149,25 +149,11 @@ npm run pre-test
 nohup Xvfb :99 > /dev/null 2>&1 &
 export DISPLAY=:99
 npm run test
+MVNSTATE=$?
 pkill Xvfb
 npm run report:merge
 npm run report:generate
 node ./upload_email
 ######
 
-mvn clean install
-MVNSTATE=$?
-
-echo `pwd`
-#=============== Copy Surefire Reports ===========================================
-
-echo "Copying surefire-reports to ${OUTPUT_DIR}/scenarios"
-mkdir -p ${OUTPUT_DIR}/scenarios
-mv ${OUTPUT_DIR}/scenarios/target/* ${OUTPUT_DIR}/scenarios/
-find . -name "surefire-reports" -exec cp --parents -r {} ${OUTPUT_DIR}/scenarios \;
-find . -name "aggregate-surefire-report" -exec cp --parents -r {} ${OUTPUT_DIR}/scenarios \;
-
-#=============== Code Coverage Report Generation ===========================================
-
-echo "Generating Scenario Code Coverage Reports"
-source ${HOME}/code-coverage/code-coverage.sh
+exit $MVNSTATE

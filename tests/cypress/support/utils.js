@@ -13,7 +13,7 @@ export default class Utils {
     }
 
     static getAppOrigin() {
-        return "https://localhost:9443";
+        return Cypress.config().baseUrl;
     }
 
     static capFirst(string) {
@@ -58,7 +58,7 @@ export default class Utils {
                         const curl = `curl -k -X POST \
                         -H "Content-Type: application/json" \
                         -d '${newPayload}' \
-                        -H "Authorization: Bearer ${token}"  "https://localhost:9443/api/am/publisher/v2/apis/import-openapi"`;
+                        -H "Authorization: Bearer ${token}"  "${Cypress.config().baseUrl}/api/am/publisher/v2/apis/import-openapi"`;
                         cy.exec(curl).then(result => {
                             const apiId = JSON.parse(result.stdout);
                             resolve(apiId.id);
@@ -85,7 +85,7 @@ export default class Utils {
                         const curl = `curl -k -X POST \
                         -H "Content-Type: application/json" \
                         -d '${newPayload}' \
-                        -H "Authorization: Bearer ${token}"  "https://localhost:9443/api/am/publisher/v3/apis"`;
+                        -H "Authorization: Bearer ${token}"  "${Cypress.config().baseUrl}/api/am/publisher/v3/apis"`;
                         cy.exec(curl).then(result => {
                             const apiId = JSON.parse(result.stdout);
                             resolve(apiId.id);
@@ -115,7 +115,7 @@ export default class Utils {
                     .then((token) => {
                         const curl = `curl -k -X POST \
                         -H "Content-Type: application/json" \
-                        -H "Authorization: Bearer ${token}"  "https://localhost:9443/api/am/publisher/v3/apis/change-lifecycle?action=Publish&apiId=${apiId}"`;
+                        -H "Authorization: Bearer ${token}"  "${Cypress.config().baseUrl}/api/am/publisher/v3/apis/change-lifecycle?action=Publish&apiId=${apiId}"`;
                         cy.exec(curl).then(result => {
                             resolve(result.stdout);
                         })
@@ -133,7 +133,7 @@ export default class Utils {
                     .then((token) => {
                         const curl = `curl -k -X DELETE \
                         -H "Content-Type: application/json" \
-                        -H "Authorization: Bearer ${token}"  "https://localhost:9443/api/am/publisher/v3/apis/${apiId}"`;
+                        -H "Authorization: Bearer ${token}"  "${Cypress.config().baseUrl}/api/am/publisher/v3/apis/${apiId}"`;
                         cy.exec(curl).then(result => {
                             resolve(result.stdout);
                         })
