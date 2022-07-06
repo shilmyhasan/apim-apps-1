@@ -25,7 +25,7 @@ Cypress.Commands.add('carbonLogin', (username, password) => {
         message: `${username} | ${password}`,
     })
 
-    cy.visit(`${Utils.getAppOrigin()}/carbon/admin/login.jsp`);
+    cy.visit(`/carbon/admin/login.jsp`);
     cy.get('#txtUserName').type(username);
     cy.get('#txtPassword').type(password);
     cy.get('form').submit();
@@ -41,17 +41,17 @@ Cypress.Commands.add('portalLogin', (username, password, portal) => {
         message: `${username} | ${password}`,
     })
 
-    cy.visit(`${Utils.getAppOrigin()}/${portal}`);
+    cy.visit(`/${portal}`);
     if (portal === 'devportal') {
-        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+        cy.visit(`/devportal/apis?tenant=carbon.super`);
         cy.get('#itest-devportal-sign-in').click();
     }
-    cy.url().should('contains', `${Utils.getAppOrigin()}/authenticationendpoint/login.do`);
+    cy.url().should('contains', `/authenticationendpoint/login.do`);
     cy.get('[data-testid=login-page-username-input]').click();
     cy.get('[data-testid=login-page-username-input]').type(username);
     cy.get('[data-testid=login-page-password-input]').type(password);
     cy.get('#loginForm').submit();
-    cy.url().should('contains', `${Utils.getAppOrigin()}/${portal}`);
+    cy.url().should('contains', `/${portal}`);
 })
 
 Cypress.Commands.add('loginToPublisher', (username, password) => {
@@ -67,7 +67,7 @@ Cypress.Commands.add('loginToAdmin', (username, password) => {
 })
 
 Cypress.Commands.add('addNewTenant', (tenant = 'wso2.com', username = 'admin', password = 'admin') => {
-    cy.visit(`${Utils.getAppOrigin()}/carbon/tenant-mgt/add_tenant.jsp?region=region1&item=govern_add_tenants_menu`);
+    cy.visit(`/carbon/tenant-mgt/add_tenant.jsp?region=region1&item=govern_add_tenants_menu`);
     cy.get('#buttonRow .button');
     cy.get('#domain').click();
     cy.get('#domain').type(tenant);
@@ -95,14 +95,14 @@ Cypress.Commands.add('addNewTenant', (tenant = 'wso2.com', username = 'admin', p
 
 Cypress.Commands.add('addNewUser', (name = 'newuser', roles = [], password = 'test123') => {
     // Visit the add user page
-    cy.visit(`${Utils.getAppOrigin()}/carbon/user/add-step1.jsp`);
+    cy.visit(`/carbon/user/add-step1.jsp`);
     cy.get('input[name="username"]').type(name);
     cy.get('#password').type(password);
     cy.get('#password-repeat').type(password);
     cy.get('.buttonRow input:first-child').click();
 
     // Go to step 2 where add roles
-    cy.url().should('contains', `${Utils.getAppOrigin()}/carbon/user/add-step2.jsp`);
+    cy.url().should('contains', `/carbon/user/add-step2.jsp`);
     roles.forEach(role => {
         cy.get(`input[value="${role}"][type="checkbox"]`).check();
     });
@@ -136,7 +136,7 @@ Cypress.Commands.add('deleteUser', (name) => {
 Cypress.Commands.add('deleteApi', (name, version) => {
     var cardName='card-'+name+version;
     var actionCardName='card-action-'+name+version;
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.visit(`/publisher/apis`);
     cy.intercept('**/apis*').as('getApis');
     cy.wait('@getApis', {timeout: 3000}).then(() => {
         cy.get(`[data-testid="${cardName}"]`).get(`[data-testid="${actionCardName}"]`).within(($panel) => {
@@ -150,7 +150,7 @@ Cypress.Commands.add('deleteApi', (name, version) => {
 // Fails intermittently 
 // Instead delete each api after the test is finish.
 Cypress.Commands.add('deleteAllApis', () => {
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.visit(`/publisher/apis`);
     cy.intercept('**/apis*').as('getApis');
     cy.wait('@getApis').then((interception) => {
         if (interception.response && interception.response.body && interception.response.body.count > 0) {
@@ -166,7 +166,7 @@ Cypress.Commands.add('deleteAllApis', () => {
 Cypress.Commands.add('createAnAPI', (name, type = 'REST') => {
     const random_number = Math.floor(Date.now() / 1000);
     const randomName = `0sample_api_${random_number}`;
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`)
+    cy.visit(`/publisher/apis`)
     cy.get('#itest-rest-api-create-menu', { timeout: 30000 });
     cy.get('#itest-rest-api-create-menu').click();
     cy.get('#itest-id-landing-rest-create-default').click()
@@ -193,7 +193,7 @@ Cypress.Commands.add('createAPIByRestAPIDesign', (name = null, version = null, c
     const apiName = name ? name : `0sample_api_${random_number}`;
     const apiVersion = version ? version : `v${random_number}`;
     const apiContext = context ? context : `/sample_context_${random_number}`;
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.visit(`/publisher/apis`);
     cy.get('#itest-rest-api-create-menu', { timeout: 30000 });
     cy.get('#itest-rest-api-create-menu').click();
     cy.get('#itest-id-landing-rest-create-default').click();
@@ -212,7 +212,7 @@ Cypress.Commands.add('createAPIByRestAPIDesign', (name = null, version = null, c
         return false
     });
     cy.wait(500);
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/`, { timeout: 30000 });
+    cy.visit(`/publisher/apis/`, { timeout: 30000 });
     cy.get(`#${apiName}`).click();
 
     cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
@@ -225,7 +225,7 @@ Cypress.Commands.add('createAndPublishAPIByRestAPIDesign', (name = null, version
     const apiName = name ? name : `0sample_api_${random_number}`;
     const apiVersion = version ? version : `v${random_number}`;
     const apiContext = context ? context : `/sample_context_${random_number}`;
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/rest`,{ timeout: 30000 });
+    cy.visit(`/publisher/apis/create/rest`,{ timeout: 30000 });
     cy.get('#itest-id-apiname-input').type(apiName);
     cy.get('#itest-id-apicontext-input').click();
     cy.get('#itest-id-apicontext-input').type(apiContext);
@@ -386,7 +386,7 @@ Cypress.Commands.add('addBusinessInfo', (businessOwnerName,businessOwnerEmail,te
 Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,uripattern,description=null,summary=null,security=true,scope,parametername=null,parametertype=null,datatype=null,required=false) => {
     const uriId=httpverb.toLowerCase()+'\/'+uripattern;
 
-    if(ratelimitlevel=="api"){
+    if(ratelimitlevel == "api"){
         cy.get('#api-rate-limiting-api-level').click();
         cy.get('#operation_throttling_policy').click();
         cy.contains('li',limitinglevel).click();
@@ -405,16 +405,16 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
     cy.get(`[id="${uriId}"]`, { timeout: 30000 }).click();
 
     
-    if(description!= null){
+    if(description != null){
         cy.get(`[data-testid="description-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="description-${uriId}"]`).type(description);
 
     }
-    if(summary!=null){
+    if(summary != null){
         cy.get(`[data-testid="summary-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="summary-${uriId}"]`).type(summary);
     }
-    if(security==false){
+    if(security == false){
         cy.get(`[data-testid="security-${uriId}"]`).click();
     }else{
         cy.get(`[id="${uriId}-operation-scope-select"]`, { timeout: 30000 }).click();
@@ -422,14 +422,14 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
         cy.get('#menu-').click();
     }
 
-    if(ratelimitlevel=="operation"){
+    if(ratelimitlevel == "operation"){
         cy.get(`[id="${uriId}-operation_throttling_policy-label"]`).click();
         cy.contains('li',limitinglevel).click();
     }
 
 
     //parameters
-    if(parametertype!=null){
+    if(parametertype != null){
         cy.get(`[id="param-${uriId}"]`).click();
         cy.contains('li',parametertype).click();
         cy.get(`[id="name-${uriId}"]`).type(parametername);
@@ -493,7 +493,7 @@ Cypress.Commands.add('createAPIWithoutEndpoint', (name=null,version=null,type = 
     if(version){
         apiVersion=version;
     }
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.visit(`/publisher/apis`);
     cy.get('#itest-create-api-menu-button', { timeout: 30000 });
     cy.get('#itest-create-api-menu-button').click();
     cy.get('#itest-id-landing-rest-create-default').click();
@@ -505,7 +505,8 @@ Cypress.Commands.add('createAPIWithoutEndpoint', (name=null,version=null,type = 
     cy.get('#itest-id-apiendpoint-input').click();
     cy.get('#itest-create-default-api-button').click();
     cy.wait(500);
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/`);
+
+    cy.visit(`/publisher/apis/`);
     cy.get(`#${apiName}`,{timeout:3000}).click();
 
 
@@ -514,7 +515,7 @@ Cypress.Commands.add('createAPIWithoutEndpoint', (name=null,version=null,type = 
 })
 
 Cypress.Commands.add('createApp', (appName, appDescription) => {
-    cy.visit(`${Utils.getAppOrigin()}/devportal/applications/create?tenant=carbon.super`);
+    cy.visit(`/devportal/applications/create?tenant=carbon.super`);
     cy.intercept('**/application-attributes').as('attrGet');
     cy.wait('@attrGet', { timeout: 300000 }).then(() => {
         // Filling the form
@@ -532,7 +533,7 @@ Cypress.Commands.add('createApp', (appName, appDescription) => {
 });
 
 Cypress.Commands.add('deleteApp', (appName) => {
-    cy.visit(`${Utils.getAppOrigin()}/devportal/applications?tenant=carbon.super`);
+    cy.visit(`/devportal/applications?tenant=carbon.super`);
     cy.intercept('**/applications**').as('appGet');
     cy.wait('@appGet', { timeout: 300000 }).then(() => {
         cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
@@ -542,7 +543,7 @@ Cypress.Commands.add('deleteApp', (appName) => {
 });
 
 Cypress.Commands.add('createAndPublishApi', (apiName = null) => {
-    cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+    cy.visit(`/publisher/apis`);
     // select the option from the menu item
     cy.get('#itest-rest-api-create-menu').click();
     cy.get('#itest-id-landing-upload-oas').click();
@@ -593,7 +594,7 @@ Cypress.Commands.add('createAndPublishApi', (apiName = null) => {
 })
 
 Cypress.Commands.add('logoutFromDevportal', (referer = '/devportal/apis') => {
-    //cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+    //cy.visit(`/devportal/apis?tenant=carbon.super`);
     //cy.wait(2000);
     cy.get('#userToggleButton').click();
     cy.get("#userPopup").get("#menu-list-grow").get('ul').contains('li','Logout').click();
@@ -603,7 +604,7 @@ Cypress.Commands.add('logoutFromDevportal', (referer = '/devportal/apis') => {
 })
 
 Cypress.Commands.add('logoutFromPublisher', () => {
-    cy.visit(`${Utils.getAppOrigin()}/publisher/services/logout`);
+    cy.visit(`/publisher/services/logout`);
 })
 
 Cypress.Commands.add('publishThirdPartyApi', (apiName = null) => {

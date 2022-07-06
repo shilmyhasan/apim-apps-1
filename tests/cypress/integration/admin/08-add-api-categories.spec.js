@@ -38,10 +38,10 @@ describe("Add API Categories and assign via publisher portal", () => {
 
         // Go to publisher
         cy.wait(500);
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+        cy.visit(`/publisher/apis`);
         Utils.addAPI({}).then((apiId) => {
             testApiId = apiId;
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/configuration`);
+            cy.visit(`/publisher/apis/${apiId}/configuration`);
             cy.get('#APICategories').click();
             cy.get('span').contains(category).click();
             cy.get('#menu-categories').click('topLeft');
@@ -53,7 +53,7 @@ describe("Add API Categories and assign via publisher portal", () => {
         if (testApiId) {
             Utils.deleteAPI(testApiId).then(() => {
                 // Delete
-                cy.visit(`${Utils.getAppOrigin()}/admin/settings/api-categories`);
+                cy.visit(`/admin/settings/api-categories`);
                 cy.wait(4000);
                 cy.get('[data-testid="MuiDataTableBodyCell-4-0"] > div > div > span:nth-child(2)').click();
                 cy.get('[data-testid="Delete-btn"]').click();

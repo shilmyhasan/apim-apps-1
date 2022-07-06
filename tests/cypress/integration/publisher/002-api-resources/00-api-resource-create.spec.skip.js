@@ -25,7 +25,7 @@ describe("Resource add edit operations", () => {
 
     const addApiAndResource = (verb, apiId) => {
         // Typing the resource name
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/resources`);
+        cy.visit(`/publisher/apis/${apiId}/resources`);
         cy.get('#operation-target').type(target);
         cy.get('body').click();
         cy.get('#add-operation-selection-dropdown').click();
@@ -48,7 +48,7 @@ describe("Resource add edit operations", () => {
         const apiVersion = '1.0.0';
         cy.loginToPublisher(publisher, password);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/resources`);
+            cy.visit(`/publisher/apis/${apiId}/resources`);
 
             // Typing the resource name
             cy.get('#itest-api-details-api-config-acc').click();
@@ -162,7 +162,7 @@ describe("Resource add edit operations", () => {
             addApiAndResource(verb, apiId);
 
             // Go to local scope page
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/scopes/create`);
+            cy.visit(`/publisher/apis/${apiId}/scopes/create`);
 
             // Create a local scope
             cy.get('input#name').click();
@@ -188,7 +188,7 @@ describe("Resource add edit operations", () => {
                 .contains(scopeName).should('be.visible');
 
             // Go to resources page
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/resources`);
+            cy.visit(`/publisher/apis/${apiId}/resources`);
 
             // Open the operation sub section
             cy.get(`#${verb}\\${target}`).click();

@@ -27,7 +27,7 @@ describe("Undeploy new revision", () => {
 
     it.only("Create new revision and undeploy", () => {
         Utils.addAPIWithEndpoints({}).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
             // Going to deployments page
             cy.get('#left-menu-itemdeployments').click();
 

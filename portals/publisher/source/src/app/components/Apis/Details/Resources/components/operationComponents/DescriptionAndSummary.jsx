@@ -57,7 +57,7 @@ export default function DescriptionAndSummary(props) {
                     rows='4'
                     value={operation.description}
                     variant='outlined'
-                    data-testid={'description-'+verb+''+target}
+                    data-testid={'description-'+verb+target}
                     onChange={
                         ({ target: { value } }) => operationsDispatcher(
                             { action: 'description', data: { target, verb, value } },

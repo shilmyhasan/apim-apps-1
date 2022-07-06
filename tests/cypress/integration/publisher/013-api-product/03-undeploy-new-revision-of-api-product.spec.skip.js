@@ -25,7 +25,7 @@ describe("Mock the api response and test it", () => {
     })
 
     it("Mock the api response and test it", () => {
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/openapi`, { timeout: 30000 });
+        cy.visit(`/publisher/apis/create/openapi`, { timeout: 30000 });
         cy.get('#open-api-file-select-radio').click();
 
         // upload the swagger
@@ -61,7 +61,7 @@ describe("Mock the api response and test it", () => {
                 cy.get('#itest-api-name-version').contains(version);
                 
                 // Go to api product create page
-                cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/create`);
+                cy.visit(`/publisher/api-products/create`);
 
                 // fill the form
                 cy.get('#itest-id-apiname-input').type(productName);
@@ -100,12 +100,12 @@ describe("Mock the api response and test it", () => {
                     cy.log(uuid, uuidProduct);
 
                     // Deleting the api and api product
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/${uuidProduct}/overview`);
+                    cy.visit(`/publisher/api-products/${uuidProduct}/overview`);
                     cy.get('#itest-api-name-version', { timeout: 30000 });
                     cy.get(`#itest-id-deleteapi-icon-button`).click({force: true});
                     cy.get(`#itest-id-deleteconf`).click();
 
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/overview`);
+                    cy.visit(`/publisher/apis/${uuid}/overview`);
                     cy.get('#itest-api-name-version', { timeout: 30000 });
                     cy.get(`#itest-id-deleteapi-icon-button`).click({force: true});
                     cy.get(`#itest-id-deleteconf`).click();
