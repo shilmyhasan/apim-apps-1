@@ -31,7 +31,7 @@ describe("Change subscription tier of an application", () => {
             testApiId = apiId;
             Utils.publishAPI(apiId).then(() => {
                 
-                cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/subscriptions`);
+                cy.visit(`/publisher/apis/${apiId}/subscriptions`);
                 cy.get('[data-testid="policy-checkbox-silver"]', {timeout: 30000});
                 cy.get('[data-testid="policy-checkbox-silver"]').click();
                 cy.get('#subscriptions-save-btn').click();
@@ -71,7 +71,7 @@ describe("Change subscription tier of an application", () => {
                     cy.log('apis: ' + $apis.text());
                     // Create an app and subscribe
                     cy.createApp(appName, 'application description');
-                    cy.visit(`${Utils.getAppOrigin()}/devportal/applications?tenant=carbon.super`);
+                    cy.visit(`/devportal/applications?tenant=carbon.super`);
                     cy.get(`#itest-application-list-table td a`).contains(appName).click();
 
                     // Go to application subscription page

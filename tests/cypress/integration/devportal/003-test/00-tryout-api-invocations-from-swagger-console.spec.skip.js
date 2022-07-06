@@ -36,7 +36,7 @@ describe("Tryout API invocations", () => {
 
                 // Create an app and subscribe
                 cy.createApp(appName, 'application description');
-                cy.visit(`${Utils.getAppOrigin()}/devportal/apis/${apiId}/credentials?tenant=carbon.super`);
+                cy.visit(`/devportal/apis/${apiId}/credentials?tenant=carbon.super`);
 
                 // Click and select the new application
                 cy.get('#application-subscribe', {timeout: 30000});

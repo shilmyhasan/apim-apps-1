@@ -25,7 +25,7 @@ describe("Life cycle support for API Products", () => {
     })
 
     it("Life cycle support for API Products", () => {
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/openapi`, { timeout: 30000 });
+        cy.visit(`/publisher/apis/create/openapi`, { timeout: 30000 });
         cy.get('#open-api-file-select-radio').click();
 
 
@@ -56,7 +56,7 @@ describe("Life cycle support for API Products", () => {
                 const uuid = pathSegments[pathSegments.length - 2];
 
                 // Go to api product create page
-                cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/create`);
+                cy.visit(`/publisher/api-products/create`);
 
                 // fill the form
                 cy.get('#itest-id-apiname-input').type(productName);
@@ -102,11 +102,11 @@ describe("Life cycle support for API Products", () => {
                     cy.get('[data-testid="Deploy as a Prototype-btn"]').click();
 
                     // Deleting the api and api product
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/${uuidProduct}/overview`);
+                    cy.visit(`/publisher/api-products/${uuidProduct}/overview`);
                     cy.get('#itest-id-deleteapi-icon-button').click();
                     cy.get('#itest-id-deleteconf').click();
 
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/overview`);
+                    cy.visit(`/publisher/apis/${uuid}/overview`);
                     cy.get('#itest-api-name-version', { timeout: 30000 });
                     cy.get(`#itest-id-deleteapi-icon-button`).click();
                     cy.get(`#itest-id-deleteconf`).click();

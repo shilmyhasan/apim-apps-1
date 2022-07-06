@@ -22,7 +22,7 @@ describe("Create api with swagger file super tenant", () => {
 
     const openApiCreate = (url) => {
         // select the option from the menu item
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/openapi`);
+        cy.visit(`/publisher/apis/create/openapi`);
 
         // upload the swagger
         cy.get('[data-testid="swagger-url-endpoint"]').type(url);

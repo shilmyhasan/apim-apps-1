@@ -38,7 +38,7 @@ describe("Subscribe unsubscribe to application from api details page", () => {
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
                 cy.createApp(appName, appDescription);
-                cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=carbon.super`);
+                cy.visit(`/devportal/apis?tenant=carbon.super`);
                 cy.url().should('contain', '/apis?tenant=carbon.super');
                  // After publishing the api appears in devportal with a delay.
                 // We need to keep refresing and look for the api in the listing page
