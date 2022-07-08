@@ -30,7 +30,7 @@ describe("Runtime configuration", () => {
 
     it.only("Select transport type", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/runtime-configuration`);
+            cy.visit(`/publisher/apis/${apiId}/runtime-configuration`);
             cy.get('#transportLevel').click();
             cy.get('#http-transport').click();
             cy.get('#save-runtime-configurations').click();

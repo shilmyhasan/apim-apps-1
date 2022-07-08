@@ -218,7 +218,7 @@ class APIThumb extends Component {
                 data-testid={'card-'+api.name+api.version}
             >
                 {api.advertiseOnly && (
-                    <div className={classes.ribbon}>third party</div>
+                    <div className={classes.ribbon} data-testid='third-party-api-card-label'>third party</div>
                 )}
                 <CardMedia
                     src='None'
@@ -292,6 +292,7 @@ class APIThumb extends Component {
                         classes={{ root: classes.thumbRightBy, label: classes.thumbRightByLabel }}
                         label={lifecycleState}
                         color='default'
+                        data-testid='itest-api-lifecycleState'
                     />
                     {(api.type === 'GRAPHQL' || api.transportType === 'GRAPHQL') && (
                         <Chip

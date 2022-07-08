@@ -171,6 +171,7 @@ describe("Create GraphQl API from file", () => {
         cy.get('table').get('[data-testid="allDroids-tbl-row"]').find('td').eq(2).click().get('ul').contains('li','Unlimited').click();
         cy.get('table').get('[data-testid="allDroids-tbl-row"]').find('td').eq(3).click().get('ul').contains('li','filmSubscriberScope').click();
         cy.get("#menu-").click();
+
         cy.get('[data-testid="custom-select-save-button"]').click();
 
         //deployments

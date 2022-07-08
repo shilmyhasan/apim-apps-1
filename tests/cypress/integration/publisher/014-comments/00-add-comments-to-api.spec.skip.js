@@ -29,7 +29,7 @@ describe("adding comment", () => {
         const comment = 'test api';
         Utils.addAPI({}).then((apiId) => {
             cy.intercept('**/comments?limit=5&offset=0').as('commentsGet');
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/comments`);
+            cy.visit(`/publisher/apis/${apiId}/comments`);
             cy.wait('@commentsGet', {timeout: 30000}).then(() => {
                 cy.get('#standard-multiline-flexible').click();
                 cy.get('#standard-multiline-flexible').type(comment);

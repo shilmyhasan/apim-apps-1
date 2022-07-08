@@ -28,7 +28,7 @@ describe("Download swagger", () => {
 
     it.only("Download swagger", () => {
         Utils.addAPI({}).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemAPIdefinition').click();
             cy.get('.lines-content.monaco-editor-background div.view-lines div.view-line', { timeout: 30000 });

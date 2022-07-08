@@ -25,7 +25,7 @@ describe("Mock the api response and test it", () => {
     })
 
     it("Mock the api response and test it", () => {
-        cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/openapi`, { timeout: 30000 });
+        cy.visit(`/publisher/apis/create/openapi`, { timeout: 30000 });
         cy.get('#open-api-file-select-radio').click();
 
         // upload the swagger
@@ -61,7 +61,7 @@ describe("Mock the api response and test it", () => {
                 const uuid = res.response.body.id;
 
                 // Go to api product create page
-                cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/create`);
+                cy.visit(`/publisher/api-products/create`);
 
                 // fill the form
                 cy.get('#itest-id-apiname-input').type(productName);
@@ -91,7 +91,7 @@ describe("Mock the api response and test it", () => {
                     // Need to update the underline api and update the api product again.
                     // ==================================================================== //
                     cy.log(uuid, uuidProduct);
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/resources`);
+                    cy.visit(`/publisher/apis/${uuid}/resources`);
 
                     // Add a new resource to the underline api
                     // Typing the resource name
@@ -110,7 +110,7 @@ describe("Mock the api response and test it", () => {
                     cy.get(`#get\\${target}`).should('be.visible');
 
                     // Go to api product
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/${uuidProduct}/resources/edit`);
+                    cy.visit(`/publisher/api-products/${uuidProduct}/resources/edit`);
 
                     // Add the newly created resource and save
                     cy.get('#resource-wrapper', { timeout: 30000 });
@@ -122,12 +122,12 @@ describe("Mock the api response and test it", () => {
                     cy.get('#save-product-resources').click();
 
                     // Deleting the api and api product
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/api-products/${uuidProduct}/overview`);
+                    cy.visit(`/publisher/api-products/${uuidProduct}/overview`);
                     cy.get('#itest-api-name-version', { timeout: 30000 });
                     cy.get(`#itest-id-deleteapi-icon-button`).click();
                     cy.get(`#itest-id-deleteconf`).click();
 
-                    cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/overview`);
+                    cy.visit(`/publisher/apis/${uuid}/overview`);
                     cy.get('#itest-api-name-version', { timeout: 30000 });
                     cy.get(`#itest-id-deleteapi-icon-button`).click();
                     cy.get(`#itest-id-deleteconf`).click();

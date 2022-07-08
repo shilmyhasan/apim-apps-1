@@ -28,7 +28,7 @@ describe("Common Policies", () => {
 
     it("Api Specific Policy", () => {
         Utils.addAPI({}).then((apiId) => {
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/policies`);
+            cy.visit(`/publisher/apis/${apiId}/policies`);
             //Create API Specific Policy
             cy.get('[data-testid="add-new-api-specific-policy"]').click();
             cy.get('#name').type('Add Header sample test');
@@ -70,8 +70,8 @@ describe("Common Policies", () => {
             cy.get('#headerName').type('Testing');
             cy.get('[data-testid="policy-attached-details-save"]').click();
             cy.get('[data-testid="custom-select-save-button"]').scrollIntoView().click();
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/scopes`);
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${apiId}/policies`);
+            cy.visit(`/publisher/apis/${apiId}/scopes`);
+            cy.visit(`/publisher/apis/${apiId}/policies`);
             cy.wait(2000);
 
             //Delete API
