@@ -280,27 +280,28 @@ Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
 
     cy.contains('button', 'Import Definition').click();
     // upload the graphql file
-    cy.get('[data-testid="browse-to-upload-btn"]').then(function () {
-        cy.get('input[type="file"]').attachFile(filepath)
-    });
-
+    cy.get('[data-testid="browse-to-upload-btn"]')
+    cy.get('input[type="file"]').attachFile(filepath);
     cy.contains('h2','Import GraphQL Schema Definition').should('exist');
     uploadedDefinitionPanel=cy.get('[data-testid="uploaded-list-graphql"]').get('li').get('[data-testid="uploaded-list-content-graphql"]')
-    uploadedDefinitionPanel.contains(`[data-testid="file-input-${filename}"]`,filename).should('be.visible');
+    //uploadedDefinitionPanel.contains(`[data-testid="file-input-${filename}"]`,filename).should('be.visible');
     uploadedDefinitionPanel.get('[data-testid="btn-delete-imported-file"]').should('be.visible');
     cy.get('#import-open-api-btn').click();
-
+    
     cy.get('.react-monaco-editor-container',{timeout:3000}).get('.monaco-editor textarea:first')
-    .type('{cmd}f',{force:true});
+        .type('{cmd}f',{force:true});
     cy.get('.find-part .input').type('modified schema file');
     cy.contains('.find-actions','1 of').should('be.visible');
+    
    
 })
 
 
 Cypress.Commands.add('createLocalScope', (name, displayname='sample display name',description='sample description',roles=[]) => {
 
-    cy.get('#name',{timeout:3000}).type(name,{force:true});
+    cy.get('h3', { timeout: 30000 }).contains("Create New Scope",  { timeout: 30000 });
+    cy.wait(1000);
+    cy.get('#name',{timeout:3000}).type(name, {force:true});
     cy.get('#displayName',{timeout: 30000 }).type(displayname);
     cy.get('#description',{timeout: 30000 }).type(description);
 
@@ -310,17 +311,7 @@ Cypress.Commands.add('createLocalScope', (name, displayname='sample display name
     cy.get('#scope-save-btn').click();
     
     //check the table and verify whether entered scope names exist
-    cy.get('table').get('tbody').find("tr")
-    .then((rows) => {
-        var ele=null;
-        rows.toArray().every((element) => {
-            if (element.innerHTML.includes(name)) {
-              ele=element;
-              return false;
-            }
-          });
-          expect(ele.innerHTML).to.include(name);
-    });
+    cy.get('table').get('tbody').find("tr").contains(name);
 
 })
 
@@ -651,7 +642,7 @@ Cypress.Commands.add('createApplication', (applicationName,perTokenQuota,applica
 
     cy.get("#itest-info-bar-application-name",{timeout:3000}).contains(applicationName).should('exist');
     cy.get("#production-keys").click();
-    cy.get("#ResidentKeyManager",{timeout:3000}).click();
+    //cy.get("#ResidentKeyManager",{timeout:3000}).click();
     cy.get("#generate-keys").click();
 
     cy.get("#sandbox-keys").click();
