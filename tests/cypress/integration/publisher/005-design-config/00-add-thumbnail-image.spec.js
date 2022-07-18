@@ -46,6 +46,7 @@ describe("Upload thumbnail", () => {
             // Save
             cy.get('#design-config-save-btn').click({ force: true });
 
+            cy.wait(500);
             // Validate
             cy.get('[alt="API Thumbnail"]', { timeout: 30000 })
                 .should('be.visible')

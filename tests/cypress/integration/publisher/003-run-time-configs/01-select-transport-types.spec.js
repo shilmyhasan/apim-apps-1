@@ -31,10 +31,10 @@ describe("Runtime configuration", () => {
     it.only("Select transport type", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/runtime-configuration`);
-            cy.get('#transportLevel').click();
-            cy.get('#http-transport').click();
+            cy.get('#transportLevel').click({force:true});
+            cy.get('#http-transport').click({force:true});
             cy.get('#save-runtime-configurations').click();
-            cy.get('#transportLevel').click();
+            cy.get('#transportLevel').click({force:true});
             cy.get('#http-transport').should('not.be.checked');
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);
