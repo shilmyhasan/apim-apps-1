@@ -71,7 +71,7 @@ describe("Mock the api response and test it", () => {
                     cy.get('#itest-api-details-portal-config-acc').click();
                     cy.get('#left-menu-itemsubscriptions').click();
 
-                    cy.get('span').contains('Silver : Allows 2000 requests per minute').click();
+                    cy.get('[data-testid="policy-checkbox-silver"]').children().eq(1).contains('Silver : Allows 2000 requests per minute').click();
                     cy.get('#subscriptions-save-btn').click();
 
                     // Going to deployments page
@@ -88,7 +88,7 @@ describe("Mock the api response and test it", () => {
 
                     cy.get('#operations-pet-getPetById').click();
                     cy.get('#operations-pet-getPetById .try-out__btn').click();
-                    cy.get('#operations-pet-getPetById [placeholder="petId - ID of pet to return"]').type('1');
+                    cy.get('#operations-pet-getPetById [placeholder="petId"]').type('1');
                     cy.get('#operations-pet-getPetById button.execute').click();
                     cy.get('#operations-pet-getPetById  td.response-col_status').contains('200').should('exist');
 

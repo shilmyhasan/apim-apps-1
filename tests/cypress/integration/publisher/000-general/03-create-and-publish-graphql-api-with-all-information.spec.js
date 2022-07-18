@@ -14,15 +14,6 @@
  * under the License.
  */
 
-
-/*
-As a Pre-requisite for executing this test case you need to do the following things : 
-
-  1. download the samples-apim (github url : https://github.com/wso2/samples-apim.git )
-  2. inside the /graphql-backend directory, open a terminal and start the server (npm start)
-
-*/
-
 import Utils from "@support/utils";
 
 describe("Create GraphQl API from file", () => {
@@ -103,19 +94,6 @@ describe("Create GraphQl API from file", () => {
 
 
     beforeEach(function(){
-        //add role filmsubscriber
-        cy.carbonLogin(username, password);
-        cy.visit('https://localhost:9443/carbon/role/add-step1.jsp');
-        cy.get('input[name="roleName"]').type('FilmSubscriber');
-        cy.get('td.buttonRow').find('input').eq(0).click();
-        cy.get('#ygtvcheck2 > .ygtvspacer').click();
-        cy.get('#ygtvcheck34 > .ygtvspacer').click();
-        cy.get('#ygtvcheck48 > .ygtvspacer').click();
-        cy.get('td.buttonRow').find('input').eq(1).click();
-        cy.get('.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix>.ui-dialog-buttonset>.ui-button.ui-corner-all.ui-widget',{timeout:4000}).click();
-
-        cy.carbonLogout();
-        
         cy.loginToPublisher(username, password);
         cy.on('uncaught:exception', (err, runnable) => {
           if (err.message.includes('applicationId is not provided')||err.message.includes('validateDescription is not a function')) {
@@ -171,7 +149,6 @@ describe("Create GraphQl API from file", () => {
         cy.get('table').get('[data-testid="allDroids-tbl-row"]').find('td').eq(2).click().get('ul').contains('li','Unlimited').click();
         cy.get('table').get('[data-testid="allDroids-tbl-row"]').find('td').eq(3).click().get('ul').contains('li','filmSubscriberScope').click();
         cy.get("#menu-").click();
-
         cy.get('[data-testid="custom-select-save-button"]').click();
 
         //deployments
@@ -179,98 +156,98 @@ describe("Create GraphQl API from file", () => {
           const pathSegments = pathName.split('/');
           const uuid = pathSegments[pathSegments.length - 2];
           cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/deployments`);
-        });
-        cy.get('#deploy-btn',{timeout:4000}).click();
+          
+          cy.get('#deploy-btn',{timeout:10000}).click();
              
-        //publish
-        cy.get("#left-menu-overview",{timeout:6000}).click();
-        cy.get('[data-testid="publish-state-button"]',{timeout:6000}).should('not.be.disabled').click();
+          //publish
+          cy.get("#left-menu-overview",{timeout:6000}).click();
+          cy.get('[data-testid="publish-state-button"]',{timeout:6000}).should('not.be.disabled').click();
 
-        //visit dev portal and view API
-        cy.logoutFromPublisher();
-        cy.loginToDevportal(username, password);
+          //visit dev portal and view API
+          cy.logoutFromPublisher();
+          cy.loginToDevportal(username, password);
 
-        // create an application
-        cy.createApplication(applicationName,"50PerMin","Sample Description");
+          // create an application
+          cy.createApplication(applicationName,"50PerMin","Sample Description");
 
-        //go to apis
-        cy.get('[data-testid="itest-link-to-apis"]',{timeout:3000}).click();
+          //go to apis
+          cy.get('[data-testid="itest-link-to-apis"]',{timeout:3000}).click();
 
-        cy.get('table > tbody > tr',{timeout:6000}).get(`[area-label="Go to ${apiName}"]`).click();
+          cy.get('table > tbody > tr',{timeout:6000}).get(`[area-label="Go to ${apiName}"]`).click();
 
-        //should contain two urls : HTTP URL and Websocket URL
-        cy.get('#gateway-envirounment',{timeout:6000}).get('[data-testid="http-url"]').should('exist');
-        cy.get('#gateway-envirounment').get('[data-testid="websocket-url"]').should('exist');
-        
-        // Go to application subscription page
-        cy.get("#left-menu-credentials").click();
-        cy.get('button[aria-label="Open"]').click();
-        cy.get('ul').contains('li',applicationName).click();
-        cy.get("#subscribe-to-api-btn").click();
-        
-        cy.get("#left-menu-test",{timeout:3000}).click();
+          //should contain two urls : HTTP URL and Websocket URL
+          cy.get('#gateway-envirounment',{timeout:6000}).get('[data-testid="http-url"]').should('exist');
+          cy.get('#gateway-envirounment').get('[data-testid="websocket-url"]').should('exist');
+          
+          // Go to application subscription page
+          cy.get("#left-menu-credentials").click();
+          cy.get('button[aria-label="Open"]').click();
+          cy.get('ul').contains('li',applicationName).click();
+          cy.get("#subscribe-to-api-btn").click();
+          
+          cy.get("#left-menu-test",{timeout:3000}).click();
 
-        cy.intercept('**/applications/').then((res) => {
-          // Check if the application exists
-          cy.get("#selected-application").should('exist');
+          cy.intercept('**/applications/').then((res) => {
+            // Check if the application exists
+            cy.get("#selected-application").should('exist');
+          });
+
+          cy.intercept('**/generate-token').as('getToken');
+          cy.get('#gen-test-key',{timeout:3000}).click();
+          cy.wait('@getToken').its('response.statusCode').should('eq', 200);
+
+          cy.get('[aria-label="Query Editor"]').type(starWarsQueryRequest);
+          cy.get('.topBar').get('.execute-button-wrap').get('button.execute-button').click();
+
+          cy.intercept('POST','/swapi/1.0.0',(res) => {
+            expect(res.body).to.include(starWarsQueryResponse);
+          }).as("queryResponse");
+          
+          cy.reload();
+          cy.intercept('**/applications/').then((res) => {
+            // Check if the application exists
+            cy.get("#selected-application").should('exist');
+          });
+
+          cy.intercept('**/generate-token').as('getToken');
+          cy.get('#gen-test-key',{timeout:3000}).click();
+          cy.wait('@getToken').its('response.statusCode').should('eq', 200);
+
+          cy.get('[aria-label="Query Editor"]').type('{backspace}'+starWarsSubscriptionRequest);
+          cy.get('.topBar').get('.execute-button-wrap').get('button.execute-button').click();
+          
+          cy.intercept('GET','/swapi/1.0.0/*',(res) => {
+            expect(res).property('status').to.equal(200);
+            expect(res).property('type').to.equal('websocket');
+          }).as("switchProtocol");
+          cy.deleteApplication(applicationName);
+          /*
+          cy.request({
+            method: 'POST',
+            url: 'http://localhost:8080/graphql',
+            headers:{
+              'accept': "application/json", 
+              'Content-type': "application/json"
+            },
+            body: {
+              "query":`mutation {createReview(episode: JEDI, review: { stars: 3, commentary: \"Excellent\"}) { stars   episode   commentary }}`,
+              "variables":null
+            },
+          }).then((resp) => {
+            expect(JSON.stringify(resp.body)).to.include(starWarsSubscriptionResponse);
+          });   */ 
         });
-
-        cy.intercept('**/generate-token').as('getToken');
-        cy.get('#gen-test-key',{timeout:3000}).click();
-        cy.wait('@getToken').its('response.statusCode').should('eq', 200);
-
-        cy.get('[aria-label="Query Editor"]').type(starWarsQueryRequest);
-        cy.get('.topBar').get('.execute-button-wrap').get('button.execute-button').click();
-
-        cy.intercept('POST','/swapi/1.0.0',(res) => {
-          expect(res.body).to.include(starWarsQueryResponse);
-        }).as("queryResponse");
         
-        cy.reload();
-        cy.intercept('**/applications/').then((res) => {
-          // Check if the application exists
-          cy.get("#selected-application").should('exist');
-        });
-
-        cy.intercept('**/generate-token').as('getToken');
-        cy.get('#gen-test-key',{timeout:3000}).click();
-        cy.wait('@getToken').its('response.statusCode').should('eq', 200);
-
-        cy.get('[aria-label="Query Editor"]').type('{backspace}'+starWarsSubscriptionRequest);
-        cy.get('.topBar').get('.execute-button-wrap').get('button.execute-button').click();
-        
-        cy.intercept('GET','/swapi/1.0.0/*',(res) => {
-          expect(res).property('status').to.equal(200);
-          expect(res).property('type').to.equal('websocket');
-        }).as("switchProtocol");
-
-        
-         cy.request({
-          method: 'POST',
-          url: 'http://localhost:8080/graphql',
-          headers:{
-            'accept': "application/json", 
-            'Content-type': "application/json"
-          },
-          body: {
-            "query":`mutation {createReview(episode: JEDI, review: { stars: 3, commentary: \"Excellent\"}) { stars   episode   commentary }}`,
-            "variables":null
-          },
-        }).then((resp) => {
-          expect(JSON.stringify(resp.body)).to.include(starWarsSubscriptionResponse);
-        });      
-
-
     });
 
-    after(function () {
-        //delete the created application
-        cy.deleteApplication(applicationName);
-        cy.logoutFromDevportal();
 
-        cy.loginToPublisher(username, password);
+/*
+    after(function () {
         // Test is done. Now delete the api
-        cy.deleteApi(apiName,apiVersion);
-        cy.logoutFromPublisher();
-    })
+        cy.get(`#itest-id-deleteapi-icon-button`).click();
+        cy.get(`#itest-id-deleteconf`).click();
+
+        cy.visit(`${Utils.getAppOrigin()}/carbon/user/user-mgt.jsp`);
+        cy.deleteUser(publisher);
+    })*/
 })

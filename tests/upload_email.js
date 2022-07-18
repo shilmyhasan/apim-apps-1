@@ -8,7 +8,7 @@ const ID = '';
 const SECRET = '';
 
 // The name of the bucket that you have created
-const BUCKET_NAME = 'apim-3.2.0-ui-testing';
+const BUCKET_NAME = 'apim-4.1.0-ui-testing';
 var secretAccessKey = process.env.S3_SECRET_KEY;
 var accessKeyId = process.env.S3_ACCESS_KEY;
 var testGridEmailPWD = process.env.TESTGRID_EMAIL_PASSWORD;
@@ -23,10 +23,11 @@ const uploadFile = (fileName) => {
   // Read content from the file
   const fileContent = fs.readFileSync(fileName);
 
+  var timestamp = new Date() / 1000;
   // Setting up S3 upload parameters
   const params = {
       Bucket: BUCKET_NAME,
-      Key: 'mochawesome-bundle.html', // File name you want to save as in S3
+      Key: 'mochawesome-bundle-' + timestamp + '.html', // File name you want to save as in S3
       Body: fileContent,
       ACL: 'public-read',
       ContentType : "text/html"

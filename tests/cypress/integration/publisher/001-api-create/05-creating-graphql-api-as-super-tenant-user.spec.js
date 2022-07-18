@@ -17,9 +17,9 @@
 import Utils from "@support/utils";
 
 describe("Create GraphQl API from file", () => {
-    const { publisher, password, } = Utils.getUserInfo();
-
+    const {carbonUsername, carbonPassword} = Utils.getUserInfo();
     it("Create GraphQl API from file", () => {
+        cy.loginToPublisher(carbonUsername, carbonPassword);
         cy.createGraphqlAPIfromFile("SampleAPI_",'1.0.0','/sampleapi','api_artifacts/schema_graphql.graphql');
     });
 })
