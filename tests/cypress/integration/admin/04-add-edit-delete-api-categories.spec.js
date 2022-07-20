@@ -25,7 +25,7 @@ describe("Add Edit Delete api categories", () => {
     })
     it.only("Add Edit Delete api categories", () => {
         const categoryName = 'Finance';
-        cy.get('[data-testid="API Categories"]').click();
+        cy.get('[data-testid="API Categories"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('.MuiButton-label').contains('Add API Category').click();
         cy.get('input[name="name"]').type(categoryName);
         cy.get('textarea[name="description"]').type('finance related apis');

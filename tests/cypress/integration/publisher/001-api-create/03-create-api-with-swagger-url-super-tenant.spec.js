@@ -25,27 +25,27 @@ describe("Create api with swagger file super tenant", () => {
         cy.visit(`/publisher/apis/create/openapi`);
 
         // upload the swagger
-        cy.get('[data-testid="swagger-url-endpoint"]').type(url);
+        cy.get('[data-testid="swagger-url-endpoint"]', {timeout: Cypress.config().largeTimeout}).type(url);
         // go to the next step
         cy.get('#url-validated', { timeout: 30000 });
         cy.get('#open-api-create-next-btn').click();
 
-        cy.get('#itest-id-apiversion-input', { timeout: 30000 });
+        cy.get('#itest-id-apiversion-input', {timeout: Cypress.config().largeTimeout});
         cy.document().then((doc) => {
             cy.get('#itest-id-apicontext-input').type('petstore3');
             cy.get('#itest-id-apiversion-input').click();
             const version = doc.querySelector('#itest-id-apiversion-input').value;
             cy.get('#itest-id-apiendpoint-input').clear();
-            cy.get('#itest-id-apiendpoint-input').type(url);
+            cy.get('#itest-id-apiendpoint-input').type(url).should('have.value', url);
 
             cy.intercept('**/apis/**').as('apiGet');
 
             // finish the wizard
             cy.get('#open-api-create-btn').click();
 
-            cy.wait('@apiGet', { timeout: 30000 }).then((data) => {
+            cy.wait('@apiGet', {timeout: Cypress.config().largeTimeout}).then((data) => {
                 // validate
-                cy.get('#itest-api-name-version', { timeout: 30000 });
+                cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout});
                 cy.get('#itest-api-name-version').contains(version);
 
                 // Test is done. Now delete the api

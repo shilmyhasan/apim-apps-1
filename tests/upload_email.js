@@ -53,7 +53,7 @@ const uploadFile = (fileName) => {
 
       var mailOptions = {
           from: "TestGrid Team <testgrid@wso2.com>",
-          to: "prasanna@wso2.com,vimukthi@wso2.com,rosens@wso2.com,nandika@wso2.com,dhanushka@wso2.com",
+          to: "prasanna@wso2.com,vimukthi@wso2.com,rosens@wso2.com,nandika@wso2.com,dhanushka@wso2.com,bathiya@wso2.com",
           subject: `WSO2 APIM 4.1.0 UI TESTS`,
           html: content
       }

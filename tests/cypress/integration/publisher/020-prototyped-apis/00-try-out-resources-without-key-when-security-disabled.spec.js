@@ -24,27 +24,22 @@ describe("prototype apis with security disabled", () => {
     const apiVersion='1.0.0';
     let testApiId;
     before(function () {
-        cy.loginToPublisher(userName, password);
-        cy.on('uncaught:exception', (err, runnable) => {
-            if (err.message.includes('applicationId is not provided')||err.message.includes('validateDescription is not a function')) {
-              return false
-            }
-          });
+
     })
     it.only("try out resources disabling the security without credentials", () => {
         const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
-
+        cy.loginToPublisher(userName, password);
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
-            cy.get('#itest-api-details-api-config-acc').click();
+            cy.get('#itest-api-details-api-config-acc', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#left-menu-itemendpoints').click();
-            cy.get('[data-testid="http/restendpoint-add-btn"]').click();
+            cy.get('[data-testid="http/restendpoint-add-btn"]').click({force:true});
     
             // Add the prod and sandbox endpoints
-            cy.get('#production-endpoint-checkbox').click();
+            cy.get('#production-endpoint-checkbox', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#production_endpoints', {timeout: Cypress.config().largeTimeout}).focus().type(endpoint);
             cy.get('#sandbox-endpoint-checkbox').click();
-            cy.get('#production_endpoints').focus().type(endpoint);
             cy.get('#sandbox_endpoints').focus().type(endpoint);
     
             // Save
@@ -61,20 +56,20 @@ describe("prototype apis with security disabled", () => {
             cy.get('button[aria-label="disable security for all"]').click();
             cy.get('button[aria-label="select merge strategy"]').click();
             cy.get("#split-button-menu").contains('li','Save and deploy').click();
-            cy.get('[data-testid="Defaultgateway-select-btn"]').click();
+            cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('[data-testid="btn-deploy"]').click();
     
             cy.get("#left-menu-itemlifecycle").click();
-            cy.get('[data-testid="Deploy as a Prototype-btn"]',{timeout:3000}).click();
+            cy.get('[data-testid="Deploy as a Prototype-btn"]',{timeout: Cypress.config().largeTimeout}).click();
     
             cy.logoutFromPublisher();
     
             //login to dev portal as Developer
             cy.loginToDevportal(userName, password);
-            cy.get('table > tbody > tr',{timeout:6000}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
-            cy.get('table > tbody > tr',{timeout:6000}).get(`[area-label="Go to ${apiName}"]`).click();
-            cy.contains('a',"Try out",{timeout:3000}).click();
-            cy.get('.opblock-summary-get > .opblock-summary-control').click();
+            cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
+            cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).click();
+            cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();
+            cy.get('.opblock-summary-get > .opblock-summary-control', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('.try-out__btn').click();
             cy.get('.execute').click();
             cy.contains('.live-responses-table .response > .response-col_status','200').should('exist');

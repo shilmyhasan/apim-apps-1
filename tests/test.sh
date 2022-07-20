@@ -86,6 +86,11 @@ then
 else
     PRODUCT_VERSION="-$PRODUCT_VERSION"
 fi
+BASE_URL=$(get_prop 'GatewayHttpsUrl')
+echo $BASE_URL
+
+export CYPRESS_BASE_URL=${BASE_URL}
+echo $CYPRESS_BASE_URL;
 
 ######
 export DEBIAN_FRONTEND=noninteractive
@@ -114,7 +119,6 @@ sudo ln -s $HOME/node-v12.22.3-linux-x64/bin/npx /usr/bin/npx
 sudo apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
 export LC_CTYPE="en_US.UTF-8"
 cd $HOME
-
 npm install cypress
 npm install --save-dev cypress-file-upload
 npm install --save  nodemailer
@@ -125,12 +129,6 @@ npm i --save-dev mocha-junit-reporter
 npm i --save-dev cypress-multi-reporters
 npm i babel-plugin-module-resolver
 
-$(grep -w "${1}" "${INPUT_DIR}/deployment.properties" | cut -d'=' -f2)
-BASE_URL=$(get_prop 'PublisherUrl')
-echo $BASE_URL
-
-export CYPRESS_BASE_URL=${BASE_URL//\/publisher}
-echo $CYPRESS_BASE_URL;
 
 export S3_SECRET_KEY=$(get_prop 's3secretKey')
 export S3_ACCESS_KEY=$(get_prop 's3accessKey')

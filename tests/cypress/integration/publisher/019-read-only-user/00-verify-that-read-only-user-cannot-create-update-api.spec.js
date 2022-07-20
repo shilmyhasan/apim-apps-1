@@ -73,7 +73,7 @@ describe("Publisher Read-Only Mode", () => {
             cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/policies`);
 
             const dataTransfer = new DataTransfer();
-            cy.contains('Add Header').trigger('dragstart',{
+            cy.contains('Add Header', {timeout: Cypress.config().largeTimeout}).trigger('dragstart',{
                 dataTransfer
             });
             cy.contains('Drag and drop policies here').trigger('drop', {
@@ -98,10 +98,11 @@ describe("Publisher Read-Only Mode", () => {
     it("Verify Configurations are in Read only mode", () => {
         
         //1. should not be able to create APIS
-        cy.get('#itest-create-api-menu-button', { timeout: 30000 }).should('not.exist');
+        cy.get('#itest-create-api-menu-button', {timeout: Cypress.config().largeTimeout}).should('not.exist');
 
         //2. click on API tile and select design config (basic info)
-        cy.get('a').get(`[aria-label="${apiName} Thumbnail"]`, { timeout: 30000 }).click();
+        cy.wait(2000);
+        cy.get('a').get(`[aria-label="${apiName} Thumbnail"]`, {timeout: Cypress.config().largeTimeout}).click();
         cy.get('#itest-api-details-portal-config-acc').click();
         cy.get('#left-menu-itemDesignConfigurations').click();
 
@@ -238,7 +239,7 @@ describe("Publisher Read-Only Mode", () => {
 
         //12. Policies should be checked. (UI issue fixed by PR #11297 in carbon-apimgt)
         cy.get("#left-menu-policies").click();
-        cy.get('[data-testid="add-new-api-specific-policy"]').click();
+        cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="displayname"]').type("test name");
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="gateway-details-panel"]').get('[data-testid="file-drop-zone"]').then(function () {
             cy.get('input[type="file"]').attachFile('api_artifacts/sampleAddHeader.j2');

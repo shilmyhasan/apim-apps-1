@@ -33,40 +33,28 @@ describe("Anonymous view apis", () => {
             testApiId = apiId;
             Utils.publishAPI(apiId).then((serverResponse) => {
                 console.log(serverResponse);
-                cy.logoutFromPublisher();
+                cy.logoutFromPublisher(); 
+                cy.loginToDevportal(developer, password);
                 cy.visit(`/devportal/apis?tenant=carbon.super`);
 
                 // After publishing the api appears in devportal with a delay.
                 // We need to keep refresing and look for the api in the listing page
                 // following waitUntilApiExists function does that recursively.
                 let remainingAttempts = 15;
-
-                function waitUntilApiExists() {
-                    let $apis = Cypress.$(`[title="${apiName}"]`);
+                let attemptCount = 0;
+                for (; attemptCount< remainingAttempts; attemptCount++) {
+                    let $apis = Cypress.$(`[title="${apiName}"]`, {timeout: Cypress.config().largeTimeout});
                     if ($apis.length) {
                         // At least one with api name was found.
                         // Return a jQuery object.
-                        return $apis;
+                        cy.log('apis: ' + $apis.text());
+                        break;
                     }
-
-                    if (--remainingAttempts) {
-                        cy.log('Table not found yet. Remaining attempts: ' + remainingAttempts);
-
-                        // Requesting the page to reload (F5)
-                        cy.reload();
-
-                        // Wait a second for the server to respond and the DOM to be present.
-                        return cy.wait(8000).then(() => {
-                            return waitUntilApiExists();
-                        });
-                    }
+                    cy.reload();
+                }
+                if (attemptCount==(remainingAttempts-1)){
                     throw Error('Table was not found.');
                 }
-
-                waitUntilApiExists().then($apis => {
-                    cy.log('apis: ' + $apis.text());
-                });
-
             });
         });
     })

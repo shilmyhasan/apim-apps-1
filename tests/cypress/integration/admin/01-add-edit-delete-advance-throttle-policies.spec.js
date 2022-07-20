@@ -25,7 +25,7 @@ describe("Add Edit Delete advance throttle policies", () => {
     })
     it.only("Add Edit Delete advance throttle policies", () => {
         const policyName = '030PerMin';
-        cy.get('[data-testid="Advanced Policies-child-link"]').click();
+        cy.get('[data-testid="Advanced Policies-child-link"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('[data-testid="Add New Policy-btn"]').click();
         cy.get('input[name="policyName"]').type(policyName);
         cy.get('textarea[name="description"]').type('allow 30 requests per minute');

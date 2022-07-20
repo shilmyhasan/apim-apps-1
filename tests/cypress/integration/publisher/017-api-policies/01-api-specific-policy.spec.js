@@ -30,7 +30,7 @@ describe("Common Policies", () => {
         Utils.addAPI({}).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/policies`);
             //Create API Specific Policy
-            cy.get('[data-testid="add-new-api-specific-policy"]').click();
+            cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#name').type('Add Header sample test');
             cy.get('input[name="description"]').type('Sample add header policy description');
             cy.get('#fault-select-check-box').uncheck()
@@ -51,7 +51,7 @@ describe("Common Policies", () => {
 
             //View API Specific Policy
             cy.contains('Add Header sample test').trigger('mouseover');
-            cy.get('[aria-label="view-AddHeadersampletest"]').click();
+            cy.get('[aria-label="view-AddHeadersampletest"]').click({force:true});
             //Download file
             cy.get('[data-testid="download-policy-file"]').click();
             cy.wait(2000);

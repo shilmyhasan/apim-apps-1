@@ -33,8 +33,10 @@ describe("Subscribe unsubscribe to application from api details page", () => {
         cy.loginToPublisher(publisher, password);
 
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion, context: apiContext }).then((apiId) => {
+            cy.log("API created " + apiName);
             testApiId = apiId;
-            Utils.publishAPI(apiId).then(() => {
+            Utils.publishAPI(apiId).then((result) => {
+                cy.log("API published " + result)
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
                 cy.createApp(appName, appDescription);
@@ -46,6 +48,8 @@ describe("Subscribe unsubscribe to application from api details page", () => {
                 let remainingAttempts = 30;
         
                 function waitUntilApiExists() {
+                    cy.log("Check API exist " + apiName);
+                    cy.contains(apiName, {timeout: Cypress.config().largeTimeout});
                     let $apis = Cypress.$(`[title="${apiName}"]`);
                     if ($apis.length) {
                         // At least one with api name was found.

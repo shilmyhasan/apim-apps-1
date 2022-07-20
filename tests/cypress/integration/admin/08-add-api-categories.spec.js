@@ -30,7 +30,7 @@ describe("Add API Categories and assign via publisher portal", () => {
         const category = Utils.generateName();
         const categoryDescription = 'Weather related apis';
 
-        cy.get('[data-testid="API Categories"]').click();
+        cy.get('[data-testid="API Categories"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('.MuiButton-label').contains('Add API Category').click();
         cy.get('input[name="name"]').type(category);
         cy.get('textarea[name="description"]').type(categoryDescription);
@@ -42,7 +42,7 @@ describe("Add API Categories and assign via publisher portal", () => {
         Utils.addAPI({}).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/configuration`);
-            cy.get('#APICategories').click();
+            cy.get('#APICategories', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('span').contains(category).click();
             cy.get('#menu-categories').click('topLeft');
             cy.get('#design-config-save-btn').click();
@@ -55,7 +55,7 @@ describe("Add API Categories and assign via publisher portal", () => {
                 // Delete
                 cy.visit(`/admin/settings/api-categories`);
                 cy.wait(4000);
-                cy.get('[data-testid="MuiDataTableBodyCell-4-0"] > div > div > span:nth-child(2)').click();
+                cy.get('[data-testid="MuiDataTableBodyCell-4-0"] > div > div > span:nth-child(2)', {timeout: Cypress.config().largeTimeout}).click();
                 cy.get('[data-testid="Delete-btn"]').click();
                 cy.get('div[role="status"]').should('have.text', 'API Category deleted successfully');
             });
