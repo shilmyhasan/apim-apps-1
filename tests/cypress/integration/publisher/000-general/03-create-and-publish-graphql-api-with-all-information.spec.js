@@ -96,7 +96,7 @@ describe("Create GraphQl API from file", () => {
     beforeEach(function(){
         //add role filmsubscriber
         cy.carbonLogin(username, password);
-        cy.visit('https://localhost:9443/carbon/role/add-step1.jsp');
+        cy.visit('/carbon/role/add-step1.jsp');
         cy.get('input[name="roleName"]').type('FilmSubscriber');
         cy.get('td.buttonRow').find('input').eq(0).click();
         cy.get('#ygtvcheck2 > .ygtvspacer').click();
