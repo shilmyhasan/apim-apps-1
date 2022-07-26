@@ -17,12 +17,16 @@
  */
 
 import Utils from "@support/utils";
+import PublisherComonPage from "../../../support/pages/publisher/PublisherComonPage";
+const publisherComonPage = new PublisherComonPage();
 
 describe("Publish thirdparty api", () => {
     const { publisher, developer, password, } = Utils.getUserInfo();
     it.only("Publish thirdparty api", () => {
         cy.loginToPublisher(publisher, password);
+        publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/asyncapi`);
+            publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             cy.get('#outlined-full-width', {timeout: Cypress.config().largeTimeout}).invoke('val', 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.ym');
             cy.get('#outlined-full-width').type('l');
             cy.get('#outlined-full-width').click(0,0);
@@ -91,22 +95,24 @@ describe("Publish thirdparty api", () => {
                 cy.get('[data-testid="itest-update-api-confirmation"]', {timeout: Cypress.config().largeTimeout}).should('exist');
         
                 cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
-                cy.get('[data-testid="itest-api-lifecycleState"] span', {timeout: Cypress.config().largeTimeout}).contains('PUBLISHED').should('exist');
-                cy.get('[data-testid="third-party-api-card-label"]', {timeout: Cypress.config().largeTimeout})
+                publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
+                cy.get('div[data-testid="card-action-ThirdPartyApi1.0.0"]>div>span', {timeout: Cypress.config().largeTimeout}).contains('PUBLISHED').should('exist');
+                cy.get('a[aria-label="ThirdPartyApi Thumbnail"]', {timeout: Cypress.config().largeTimeout})
                     .should('exist', {timeout: Cypress.config().largeTimeout});
-        
+                    
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
                 cy.viewThirdPartyApi();
                 cy.logoutFromDevportal();
                 cy.log("delete api ", apiId);
                 cy.loginToPublisher(publisher, password);
+                publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
                 Utils.deleteAPI(apiId);
                 cy.logoutFromPublisher();
             });
     });
     after(function () {
-        cy.loginToPublisher(publisher, password);
+        //cy.loginToPublisher(publisher, password);
     })
 });
 
