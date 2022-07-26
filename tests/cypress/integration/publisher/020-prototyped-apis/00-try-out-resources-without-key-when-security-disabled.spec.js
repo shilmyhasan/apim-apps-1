@@ -16,6 +16,8 @@
  * under the License.
  */
 import Utils from "@support/utils";
+import PublisherComonPage from "../../../support/pages/publisher/PublisherComonPage";
+const publisherComonPage = new PublisherComonPage();
 
 describe("prototype apis with security disabled", () => {
     const userName = 'admin';
@@ -32,6 +34,7 @@ describe("prototype apis with security disabled", () => {
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
+            publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             cy.get('#itest-api-details-api-config-acc', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#left-menu-itemendpoints').click();
             cy.get('[data-testid="http/restendpoint-add-btn"]').click({force:true});
@@ -53,9 +56,11 @@ describe("prototype apis with security disabled", () => {
     
             //disable security
             cy.get("#left-menu-itemresources").click();
+            cy.wait(5000)
             cy.get('button[aria-label="disable security for all"]').click();
             cy.get('button[aria-label="select merge strategy"]').click();
             cy.get("#split-button-menu").contains('li','Save and deploy').click();
+            cy.wait(5000)
             cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('[data-testid="btn-deploy"]').click();
     
@@ -72,7 +77,8 @@ describe("prototype apis with security disabled", () => {
             cy.get('.opblock-summary-get > .opblock-summary-control', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('.try-out__btn').click();
             cy.get('.execute').click();
-            cy.contains('.live-responses-table .response > .response-col_status','200').should('exist');
+           // cy.contains('.live-responses-table .response > td.response-col_status','200').should('exist');
+            cy.get('.live-responses-table .response > td.response-col_status').should("contain.text",'200')
            
             cy.logoutFromDevportal();
         });
@@ -82,6 +88,7 @@ describe("prototype apis with security disabled", () => {
     after(function () {
         // Test is done. Now delete the api
         cy.loginToPublisher(userName, password);
+        publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
         Utils.deleteAPI(testApiId);
     })
 });
