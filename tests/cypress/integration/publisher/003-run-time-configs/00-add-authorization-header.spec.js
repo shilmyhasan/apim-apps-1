@@ -32,10 +32,10 @@ describe("Runtime configuration", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             const customAuthHeader = '-custom';
             cy.visit(`/publisher/apis/${apiId}/runtime-configuration`);
-            cy.get('#applicationLevel').click();
-            cy.get('#itest-id-headerName-input').focus().type(customAuthHeader);
+            cy.get('#applicationLevel').children('[role="button"]').click({force:true});
+            cy.wait(1000);
+            cy.get('#itest-id-headerName-input').click({force:true}).type(customAuthHeader, {force:true});
             cy.get('#save-runtime-configurations').click();
-            cy.get('#applicationLevel').click();
             cy.get('#itest-id-headerName-input').should('have.value', 'Authorization' + customAuthHeader);
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);

@@ -26,7 +26,12 @@ describe("Add API Categories and assign via publisher portal", () => {
     before(function () {
         cy.loginToAdmin(carbonUsername, carbonPassword);
     })
-    it("Add API Categories and assign via publisher portal", () => {
+    it("Add API Categories and assign via publisher portal",{
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         const category = Utils.generateName();
         const categoryDescription = 'Weather related apis';
 
@@ -54,10 +59,9 @@ describe("Add API Categories and assign via publisher portal", () => {
             Utils.deleteAPI(testApiId).then(() => {
                 // Delete
                 cy.visit(`/admin/settings/api-categories`);
-                cy.wait(4000);
                 cy.get('[data-testid="MuiDataTableBodyCell-4-0"] > div > div > span:nth-child(2)', {timeout: Cypress.config().largeTimeout}).click();
                 cy.get('[data-testid="Delete-btn"]').click();
-                cy.get('div[role="status"]').should('have.text', 'API Category deleted successfully');
+                cy.get('div[role="status"]', {timeout: Cypress.config().largeTimeout}).should('have.text', 'API Category deleted successfully');
             });
         }
     })

@@ -14,6 +14,12 @@
  * under the License.
  */
 
+// This test need to enable application sharing in deployment.toml file
+/*
+[apim.devportal]
+enable_application_sharing = true
+application_sharing_type = "default"
+*/
 import Utils from "@support/utils";
 
 describe("Invoke API Product", () => {
@@ -32,8 +38,6 @@ describe("Invoke API Product", () => {
 
 
     before(function () {
-        cy.carbonLogin(carbonUsername, carbonPassword);
-        cy.addNewUser(publisher, ['Internal/publisher', 'Internal/creator', 'Internal/everyone'], password);
         cy.loginToPublisher(publisher, password);
     
     })
@@ -47,9 +51,9 @@ describe("Invoke API Product", () => {
             cy.logoutFromPublisher();
 
             //Create Users in Devportal
-            cy.visit(`/devportal/apis`);
-            cy.get('#itest-devportal-sign-in').click();
-            cy.get('#registerLink').click();
+            cy.visit(`/devportal/apis?tenant=carbon.super`); 
+            cy.get('#itest-devportal-sign-in', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#registerLink', {timeout: Cypress.config().largeTimeout}).click();
 
             //Creating user 1
             cy.get('#username').type(user1);
@@ -60,7 +64,7 @@ describe("Invoke API Product", () => {
                 // returning false here prevents Cypress from failing the test
                 return false
             });
-            cy.get('input[name="http://wso2.org/claims/givenname"]').type(user1);
+            cy.get('input[name="http://wso2.org/claims/givenname"]', {timeout: Cypress.config().largeTimeout}).type(user1);
             cy.get('input[name="http://wso2.org/claims/lastname"]').type('test');
             cy.get('#password').type(password);
             cy.get('#password2').type(password);
@@ -68,11 +72,11 @@ describe("Invoke API Product", () => {
             cy.get('input[name="http://wso2.org/claims/organization"]').type('org1');
             cy.get('#termsCheckbox').check().should('be.checked');
             cy.get('#registrationSubmit').click();
-            cy.contains('Close').click() 
+            cy.contains('Close', {timeout: Cypress.config().largeTimeout}).click() 
 
             //Creating user 2
             cy.get('#registerLink').click();
-            cy.get('#username').type(user2);
+            cy.get('#username', {timeout: Cypress.config().largeTimeout}).type(user2);
             cy.get('#registrationSubmit').click();
             cy.get('input[name="http://wso2.org/claims/givenname"]').type('user2');
             cy.get('input[name="http://wso2.org/claims/lastname"]').type('test');
@@ -82,7 +86,7 @@ describe("Invoke API Product", () => {
             cy.get('input[name="http://wso2.org/claims/organization"]').type('org1');
             cy.get('#termsCheckbox').check().should('be.checked');
             cy.get('#registrationSubmit').click();
-            cy.contains('Close').click();
+            cy.contains('Close', {timeout: Cypress.config().largeTimeout}).click();
 
 
             //Log into developer portal as user 1
@@ -90,7 +94,7 @@ describe("Invoke API Product", () => {
 
             //Test with Oath2 Token
             cy.visit(`/devportal/applications/create`);
-            cy.get('#application-name').click();
+            cy.get('#application-name', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#application-name').type(appName);
             cy.get('#application-group-id').click();
             cy.get('#application-group-id').type(groupId);
@@ -104,7 +108,7 @@ describe("Invoke API Product", () => {
             //Log into developer portal as user 2
             cy.loginToDevportal(user2, password);
             cy.visit(`/devportal/applications`);
-            cy.contains('App_A1').click();
+            cy.contains('App_A1', {timeout: Cypress.config().largeTimeout}).click();
 
             cy.location('pathname').then((pathName) => {
                 const pathSegments = pathName.split('/');
@@ -112,34 +116,35 @@ describe("Invoke API Product", () => {
                 
                 //Subscription of API
                 cy.get('#left-menu-subscriptions').click();
-                cy.get('#subscribe-api-btn').click();
+                cy.contains('Subscribe APIs').click();
 
                 cy.get(`#policy-subscribe-btn-${uuid}`).click();
-                cy.get('#close-btn').click();
+                cy.get('[aria-label="close"]').click();
                 cy.logoutFromDevportal();
 
                 //Log into developer portal as user 1
                 cy.loginToDevportal(user1, password);
                 cy.visit(`/devportal/applications/${uuidApp}/subscriptions`);
             });
-
-            cy.visit(`/devportal/applications`);
-            cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
-            cy.get(`#delete-${appName}-btn`).click();
-            cy.get(`#itest-confirm-application-delete`).click();
         });
-        cy.logoutFromDevportal();
  
     });
 
     after(function () {
+        cy.visit(`/devportal/applications`);
+        cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
+        cy.get(`#delete-${appName}-btn`).click();
+        cy.get(`#itest-confirm-application-delete`).click();
+        cy.logoutFromDevportal();
+
         //Delete Users
         cy.loginToPublisher(publisher, password);
         cy.deleteApi(apiName, apiVersion);
+        cy.carbonLogin(carbonUsername, carbonPassword);
         cy.visit(`/carbon/user/user-mgt.jsp`);
         cy.deleteUser(user1);
+        cy.visit(`/carbon/user/user-mgt.jsp`);
         cy.deleteUser(user2);
-        cy.deleteUser(publisher);
         
     })
 })

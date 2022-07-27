@@ -26,7 +26,12 @@ describe("Endpoint testing", () => {
         cy.loginToPublisher(publisher, password);
     })
 
-    it.only("Add REST endpoints for production and sandbox endpoints with LOAD balanced", () => {
+    it.only("Add REST endpoints for production and sandbox endpoints with LOAD balanced", {
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         Utils.addAPI({}).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();

@@ -59,12 +59,6 @@ describe("Add security to the endpoint", () => {
             cy.get('#auth-userName').should('have.value', usernameLocal);
             cy.get('#auth-password').should('have.value', passwordLocal);
             // Test is done. Now delete the api
-            // todo need to remove this check after `console.err(err)` -> `console.err(err)` in Endpoints.jsx
-            Cypress.on('uncaught:exception', (err, runnable) => {
-                // returning false here prevents Cypress from
-                // failing the test
-                return false
-            });
             Utils.deleteAPI(apiId);
         });
     });

@@ -22,7 +22,7 @@ const publisherComonPage = new PublisherComonPage();
 describe("prototype apis with security disabled", () => {
     const userName = 'admin';
     const password = 'admin';
-    const apiName="Prototyped_sample1";
+    const apiName="Prototyped_sample1" + Math.floor(Date.now() / 1000);
     const apiVersion='1.0.0';
     let testApiId;
     before(function () {
@@ -61,7 +61,7 @@ describe("prototype apis with security disabled", () => {
             cy.get('button[aria-label="select merge strategy"]').click();
             cy.get("#split-button-menu").contains('li','Save and deploy').click();
             cy.wait(5000)
-            cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#Default', {timeout: Cypress.config().largeTimeout}).check({force:true});
             cy.get('[data-testid="btn-deploy"]').click();
     
             cy.get("#left-menu-itemlifecycle").click();

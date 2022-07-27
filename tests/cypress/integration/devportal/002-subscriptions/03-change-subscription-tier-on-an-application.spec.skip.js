@@ -39,62 +39,30 @@ describe("Change subscription tier of an application", () => {
                 cy.wait(3000);
                 cy.logoutFromPublisher();
                 cy.loginToDevportal(developer, password);
+                cy.createApp(appName, 'application description');
+                cy.visit(`/devportal/applications?tenant=carbon.super`);
+                cy.get(`#itest-application-list-table td a`).contains(appName).click();
 
-                // After publishing the api appears in devportal with a delay.
-                // We need to keep refresing and look for the api in the listing page
-                // following waitUntilApiExists function does that recursively.
-                let remainingAttempts = 30;
+                // Go to application subscription page
+                cy.get('#left-menu-subscriptions').click();
+                cy.contains('Subscribe APIs').click();
+                cy.get(`#policy-select`).click();
+                cy.get(`#policy-select-Unlimited`).click();
+                cy.get(`#policy-subscribe-btn-${apiId}`).click();
+                cy.get('#close-btn').click();
 
-                function waitUntilApiExists() {
-                    let $apis = Cypress.$(`[title="${apiName}"]`);
-                    if ($apis.length) {
-                        // At least one with api name was found.
-                        // Return a jQuery object.
-                        return $apis;
-                    }
+                // Check the subscriptions existence
+                cy.get(`#subscriptions-table td a`).contains(`${apiName} - ${apiVersion}`).should('exist');
 
-                    if (--remainingAttempts) {
-                        cy.log('Table not found yet. Remaining attempts: ' + remainingAttempts);
+                // Edit the subscription
+                cy.get(`#edit-api-subscription-${apiName}`).click();
+                cy.get('#outlined-select-currency').click();
+                cy.get('#Silver').click();
+                cy.get('button span').contains('Update').click();
 
-                        // Requesting the page to reload (F5)
-                        cy.reload();
-
-                        // Wait a second for the server to respond and the DOM to be present.
-                        return cy.wait(4000).then(() => {
-                            return waitUntilApiExists();
-                        });
-                    }
-                    throw Error('Table was not found.');
-                }
-
-                waitUntilApiExists().then($apis => {
-                    cy.log('apis: ' + $apis.text());
-                    // Create an app and subscribe
-                    cy.createApp(appName, 'application description');
-                    cy.visit(`/devportal/applications?tenant=carbon.super`);
-                    cy.get(`#itest-application-list-table td a`).contains(appName).click();
-
-                    // Go to application subscription page
-                    cy.get('#left-menu-subscriptions').click();
-                    cy.get('#subscribe-api-btn').click();
-                    cy.get(`#policy-select`).click();
-                    cy.get(`#policy-select-Unlimited`).click();
-                    cy.get(`#policy-subscribe-btn`).click();
-                    cy.get('#close-btn').click();
-
-                    // Check the subscriptions existence
-                    cy.get(`#subscriptions-table td a`).contains(`${apiName} - ${apiVersion}`).should('exist');
-
-                    // Edit the subscription
-                    cy.get(`#edit-api-subscription-${apiName}`).click();
-                    cy.get('#outlined-select-currency').click();
-                    cy.get('#Silver').click();
-                    cy.get('button span').contains('Update').click();
-
-                    // Checking the update is success.
-                    cy.wait(4000);
-                    cy.get(`#subscriptions-table td`).contains('Silver').should('exist');
-                });
+                // Checking the update is success.
+                cy.wait(4000);
+                cy.get(`#subscriptions-table td`).contains('Silver').should('exist');
             })
         })
     });

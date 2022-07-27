@@ -21,7 +21,7 @@ import Utils from "@support/utils";
 describe("Publisher Read-Only Mode", () => {
     const apiName = 'checkreadonlyapi' + Math.floor(Date.now() / 1000);
     const apiVersion = '1.0.0';
-    const apiContext = '/readonlycheck';
+    const apiContext = '/readonlycheck' + Math.floor(Date.now() / 1000);;
     const readOnlyUser = 'internalDeveloper';
     const readOnlyUserPassword = 'test123';
     const creatorPublisher='creatorPublisher';
@@ -162,7 +162,7 @@ describe("Publisher Read-Only Mode", () => {
         cy.get('#mutual-ssl-checkbox').should('be.disabled');
 
         //7-b. application level
-        cy.get('#applicationLevel').click();
+        cy.get('#applicationLevel').children('[role="button"]').click();
         cy.get('[value="oauth2"]').should('be.disabled');
         cy.get('#api-security-basic-auth-checkbox').should('be.disabled');
         cy.get('#api-security-api-key-checkbox').should('be.disabled');
@@ -253,7 +253,7 @@ describe("Publisher Read-Only Mode", () => {
 
         //14. Properties
         cy.get('#left-menu-itemproperties').click();
-        cy.get('#add-new-property').should('be.disabled');
+        cy.get('#add-new-property', {timeout: Cypress.config().largeTimeout}).should('be.disabled');
         cy.get('table').get('tbody').get('tr').contains('td','property1').should('be.visible');
         cy.get('table').get('tbody').get('tr').get('[aria-label="Edit property1"]').should('be.disabled');
         cy.get('table').get('tbody').get('tr').get('[aria-label="Remove property1"]').should('be.disabled');

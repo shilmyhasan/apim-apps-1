@@ -47,12 +47,6 @@ describe("Add production and sandbox endpoints for an API", () => {
             cy.get('#production_endpoints').should('have.value', endpoint);
             cy.get('#sandbox_endpoints').should('have.value', endpoint);
             // Test is done. Now delete the api
-            // todo need to remove this check after `console.err(err)` -> `console.err(err)` in Endpoints.jsx
-            Cypress.on('uncaught:exception', (err, runnable) => {
-                // returning false here prevents Cypress from
-                // failing the test
-                return false
-            });
             Utils.deleteAPI(apiId);
         });
     });

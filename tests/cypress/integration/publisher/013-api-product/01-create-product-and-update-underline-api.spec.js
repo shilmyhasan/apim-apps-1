@@ -19,13 +19,13 @@ import Utils from "@support/utils";
 describe("Mock the api response and test it", () => {
     const { publisher, password, } = Utils.getUserInfo();
     const productName = Utils.generateName();
-
+    let testApiID;
     before(function () {
         cy.loginToPublisher(publisher, password);
     })
 
     it("Mock the api response and test it", () => {
-        cy.visit(`/publisher/apis/create/openapi`, { timeout: 30000 });
+        cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().largeTimeout});
         cy.get('#open-api-file-select-radio').click();
 
         // upload the swagger
@@ -36,29 +36,23 @@ describe("Mock the api response and test it", () => {
 
         cy.get('#open-api-create-next-btn').click();
 
-        cy.get('#itest-id-apiversion-input', { timeout: 30000 });
+        cy.get('#itest-id-apiversion-input', {timeout: Cypress.config().largeTimeout});
         cy.document().then((doc) => {
             cy.get('#itest-id-apicontext-input').clear();
             cy.get('#itest-id-apicontext-input').type('petstore3');
             cy.get('#itest-id-apiversion-input').click();
             const version = doc.querySelector('#itest-id-apiversion-input').value;
-
             // finish the wizard
-            cy.get('#open-api-create-btn').click();
+            cy.get('#open-api-create-btn').should('not.have.class', 'Mui-disabled').click({force:true});
 
-            cy.intercept({
-                method: "GET",
-                url: `**/apis/**`,
-                times: 1,
-            }).as('apiGet');
-            cy.wait('@apiGet', { timeout: 30000 }).then((res) => {
-
+            cy.url().should('contains', 'overview').then(url => {
+                testApiID = /apis\/(.*?)\/overview/.exec(url)[1];
+                cy.log("API ID", testApiID);
                 // validate
-                cy.get('#itest-api-name-version', { timeout: 30000 });
+                cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout});
                 cy.get('#itest-api-name-version').contains(version);
 
-                //Get the api id
-                const uuid = res.response.body.id;
+                //Get the api id;
 
                 // Go to api product create page
                 cy.visit(`/publisher/api-products/create`);
@@ -67,36 +61,30 @@ describe("Mock the api response and test it", () => {
                 cy.get('#itest-id-apiname-input').type(productName);
                 cy.get('#context').type(productName);
                 cy.get('#itest-id-apiname-input').click();
-
+                cy.get('body').click(0,0);
                 cy.get('#api-product-next-btn').click();
 
                 // Wait until the api is saved
-                cy.get('#resource-wrapper', { timeout: 30000 });
-                cy.get('#resource-wrapper').click();
-
-                cy.intercept("POST", `**/api-products`).as('apiProductsGet');
+                cy.get('#resource-wrapper').children().should('have.length.gte', 1);
 
                 // add all resources
-                cy.get('#add-all-resources-btn').click();
-                cy.get('#create-api-product-btn').scrollIntoView().click();
-
-                cy.wait('@apiProductsGet', { timeout: 30000 }).then((res) => {
-
-                    cy.get('#itest-api-name-version', { timeout: 30000 });
+                cy.get('#add-all-resources-btn').click({force:true});
+                cy.get('#create-api-product-btn').scrollIntoView().dblclick({force:true});
+                cy.url().should('contains', 'overview').then(urlProduct => {
+                    const productID = /api-products\/(.*?)\/overview/.exec(urlProduct)[1];
+                    cy.log("API Product ID", productID);
+                    cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout});
                     cy.get('#itest-api-name-version').contains(productName);
-
-                    //Get the api product id
-                    const uuidProduct = res.response.body.id;
 
                     // Need to update the underline api and update the api product again.
                     // ==================================================================== //
-                    cy.log(uuid, uuidProduct);
-                    cy.visit(`/publisher/apis/${uuid}/resources`);
+                    cy.log(testApiID, productID);
+                    cy.visit(`/publisher/apis/${testApiID}/resources`);
 
                     // Add a new resource to the underline api
                     // Typing the resource name
                     const target = '/test';
-                    cy.get('#operation-target', { timeout: 30000 });
+                    cy.get('#operation-target', {timeout: Cypress.config().largeTimeout});
                     cy.get('#operation-target').type(target);
                     cy.get('#add-operation-selection-dropdown').click();
 
@@ -110,10 +98,10 @@ describe("Mock the api response and test it", () => {
                     cy.get(`#get\\${target}`).should('be.visible');
 
                     // Go to api product
-                    cy.visit(`/publisher/api-products/${uuidProduct}/resources/edit`);
+                    cy.visit(`/publisher/api-products/${productID}/resources/edit`);
 
                     // Add the newly created resource and save
-                    cy.get('#resource-wrapper', { timeout: 30000 });
+                    cy.get('#resource-wrapper', {timeout: Cypress.config().largeTimeout});
                     cy.get('#resource-wrapper')
                         .last()
                         .scrollIntoView()
@@ -122,17 +110,16 @@ describe("Mock the api response and test it", () => {
                     cy.get('#save-product-resources').click();
 
                     // Deleting the api and api product
-                    cy.visit(`/publisher/api-products/${uuidProduct}/overview`);
-                    cy.get('#itest-api-name-version', { timeout: 30000 });
+                    cy.visit(`/publisher/api-products/${productID}/overview`);
+                    cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout});
                     cy.get(`#itest-id-deleteapi-icon-button`).click();
                     cy.get(`#itest-id-deleteconf`).click();
 
-                    cy.visit(`/publisher/apis/${uuid}/overview`);
-                    cy.get('#itest-api-name-version', { timeout: 30000 });
-                    cy.get(`#itest-id-deleteapi-icon-button`).click();
-                    cy.get(`#itest-id-deleteconf`).click();
                 });
             });
         });
     });
+    afterEach(() => {
+        Utils.deleteAPI(testApiID);
+    })
 })

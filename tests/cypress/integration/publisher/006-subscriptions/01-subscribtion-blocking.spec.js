@@ -33,7 +33,12 @@ describe("Subscription blocking", () => {
         cy.loginToPublisher(publisher, password);
     })
 
-    it.only("Subscription blocking", () => {
+    it.only("Subscription blocking", {
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion, context: apiContext }).then((apiId) => {
             testApiId = apiId;
             Utils.publishAPI(apiId).then((serverResponse) => {
