@@ -59,13 +59,25 @@ describe("prototype apis with security disabled", () => {
             cy.wait(5000)
             cy.get('button[aria-label="disable security for all"]').click();
             cy.get('button[aria-label="select merge strategy"]').click();
-            cy.get("#split-button-menu").contains('li','Save and deploy').click();
+
+            cy.intercept('PUT', '**/swagger').as('swagger');
+            
+            cy.get("#split-button-menu").contains('li','Save and deploy').click();    
+            cy.wait('@swagger',{timeout: 15000}).its('response.statusCode').should('equal', 200)
+            
             cy.wait(5000)
+
+            
             cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
+            cy.intercept('GET', '**/revisions?query=deployed**').as('revisionDeployed');
             cy.get('[data-testid="btn-deploy"]').click();
+            cy.wait('@revisionDeployed',{timeout: 15000}).its('response.statusCode').should('equal', 200)
     
+            cy.intercept('GET', '**/revisions?query=deployed**').as('revisionDeployed2');
             cy.get("#left-menu-itemlifecycle").click();
+            cy.wait('@revisionDeployed2',{timeout: 15000}).its('response.statusCode').should('equal', 200)
             cy.get('[data-testid="Deploy as a Prototype-btn"]',{timeout: Cypress.config().largeTimeout}).click();
+            
     
             cy.logoutFromPublisher();
     
@@ -79,7 +91,6 @@ describe("prototype apis with security disabled", () => {
             cy.get('.execute').click();
            // cy.contains('.live-responses-table .response > td.response-col_status','200').should('exist');
             cy.get('.live-responses-table .response > td.response-col_status').should("contain.text",'200')
-           
             cy.logoutFromDevportal();
         });
         

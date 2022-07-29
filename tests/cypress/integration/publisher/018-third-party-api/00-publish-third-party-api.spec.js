@@ -25,17 +25,18 @@ describe("Publish thirdparty api", () => {
     it.only("Publish thirdparty api", () => {
         cy.loginToPublisher(publisher, password);
         publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/asyncapi`);
-            publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-            cy.get('#outlined-full-width', {timeout: Cypress.config().largeTimeout}).invoke('val', 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.ym');
-            cy.get('#outlined-full-width').type('l');
-            cy.get('#outlined-full-width').click(0,0);
-            cy.get('#outlined-full-width').should('have.value','https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml');
-            cy.get('button span').contains('Next').should('not.be.disabled');
-            cy.get('button span').contains('Next').click();
-            cy.get('#mui-component-select-protocol').click();
-            cy.get('#other').should('exist');
+            // cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/asyncapi`);
+            // publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
+            // cy.get('#outlined-full-width', {timeout: Cypress.config().largeTimeout}).invoke('val', 'https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.ym');
+            // cy.get('#outlined-full-width').type('l');
+            // cy.get('#outlined-full-width').click(0,0);
+            // cy.get('#outlined-full-width').should('have.value','https://raw.githubusercontent.com/asyncapi/spec/v2.0.0/examples/2.0.0/streetlights.yml');
+            // cy.get('button span').contains('Next').should('not.be.disabled');
+            // cy.get('button span').contains('Next').click();
+            // cy.get('#mui-component-select-protocol').click();
+            // cy.get('#other').should('exist');
             cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/rest`);
+            publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             cy.get('#itest-id-apiname-input', {timeout: Cypress.config().largeTimeout}).type('ThirdPartyApi');
             cy.get('#itest-id-apicontext-input').type('/thirdpartyapi');
             cy.get('#itest-id-apiversion-input').type('1.0.0');
@@ -95,6 +96,7 @@ describe("Publish thirdparty api", () => {
                 cy.get('[data-testid="itest-update-api-confirmation"]', {timeout: Cypress.config().largeTimeout}).should('exist');
         
                 cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
+                cy.wait(20000)
                 publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
                 cy.get('div[data-testid="card-action-ThirdPartyApi1.0.0"]>div>span', {timeout: Cypress.config().largeTimeout}).contains('PUBLISHED').should('exist');
                 cy.get('a[aria-label="ThirdPartyApi Thumbnail"]', {timeout: Cypress.config().largeTimeout})
