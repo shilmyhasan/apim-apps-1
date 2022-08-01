@@ -37,14 +37,15 @@ describe("Anonymous view apis", () => {
                 cy.loginToDevportal(developer, password);
                 cy.createApp(appName, appDescription);
                 cy.visit(`/devportal/applications?tenant=carbon.super`);
-                cy.get(`#itest-application-list-table td a`).contains(appName).click();
+                cy.get(`#itest-application-list-table td a`, {timeout: Cypress.config().largeTimeout}).contains(appName).click();
 
                 // Go to application subscription page
                 cy.get('#left-menu-subscriptions').click();
                 cy.intercept('**/apis**').as('apiGetFirst');
-                cy.get('#subscribe-api-btn').click();
+                cy.contains('Subscribe APIs', {timeout: Cypress.config().largeTimeout}).click();
                 cy.wait('@apiGetFirst', { timeout: 30000 }).then(() => {
-                    cy.get('input[placeholder="Search APIs"]').type(apiName);
+                    cy.wait(2000)
+                    cy.get('input[placeholder="Search APIs"]').click().type(apiName);
                     cy.intercept('**/apis**').as('apiGet');
                     cy.get('button[aria-label="search"]').click();
                     cy.wait('@apiGet', { timeout: 30000 }).then(() => {

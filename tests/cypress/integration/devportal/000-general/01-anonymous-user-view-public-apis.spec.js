@@ -26,7 +26,12 @@ describe("Anonymous view apis", () => {
     const apiContext = apiName;
     let testApiId;
 
-    it.only("Anonymous view apis", () => {
+    it.only("Anonymous view apis",{
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         cy.loginToPublisher(publisher, password);
 
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion, context: apiContext }).then((apiId) => {

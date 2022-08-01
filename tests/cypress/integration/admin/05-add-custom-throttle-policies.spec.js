@@ -23,7 +23,12 @@ describe("Add custom throttle policies", () => {
     before(function () {
         cy.loginToAdmin(carbonUsername, carbonPassword);
     })
-    it.only("Add custom throttle policies", () => {
+    it.only("Add custom throttle policies",{
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         const policyName = '5reqPerMin';
         const secondDesc = 'For an Admin users allow 5 requests per minute';
         cy.get('[data-testid="Custom Policies-child-link"]', {timeout: Cypress.config().largeTimeout}).click();

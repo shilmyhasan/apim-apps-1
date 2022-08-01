@@ -128,4 +128,3 @@ describe("Publish thirdparty api", () => {
         cy.logoutFromPublisher();
     })
 });
-

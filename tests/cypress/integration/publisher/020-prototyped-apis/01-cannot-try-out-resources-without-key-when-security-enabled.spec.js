@@ -58,7 +58,7 @@ describe("prototype apis with security enabled", () => {
             //deploy API
             cy.get("#left-menu-itemdeployments").click();
             cy.wait(2000);
-            cy.get("#deploy-btn",{timeout: Cypress.config().largeTimeout}).click({force:true});
+            cy.get("#deploy-btn",{timeout: Cypress.config().largeTimeout}).should('not.have.class', 'Mui-disabled').click({force:true});
 
             cy.get("#left-menu-itemlifecycle").click();
             cy.wait(2000);
@@ -73,7 +73,7 @@ describe("prototype apis with security enabled", () => {
             cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();
             cy.get('.opblock-summary-get > .opblock-summary-control', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('.try-out__btn').click();
-            cy.get('.execute').click();
+            cy.get('.execute').click({force:true});
             cy.contains('.live-responses-table .response > .response-col_status','401',  {timeout: Cypress.config().largeTimeout}).should('exist');
         
             cy.logoutFromDevportal();

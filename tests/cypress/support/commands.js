@@ -575,8 +575,8 @@ Cypress.Commands.add('createAndPublishApi', (apiName = null) => {
     cy.get('#left-menu-itemdeployments').click();
     cy.get('#left-menu-itemdeployments').then(() => {
         cy.wait(1000);
-        cy.get('#deploy-btn').click();
-        cy.get('#undeploy-btn').should('exist');
+        cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click();
+        cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');
     })
 
     // publish

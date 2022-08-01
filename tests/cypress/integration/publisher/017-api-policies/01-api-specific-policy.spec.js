@@ -26,7 +26,12 @@ describe("Common Policies", () => {
     })
 
 
-    it("Api Specific Policy", () => {
+    it("Api Specific Policy", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
         Utils.addAPI({}).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/policies`);
             //Create API Specific Policy

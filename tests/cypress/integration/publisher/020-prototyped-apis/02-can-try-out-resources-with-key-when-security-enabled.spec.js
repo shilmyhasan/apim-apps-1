@@ -65,7 +65,7 @@ describe("prototype apis with security enabled", () => {
                     //deploy API
                     cy.get("#left-menu-itemdeployments").click();
                     cy.wait(2000);
-                    cy.get("#deploy-btn",{timeout: Cypress.config().largeTimeout}).click({force:true});
+                    cy.get("#deploy-btn",{timeout: Cypress.config().largeTimeout}).should('not.have.class', 'Mui-disabled').click({force:true});
         
                     cy.get("#left-menu-itemlifecycle").click();
                     cy.wait(2000);

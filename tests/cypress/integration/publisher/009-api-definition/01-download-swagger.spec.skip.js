@@ -44,6 +44,8 @@ describe("Download swagger", () => {
             cy.readFile(downloadedFilename).then((str) => {
                 // TODO. The content is there when we test the same from the UI
                 // But somehow the content coming as null here. Need to validate the content here.
+                cy.log(str);
+                cy.log(downloadedFilename);
                 const english = YAML.parse(str)
             })
             // Test is done. Now delete the api

@@ -166,7 +166,7 @@ describe("Create GraphQl API from file", () => {
           const uuid = pathSegments[pathSegments.length - 2];
           cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/deployments`);
           
-          cy.get('#deploy-btn', {timeout: Cypress.config().largeTimeout}).click({force:true});
+          cy.get('#deploy-btn', {timeout: Cypress.config().largeTimeout}).should('not.have.class', 'Mui-disabled').click({force:true});
              
           //publish
           cy.get("#left-menu-overview",{timeout: Cypress.config().largeTimeout}).click();

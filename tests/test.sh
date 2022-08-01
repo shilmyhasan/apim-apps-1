@@ -138,6 +138,7 @@ npm install --save-dev cypress-multi-reporters mocha-junit-reporter
 npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
 npm install --save-dev mocha
 npm install --save-dev @cypress/browserify-preprocessor
+npm install archiver
 npm install junit-report-merger --save-dev
 npm i --save aws-sdk
 npm run delete:reportFolderHTML

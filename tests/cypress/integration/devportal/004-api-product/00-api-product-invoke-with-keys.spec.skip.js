@@ -91,7 +91,7 @@ describe("Invoke API Product", () => {
                         cy.get('#left-menu-itemdeployments').click();
 
                         // Deploying
-                        cy.get('#deploy-btn', { timeout: 30000 }).click({ force: true });
+                        cy.get('#deploy-btn', { timeout: 30000 }).should('not.have.class', 'Mui-disabled').click({ force: true });
 
                         cy.get('#left-menu-itemlifecycle').click();
 
@@ -99,7 +99,7 @@ describe("Invoke API Product", () => {
                         cy.wait(2000);
                         cy.get('[data-testid="Publish-btn"]').click();
                         cy.visit(`/publisher/api-products/${uuidProduct}/runtime-configuration`);
-                        cy.get('#applicationLevel').click();
+                        cy.get('#applicationLevel', {timeout: Cypress.config().largeTimeout}).children('[role="button"]').click({force:true});
                         cy.wait(2000);
                         cy.get('#api-security-api-key-checkbox').check().should('be.checked');
 
@@ -123,7 +123,7 @@ describe("Invoke API Product", () => {
 
                         //Subscription of APi Product
                         cy.get('#left-menu-subscriptions').click();
-                        cy.get('#subscribe-api-btn').click();
+                        cy.contains('Subscribe APIs').click();
 
                         cy.get(`#policy-subscribe-btn-${uuidProduct}`).click();
                         cy.get('#close-btn').click();
@@ -168,7 +168,7 @@ describe("Invoke API Product", () => {
                             //Subscription of APi Product
                             cy.visit(`/devportal/applications/${uuidApp}/subscriptions`);
                             cy.get('#left-menu-subscriptions').click();
-                            cy.get('#subscribe-api-btn').click();
+                            cy.contains('Subscribe APIs').click();
 
                             cy.get(`#policy-subscribe-btn-${uuidProduct}`).click();
                             cy.get('#close-btn').click();

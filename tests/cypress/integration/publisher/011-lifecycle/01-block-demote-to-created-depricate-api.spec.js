@@ -27,7 +27,12 @@ describe("Lifecycle changes", () => {
     before(function () {
         cy.loginToPublisher(publisher, password);
     })
-    it.only("Block demote retire api", () => {
+    it.only("Block demote retire api", {
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion }).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
@@ -58,7 +63,7 @@ describe("Lifecycle changes", () => {
             cy.get('#left-menu-itemdeployments').click();
 
             // Deploying
-            cy.get('#deploy-btn').scrollIntoView().click({force:true});
+            cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').scrollIntoView().click({force:true});
             cy.contains("Create revisions and deploy in Gateway Environments", {timeout: Cypress.config().largeTimeout})
             // Going to lifecycle page
             cy.get('#left-menu-itemlifecycle').click();
