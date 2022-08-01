@@ -68,7 +68,10 @@ describe("prototype apis with security disabled", () => {
             cy.wait(5000)
 
             
-            cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
+            //cy.get('[data-testid="Defaultgateway-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
+            // NOTE: Seems when running on server configuration, we donlt get Defaultgateway dialog box option, instead getting
+            // production and sandbox option
+            cy.get('span[data-testid*="-select-btn"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.intercept('GET', '**/revisions?query=deployed**').as('revisionDeployed');
             cy.get('[data-testid="btn-deploy"]').click();
             cy.wait('@revisionDeployed',{timeout: 15000}).its('response.statusCode').should('equal', 200)
@@ -98,6 +101,7 @@ describe("prototype apis with security disabled", () => {
 
     after(function () {
         // Test is done. Now delete the api
+        //cy.logoutFromDevportal();
         cy.loginToPublisher(userName, password);
         publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
         Utils.deleteAPI(testApiId);
