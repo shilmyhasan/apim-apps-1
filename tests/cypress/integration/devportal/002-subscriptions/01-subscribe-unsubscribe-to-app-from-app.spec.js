@@ -31,6 +31,8 @@ describe("Anonymous view apis", () => {
     it.only("Subscribe unsubscribe to app from application view", () => {
         cy.loginToPublisher(publisher, password);
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion, context: apiContext }).then((apiId) => {
+            cy.log("API ID", apiId);
+            cy.log("API Name", apiName);
             testApiId = apiId;
             Utils.publishAPI(apiId).then(() => {
                 cy.logoutFromPublisher();
@@ -45,22 +47,20 @@ describe("Anonymous view apis", () => {
                 cy.contains('Subscribe APIs', {timeout: Cypress.config().largeTimeout}).click();
                 cy.wait('@apiGetFirst', { timeout: 30000 }).then(() => {
                     cy.wait(2000)
-                    cy.get('input[placeholder="Search APIs"]').click().type(apiName);
-                    cy.intercept('**/apis**').as('apiGet');
-                    cy.get('button[aria-label="search"]').click();
-                    cy.wait('@apiGet', { timeout: 30000 }).then(() => {
-                        cy.get('#subscribe-to-api-table td button span').contains('Subscribe').click();
-                        cy.get('#close-btn').click();
+                    cy.get('[aria-labelledby="simple-dialog-title"]').find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
+                    cy.contains('1-1 of 1'); 
+                    cy.get(`#policy-subscribe-btn-${apiId}`).contains('Subscribe').click();
+                        cy.get('button[aria-label="close"]').click();
 
                         // check if the subscription exists
-                        cy.get(`#subscriptions-table td a`).contains(`${apiName} - ${apiVersion}`).should('exist');
+                        cy.contains(`${apiName} - ${apiVersion}`).should('exist');
 
                         // Unsubscribe
-                        cy.get(`#delete-api-subscription-${apiName}`).click();
+                        cy.get(`#delete-api-subscription-${apiId}`).click();
                         cy.get('#delete-api-subscription-confirm-btn').click();
 
                         // Check if unsubscribed successfully
-                        cy.get(`#delete-api-subscription-${apiName}`).should('not.exist');
+                        cy.get(`#delete-api-subscription-${apiId}`).should('not.exist');
 
                         // Editing application
                         cy.get('#edit-application').click();
@@ -73,7 +73,6 @@ describe("Anonymous view apis", () => {
                         cy.url().should('contain', '/overview');
                         cy.get('#itest-info-bar-application-name').contains(appName + '2').should('exist');
                     })
-                })
 
             });
         })
@@ -81,7 +80,7 @@ describe("Anonymous view apis", () => {
     })
 
     after(() => {
-        cy.deleteApp(appName);
+        cy.deleteApp(appName + '2');
         Utils.deleteAPI(testApiId);
     })
 })

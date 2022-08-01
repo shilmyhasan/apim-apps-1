@@ -27,7 +27,12 @@ describe("prototype apis with security enabled", () => {
     before(function () {
         cy.loginToPublisher(userName, password);
     })
-    it.only("try out resources enabling the security without credentials", () => {
+    it.only("try out resources enabling the security without credentials", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
         const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             testApiId = apiId;
@@ -86,7 +91,7 @@ describe("prototype apis with security enabled", () => {
         });
     });
 
-    after(function () {
+    afterEach(function () {
         // Test is done. Now delete the api
         cy.loginToPublisher(userName, password);
         cy.log("API id ", testApiId);

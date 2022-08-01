@@ -22,6 +22,7 @@ describe("Resource add edit operations", () => {
 
     const { publisher, password, } = Utils.getUserInfo();
     const target = '/test';
+    let testApiId;
 
     const addApiAndResource = (verb, apiId) => {
         // Typing the resource name
@@ -48,6 +49,7 @@ describe("Resource add edit operations", () => {
         const apiVersion = '1.0.0';
         cy.loginToPublisher(publisher, password);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/resources`);
 
             // Typing the resource name
@@ -78,9 +80,6 @@ describe("Resource add edit operations", () => {
             cy.get(`#patch\\${target}`).should('be.visible');
             cy.get(`#delete\\${target}`).should('be.visible');
             cy.get(`#head\\${target}`).should('be.visible');
-
-            // Test is done. Now delete the api
-            Utils.deleteAPI(apiId);
         });
     });
 
@@ -93,6 +92,7 @@ describe("Resource add edit operations", () => {
         const apiVersion = '1.0.0';
         cy.loginToPublisher(publisher, password);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            testApiId = apiId;
             addApiAndResource(verb, apiId);
 
             cy.get(`#${verb}\\${target}`).click();
@@ -113,9 +113,6 @@ describe("Resource add edit operations", () => {
             // Validating if the param exists after saving
             cy.get('#resources-save-operations', { timeout: 30000 });
             cy.get(`#param-list-${paramType}-${paramName}-${paramDataType}`).should('be.visible');
-
-            // Test is done. Now delete the api
-            Utils.deleteAPI(apiId);
         });
     });
 
@@ -126,6 +123,7 @@ describe("Resource add edit operations", () => {
         const apiVersion = '1.0.0';
         cy.loginToPublisher(publisher, password);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            testApiId = apiId;
             addApiAndResource(verb, apiId);
             // Click the operation level radio button on the top
             cy.get('#api-rate-limiting-operation-level').click({ force: true });
@@ -143,13 +141,15 @@ describe("Resource add edit operations", () => {
             cy.get(`#${verb}\\${target}-operation_throttling_policy`)
                 .contains(rateLimitName)
                 .should('be.visible');
-
-            // Test is done. Now delete the api
-            Utils.deleteAPI(apiId);
         });
     });
 
-    it.only("Add and assign scopes for API resources", () => {
+    it.only("Add and assign scopes for API resources",{
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
         const random_number = Math.floor(Date.now() / 1000);
         const verb = 'post';
         const scopeName = 'test' + random_number;
@@ -159,11 +159,13 @@ describe("Resource add edit operations", () => {
         const apiVersion = '1.0.0';
         cy.loginToPublisher(publisher, password);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            testApiId = apiId;
             addApiAndResource(verb, apiId);
 
             // Go to local scope page
             cy.visit(`/publisher/apis/${apiId}/scopes/create`);
 
+            cy.wait(2000);
             // Create a local scope
             cy.get('input#name').click();
             cy.get('input#name').type(scopeName);
@@ -176,10 +178,6 @@ describe("Resource add edit operations", () => {
 
             cy.get('#roles-input').click();
             cy.get('#roles-input').type(`${role}{enter}`);
-
-            // Not sure why, but the name becomes empty and we need to type it again
-            cy.get('input#name').click();
-            cy.get('input#name').type(scopeName);
 
             cy.get('#scope-save-btn').click();
             cy
@@ -204,8 +202,11 @@ describe("Resource add edit operations", () => {
                 .contains(scopeName)
                 .should('be.visible');
 
-            // Test is done. Now delete the api
-            Utils.deleteAPI(apiId);
         });
     });
+
+    afterEach(() => {
+        Utils.deleteAPI(testApiId);
+    })
+
 })

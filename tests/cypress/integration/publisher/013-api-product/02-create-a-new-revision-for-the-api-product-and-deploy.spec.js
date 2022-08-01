@@ -19,12 +19,18 @@ import Utils from "@support/utils";
 describe("Mock the api response and test it", () => {
     const { publisher, password, } = Utils.getUserInfo();
     const productName = Utils.generateName();
+    const apiName = Utils.generateName();
     let testApiID;
     before(function () {
         cy.loginToPublisher(publisher, password);
     })
 
-    it("Mock the api response and test it", () => {
+    it("Mock the api response and test it", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
         cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().largeTimeout});
         cy.get('#open-api-file-select-radio').click();
         // upload the swagger
@@ -38,7 +44,7 @@ describe("Mock the api response and test it", () => {
         cy.get('#itest-id-apiversion-input', {timeout: Cypress.config().largeTimeout});
         cy.document().then((doc) => {
             cy.get('#itest-id-apicontext-input').clear();
-            cy.get('#itest-id-apicontext-input').type('petstore3');
+            cy.get('#itest-id-apicontext-input').type(apiName);
             cy.get('#itest-id-apiversion-input').click();
             const version = doc.querySelector('#itest-id-apiversion-input').value;
             // finish the wizard
@@ -63,14 +69,19 @@ describe("Mock the api response and test it", () => {
                 cy.intercept('**/swagger').as('swaggerGet');
 
                 cy.get('#api-product-next-btn').click();
-                cy.wait('@swaggerGet', {timeout: Cypress.config().largeTimeout}).then(() => {
+                cy.wait('@swaggerGet', { timeout: Cypress.config().largeTimeout }).then(() => {
+
+                    cy.intercept('GET', '**/swagger').as('getSwagger');
+                    cy.get(`#checkbox-list-label-${testApiID}`).click();
+                    cy.wait('@getSwagger');
+
                     cy.get('#resource-wrapper').children().should('have.length.gte', 1);
                     // add all resources
-                    cy.get('#add-all-resources-btn', {timeout: Cypress.config().largeTimeout}).click();
+                    cy.get('#add-all-resources-btn', { timeout: Cypress.config().largeTimeout }).click();
                     cy.get('span').contains('Define API Product').click();
-                    cy.get('#create-api-product-btn').scrollIntoView().dblclick({force:true});
+                    cy.get('#create-api-product-btn').scrollIntoView().dblclick({ force: true });
 
-                    cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout});
+                    cy.get('#itest-api-name-version', { timeout: Cypress.config().largeTimeout });
                     cy.get('#itest-api-name-version').contains(productName);
 
                     // Going to deployments page

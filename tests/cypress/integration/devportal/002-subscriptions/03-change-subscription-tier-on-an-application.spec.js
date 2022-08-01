@@ -46,23 +46,27 @@ describe("Change subscription tier of an application", () => {
                 // Go to application subscription page
                 cy.get('#left-menu-subscriptions').click();
                 cy.contains('Subscribe APIs').click();
+                
+                cy.get('[aria-labelledby="simple-dialog-title"]').find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
+                cy.contains('1-1 of 1'); 
+
                 cy.get(`#policy-select`).click();
                 cy.get(`#policy-select-Unlimited`).click();
-                cy.get(`#policy-subscribe-btn-${apiId}`).click();
-                cy.get('#close-btn').click();
+                cy.get(`#policy-subscribe-btn-${apiId}`).contains('Subscribe').click();
+                cy.get('button[aria-label="close"]').click();
 
                 // Check the subscriptions existence
-                cy.get(`#subscriptions-table td a`).contains(`${apiName} - ${apiVersion}`).should('exist');
+                cy.contains(`${apiName} - ${apiVersion}`).should('exist');
 
                 // Edit the subscription
-                cy.get(`#edit-api-subscription-${apiName}`).click();
+                cy.get(`#edit-api-subscription-${apiId}`).click();
                 cy.get('#outlined-select-currency').click();
-                cy.get('#Silver').click();
+                cy.get('li[data-value="Silver"]').click();
                 cy.get('button span').contains('Update').click();
 
                 // Checking the update is success.
                 cy.wait(4000);
-                cy.get(`#subscriptions-table td`).contains('Silver').should('exist');
+                cy.contains('Silver').should('exist');
             })
         })
     });

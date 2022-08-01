@@ -25,8 +25,12 @@ describe("Deploy sample api", () => {
         cy.loginToPublisher(publisher, password);
     })
 
-    it.only("Deploy sample api", () => {
-        cy.visit(`/publisher/apis`);
+    it.only("Deploy sample api", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
         cy.intercept(
             {
                 method: 'GET',
@@ -36,6 +40,7 @@ describe("Deploy sample api", () => {
                 body: { "count": 0, "list": [], "pagination": { "offset": 0, "limit": 10, "total": 0, "next": "", "previous": "" } },
             },
         ).as('apiGet');
+        cy.visit(`/publisher/apis`);
         cy.wait("@apiGet", { timeout: 180000 }).then((interceptions) => {
             console.log(interceptions);
             cy.get('#itest-rest-api-create-menu').click();
