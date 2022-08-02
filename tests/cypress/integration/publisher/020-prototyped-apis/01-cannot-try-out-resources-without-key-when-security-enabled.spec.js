@@ -83,7 +83,6 @@ describe("prototype apis with security enabled", () => {
             //cy.contains('.live-responses-table .response > .response-col_status','401',  {timeout: Cypress.config().largeTimeout}).should('exist');
             cy.get('.live-responses-table .response > td.response-col_status',{timeout: Cypress.config().largeTimeout}).should("contain.text",'401')
             cy.logoutFromDevportal();
-            cy.logoutFromDevportal();
         });
     });
 
