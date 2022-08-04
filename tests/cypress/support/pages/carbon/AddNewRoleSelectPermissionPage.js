@@ -17,22 +17,22 @@
  * under the License.
  */
 class AddNewRoleSelectPermissionPage {
-    getUrl(){
+    static getUrl(){
         return "/carbon/role/add-step2.jsp";
     }
-    getpermissionCheckboxOf(permission){
+    static getpermissionCheckboxOf(permission){
         return cy.get(permission);
 
     }
-    getFinishButton(){
+    static getFinishButton(){
         return cy.get('input[value="Finish"]')
     }
 
-    getMessageBoxInfo(){
+    static getMessageBoxInfo(){
         return cy.get('#messagebox-info')
     }
 
-    getMessageBoxOkButton(){
+    static getMessageBoxOkButton(){
         return cy.get('.ui-dialog-buttonset > .ui-button')
     }
 

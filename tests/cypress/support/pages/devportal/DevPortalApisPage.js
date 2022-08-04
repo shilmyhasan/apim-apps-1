@@ -18,13 +18,13 @@
 import Utils from "@support/utils";
 import DevportalComonPage from './DevportalComonPage';
 class DevPortalApisPage extends DevportalComonPage{
-    getUrl(){
+    static getUrl(){
         return "/devportal/apis";
     }
-    visitAPIsPage(){
+    static visitAPIsPage(){
         cy.visit(`${Utils.getAppOrigin()}` + this.getUrl())
     }
-    getApiLinkOfAPI(apiName){
+    static getApiLinkOfAPI(apiName){
         return cy.get(`a[area-label="Go to ${apiName}"]`)
     }
 }

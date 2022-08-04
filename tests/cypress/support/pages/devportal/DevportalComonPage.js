@@ -22,9 +22,8 @@ class DevportalComonPage {
     getToolTip(){
         return cy.get('div[role="status"][aria-live="polite"]')
     }
-    waitUntillDevportalLoaderSpinnerExit(){
+    static waitUntillLoadingComponentsExit(){
         cy.get('.apim-dual-ring',{timeout:25000}).should('not.exist');;
     }
-
 }
 export default DevportalComonPage;

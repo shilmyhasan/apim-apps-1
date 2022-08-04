@@ -16,14 +16,20 @@
  * under the License.
  */
 class DeploymentsPage {
-    getUrl(apiID){
+    static getUrl(apiID){
         return cy.get(`publisher/apis/${apiID}/deployments`);
     }
     // getLocalScopesHeader(){
     //     return cy.get('#itest-api-details-scopes-onboarding-head')
     // }
-    getDeployButton(){
+    static getDeployButton(){
         return cy.get('#deploy-btn')
+    }
+    static clickDeployAndWaitUntillComplete(){
+        cy.intercept('GET', `**/revisions?query=deployed**`).as('revisions');
+        this.getDeployButton().click();
+        cy.wait('@revisions',{timeout: Cypress.config().largeTimeout}).its('response.statusCode').should('equal', 200)
+        // further you can handle UI tooltip
     }
     
 }

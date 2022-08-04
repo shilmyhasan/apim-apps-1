@@ -16,13 +16,17 @@
  * under the License.
  */
 class PublisherComonPage {
-    getUrl(apiID){
+    static getUrl(apiID){
         return `publisher`;
     }
     getToolTip(){
         return cy.get('div[role="status"][aria-live="polite"]')
     }
+     // Todo : refactor and remove
     waitUntillPublisherLoadingSpinnerExit(){
+        cy.get('#apim-loader > span',{timeout:25000}).should('not.exist');
+    }
+    static waitUntillLoadingComponentsExit(){
         cy.get('#apim-loader > span',{timeout:25000}).should('not.exist');
     }
 

@@ -16,25 +16,25 @@
  * under the License.
  */
 class AddNewRoleEnterDetailsPage {
-    getUrl(){
+    static getUrl(){
         return "/carbon/role/add-step1.jsp";
     }
-    getDomainDropdown(){
+    static getDomainDropdown(){
         return cy.get("#domain")
     }
-    getRoleNameTextBox(){
+    static getRoleNameTextBox(){
         return cy.get("input[name='roleName']");
     }
-    getDomainDropdown(){
+    static getDomainDropdown(){
         return cy.get('#domain');
     }
-    getNextButton(){
+    static getNextButton(){
         return cy.get('input[value="Next >"]');
     }
-    getFinishButton(){
+    static getFinishButton(){
         return cy.get("");
     }
-    getCancelButton(){
+    static getCancelButton(){
         return cy.get("");
     }
 }

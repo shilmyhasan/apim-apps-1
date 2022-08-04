@@ -16,28 +16,28 @@
  * under the License.
  */
 class LocalScopesPage {
-    getUrl(apiID){
+    static getUrl(apiID){
         return cy.get(`publisher/apis/${apiID}/scopes`);
     }
-    getLocalScopesHeader(){
+    static getLocalScopesHeader(){
         return cy.get('#itest-api-details-scopes-onboarding-head')
     }
-    getCreateScopesButton(){
+    static getCreateScopesButton(){
         return cy.get('#create-scope-btn')
     }
-    getScopeNameTextBox(){
+    static getScopeNameTextBox(){
         return cy.get('#name')
     }
-    getScopeDisplayNameTextBox(){
+    static getScopeDisplayNameTextBox(){
         return cy.get('#displayName')
     }
-    getScopeDescriptionTextBox(){
+    static getScopeDescriptionTextBox(){
         return cy.get('#description')
     }
-    getRolesTextBox(){
+    static getRolesTextBox(){
         return cy.get('#roles-input')
     }
-    getSaveButton(){
+    static getSaveButton(){
         return cy.get('#scope-save-btn')
     }
     
