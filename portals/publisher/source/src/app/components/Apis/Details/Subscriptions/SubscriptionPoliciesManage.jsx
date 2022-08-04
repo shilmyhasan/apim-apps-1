@@ -112,12 +112,13 @@ class SubscriptionPoliciesManage extends Component {
         Following logic identifies that special case.
         */
         let migratedCase = false;
-        if(Object.keys(subscriptionPolicies).length !== 0 && api.policies && api.policies.length > 0) {
-            const checkedPolicies = subscriptionPolicies.filter(subPolicy => {
-                const foundSamePolicy = api.policies.find( pVal => pVal === subPolicy.displayName); 
-                return foundSamePolicy && foundSamePolicy.length > 0 
+        let preMigrationPolicies;
+        if (Object.keys(subscriptionPolicies).length !== 0 && api.policies && api.policies.length > 0) {
+            preMigrationPolicies = api.policies.filter((apiPolicy) => {
+                const samePolicies = subscriptionPolicies.filter((subPolicy) => apiPolicy === subPolicy.displayName);
+                return samePolicies.length === 0;
             });
-            migratedCase = checkedPolicies.length === 0;
+            migratedCase = preMigrationPolicies.length > 0;
         }
         
         return (
@@ -164,33 +165,38 @@ class SubscriptionPoliciesManage extends Component {
                                     label={value[1].displayName + ' : ' + value[1].description}
                                 />
                             ))}
-                            {migratedCase && (
+                            { migratedCase && (
                                 <Box display='flex' flexDirection='column'>
                                     <Box className={classes.migrateMessage}>
-                                        <FormattedMessage
-                                            id='Apis.Details.Subscriptions.SubscriptionPoliciesManage.sub.migrated'
-                                            defaultMessage={`Following policies are migrated from an 
+                                        <Typography variant='caption' gutterBottom>
+                                            <FormattedMessage
+                                                id='Apis.Details.Subscriptions.SubscriptionPoliciesManage.sub.migrated'
+                                                defaultMessage={`Following policies are migrated from an 
                                             old version of APIM. You can uncheck and select a different policy. 
                                             Note that this is an irreversible operation.`}
-                                        />
-                                    </Box>
-                                    {api.policies.map((policy) => (<FormControlLabel
-                                        data-testid={'policy-checkbox-' + policy.toLowerCase()}
-                                        key={policy}
-                                        control={(
-                                            <Checkbox
-                                                disabled={isRestricted(['apim:api_publish', 'apim:api_create'], api)}
-                                                color='primary'
-                                                checked={policies.includes(policy)}
-                                                onChange={(e) => this.handleChange(e)}
-                                                name={policy}
                                             />
-                                        )}
-                                        label={policy}
-                                    />)) }
+                                        </Typography>
+                                    </Box>
+                                    {preMigrationPolicies.map((policy) => (
+                                        <FormControlLabel
+                                            data-testid={'policy-checkbox-' + policy.toLowerCase()}
+                                            key={policy}
+                                            control={(
+                                                <Checkbox
+                                                    disabled={
+                                                        isRestricted(['apim:api_publish', 'apim:api_create'], api)
+                                                    }
+                                                    color='primary'
+                                                    checked={policies.includes(policy)}
+                                                    onChange={(e) => this.handleChange(e)}
+                                                    name={policy}
+                                                />
+                                            )}
+                                            label={policy}
+                                        />
+                                    ))}
                                 </Box>
-                            )}
-                            
+                            )}                           
                         </FormGroup>
                     </FormControl>
                 </Paper>
