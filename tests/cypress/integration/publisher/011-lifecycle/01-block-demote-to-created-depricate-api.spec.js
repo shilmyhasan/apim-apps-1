@@ -24,7 +24,7 @@ describe("Lifecycle changes", () => {
     const apiVersion = '1.0.0';
     let testApiId;
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
     it.only("Block demote retire api", {
@@ -110,7 +110,7 @@ describe("Lifecycle changes", () => {
             cy.get('button[data-testid="Retire-btn"]', {timeout: Cypress.config().largeTimeout}).click();   
         });
     });
-    after(() => {
+    afterEach(() => {
         // Test is done. Now delete the api
         Utils.deleteAPI(testApiId);
     })

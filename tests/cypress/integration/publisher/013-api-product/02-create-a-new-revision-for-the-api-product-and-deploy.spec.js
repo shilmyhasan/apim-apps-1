@@ -21,7 +21,7 @@ describe("Mock the api response and test it", () => {
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
     let testApiID;
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 

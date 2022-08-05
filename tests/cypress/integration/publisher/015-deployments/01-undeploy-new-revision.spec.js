@@ -21,7 +21,7 @@ import Utils from "@support/utils";
 describe("Undeploy new revision", () => {
     const { publisher, password, } = Utils.getUserInfo();
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 

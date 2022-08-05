@@ -125,7 +125,7 @@ describe("Publish thirdparty api", () => {
 
             });
     });
-    after(function () {
+    afterEach(function () {
         cy.log("deleting api ", apiId);
         cy.loginToPublisher(publisher, password);
         publisherComonPage.waitUntillPublisherLoadingSpinnerExit();

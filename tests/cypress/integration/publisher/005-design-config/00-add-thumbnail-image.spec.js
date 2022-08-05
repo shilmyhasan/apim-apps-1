@@ -27,7 +27,7 @@ describe("Upload thumbnail", () => {
     const apiVersion = '1.0.0';
     let testApiID;
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
     it.only("Upload thumbnail",{

@@ -21,7 +21,7 @@ describe("Mock the api response and test it", () => {
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
     let testApiID;
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 
@@ -31,6 +31,11 @@ describe("Mock the api response and test it", () => {
             openMode: 0,
         },
     }, () => {
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            // returning false here prevents Cypress from
+            // failing the test
+            return false
+        });
         cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().largeTimeout});
         cy.get('#open-api-file-select-radio').click();
 

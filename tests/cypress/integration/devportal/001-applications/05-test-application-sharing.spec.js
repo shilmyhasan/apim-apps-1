@@ -35,19 +35,25 @@ describe("Invoke API Product", () => {
     const apiName = `anonymous${Math.floor(Math.random() * (100000 - 1 + 1) + 1)}`;
     const apiVersion = '2.0.0';
     const apiContext = `anonymous${Math.floor(Math.random() * (100000 - 1 + 1) + 1)}`;
+    let apiId;
 
-
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     
     })
 
-    it("Test Application Sharing", () => {
+    it("Test Application Sharing", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
 
         cy.createAndPublishAPIByRestAPIDesign(apiName, apiVersion, apiContext);
         cy.location('pathname').then((pathName) => {
             const pathSegments = pathName.split('/');
             const uuid = pathSegments[pathSegments.length - 2];
+            apiId = uuid;
             cy.logoutFromPublisher();
 
             //Create Users in Devportal
@@ -72,7 +78,7 @@ describe("Invoke API Product", () => {
             cy.get('input[name="http://wso2.org/claims/organization"]').type('org1');
             cy.get('#termsCheckbox').check().should('be.checked');
             cy.get('#registrationSubmit').click();
-            cy.contains('Close', {timeout: Cypress.config().largeTimeout}).click() 
+            cy.get('button.cancel', {timeout: Cypress.config().largeTimeout}).click() 
 
             //Creating user 2
             cy.get('#registerLink').click();
@@ -86,7 +92,7 @@ describe("Invoke API Product", () => {
             cy.get('input[name="http://wso2.org/claims/organization"]').type('org1');
             cy.get('#termsCheckbox').check().should('be.checked');
             cy.get('#registrationSubmit').click();
-            cy.contains('Close', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('button.cancel', {timeout: Cypress.config().largeTimeout}).click();
 
 
             //Log into developer portal as user 1
@@ -130,9 +136,9 @@ describe("Invoke API Product", () => {
  
     });
 
-    after(function () {
+    afterEach(function () {
         cy.visit(`/devportal/applications`);
-        cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
+        cy.get(`#delete-${appName}-btn`, {timeout: Cypress.config().largeTimeout});
         cy.get(`#delete-${appName}-btn`).click();
         cy.get(`#itest-confirm-application-delete`).click();
         cy.logoutFromDevportal();

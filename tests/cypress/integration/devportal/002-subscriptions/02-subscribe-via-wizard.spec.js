@@ -51,15 +51,15 @@ describe("Anonymous view apis", () => {
                 cy.get('#application-name').type(appName);
                 cy.get('#wizard-next-0-btn').click();
             
-                cy.get('#wizard-next-1-btn', { timeout: 30000 })
+                cy.get('#wizard-next-1-btn', {timeout: Cypress.config().largeTimeout})
                 cy.get('#wizard-next-1-btn').click();
             
-                cy.get('#wizard-next-2-btn', { timeout: 30000 });
+                cy.get('#wizard-next-2-btn', {timeout: Cypress.config().largeTimeout});
                 cy.get('#wizard-next-2-btn').click();
             
                 cy.intercept('GET','**/oauth-keys').as('oauthKeys');
-                cy.wait('@oauthKeys', {timeout: 4000}).then(() => {
-                    cy.get('#wizard-next-3-btn', { timeout: 30000 });
+                cy.wait('@oauthKeys', {timeout: Cypress.config().largeTimeout}).then(() => {
+                    cy.get('#wizard-next-3-btn', {timeout: Cypress.config().largeTimeout});
                     cy.get('#wizard-next-3-btn').click();
                 });
             
@@ -79,7 +79,7 @@ describe("Anonymous view apis", () => {
             })
         })
     })
-    after(() => {
+    afterEach(() => {
         cy.deleteApp(appName);
         Utils.deleteAPI(testApiId);
     })

@@ -20,7 +20,7 @@ describe("Add custom throttle policies", () => {
     const carbonUsername = 'admin';
     const carbonPassword = 'admin';
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToAdmin(carbonUsername, carbonPassword);
     })
     it.only("Add custom throttle policies",{
@@ -46,7 +46,7 @@ describe("Add custom throttle policies", () => {
 
         cy.intercept('GET', '**/throttling/policies/custom').as('getCustomPolicies');
         cy.get('button.MuiButton-containedPrimary > span').contains('Edit').click();
-        cy.wait('@getCustomPolicies', {timeout: 30000}).then(() => {
+        cy.wait('@getCustomPolicies', {timeout: Cypress.config().largeTimeout}).then(() => {
             cy.get('td').contains(secondDesc).should('exist');
         });
 
