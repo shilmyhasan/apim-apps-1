@@ -32,6 +32,7 @@ describe("Download swagger", () => {
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemAPIdefinition').click();
             cy.get('.lines-content.monaco-editor-background div.view-lines div.view-line', { timeout: 30000 });
+            cy.wait(2000);
             cy.get('#download-definition-btn').click();
 
             // Downloading swagger
@@ -40,13 +41,14 @@ describe("Download swagger", () => {
             TODO
             swagger.yaml does not get saved with the correct extension.
             */
-            const downloadedFilename = `${downloadsFolder}/swagger.null`;
+            const downloadedFilename = `${downloadsFolder}/swagger.yaml`;
             cy.readFile(downloadedFilename).then((str) => {
                 // TODO. The content is there when we test the same from the UI
                 // But somehow the content coming as null here. Need to validate the content here.
                 cy.log(str);
                 cy.log(downloadedFilename);
                 const english = YAML.parse(str)
+                cy.log(english);
             })
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);

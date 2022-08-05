@@ -518,7 +518,7 @@ Cypress.Commands.add('createApp', (appName, appDescription) => {
         cy.get('#application-description').click();
         cy.get('#application-description').type('{backspace}');
         cy.get('#application-description').type(appDescription);
-        cy.get('#itest-application-create-save').click();
+        cy.get('#itest-application-create-save').click({force:true});
 
         // Checking the app name exists in the overview page.
         cy.url().should('contain', '/overview');

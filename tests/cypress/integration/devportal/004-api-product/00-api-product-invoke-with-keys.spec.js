@@ -126,7 +126,7 @@ describe("Invoke API Product", () => {
                         cy.contains('Subscribe APIs').click();
 
                         cy.get(`#policy-subscribe-btn-${uuidProduct}`).click();
-                        cy.get('#close-btn').click();
+                        cy.get('[aria-label="close"]').click();
                         cy.location('pathname').then((pathName) => {
                             const pathSegments = pathName.split('/');
                             const uuidApp = pathSegments[pathSegments.length - 2];
@@ -140,11 +140,11 @@ describe("Invoke API Product", () => {
                             cy.wait('@genToken');
 
                             // Test console with Oath2 token
-                            cy.get('#operations-default-get_menu').click();
-                            cy.get('#operations-default-get_menu .try-out__btn').click();
-                            cy.get('#operations-default-get_menu button.execute').click();
+                            cy.get('#operations-default-get__').find('.opblock-summary-control').click();
+                            cy.get('#operations-default-get__').find('.try-out__btn').click();
+                            cy.get('#operations-default-get__').find('.execute').click();
                             cy.wait(3000);
-                            cy.get('#operations-default-get_menu  td.response-col_status').contains('200').should('exist');
+                            cy.get('#operations-default-get__').find('.response-col_status').contains('200').should('exist');
 
                             cy.visit(`/devportal/applications`);
                             cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
@@ -154,7 +154,8 @@ describe("Invoke API Product", () => {
                         });
 
                         //Test with API Key
-                        cy.createApp(appName, appDescription);
+                        const appName2 = Utils.generateName();
+                        cy.createApp(appName2, appDescription);
                         cy.location('pathname').then((pathName) => {
                             const pathSegments = pathName.split('/');
                             const uuidApp = pathSegments[pathSegments.length - 2];
@@ -171,7 +172,7 @@ describe("Invoke API Product", () => {
                             cy.contains('Subscribe APIs').click();
 
                             cy.get(`#policy-subscribe-btn-${uuidProduct}`).click();
-                            cy.get('#close-btn').click();
+                            cy.get('[aria-label="close"]').click();
 
                             cy.visit(`/devportal/apis/${uuidProduct}/test`);
                             cy.wait(2000);
@@ -185,15 +186,15 @@ describe("Invoke API Product", () => {
                             //cy.wait('@genToken');
 
                             // Test console with api key
-                            cy.get('#operations-default-get_menu').click();
-                            cy.get('#operations-default-get_menu .try-out__btn').click();
-                            cy.get('#operations-default-get_menu button.execute').click();
+                            cy.get('#operations-default-get__').find('.opblock-summary-control').click();
+                            cy.get('#operations-default-get__').find('.try-out__btn').click();
+                            cy.get('#operations-default-get__').find('.execute').click();
                             cy.wait(3000);
-                            cy.get('#operations-default-get_menu  td.response-col_status').contains('200').should('exist');
+                            cy.get('#operations-default-get__').find('.response-col_status').contains('200').should('exist');
 
                             cy.visit(`/devportal/applications`);
-                            cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
-                            cy.get(`#delete-${appName}-btn`).click();
+                            cy.get(`#delete-${appName2}-btn`, { timeout: 30000 });
+                            cy.get(`#delete-${appName2}-btn`).click();
                             cy.get(`#itest-confirm-application-delete`).click();
 
                         });

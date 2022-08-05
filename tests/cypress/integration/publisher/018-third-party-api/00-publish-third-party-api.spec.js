@@ -26,7 +26,12 @@ let apiId ;
 
 describe("Publish thirdparty api", () => {
     const { publisher, developer, password, } = Utils.getUserInfo();
-    it.only("Publish thirdparty api", () => {
+    it.only("Publish thirdparty api", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
         cy.loginToPublisher(publisher, password);
         publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             // cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/asyncapi`);
