@@ -93,9 +93,16 @@ function View(props) {
     const [code, setCode] = useState('');
     const [isFileAvailable, setIsFileAvailable] = useState(false);
     const restAPI = new API();
-    const { skipHtml } = Settings.app.markdown;
-    const markdownSyntaxHighlighterProps = Settings.app.markdown.syntaxHighlighterProps || {};
-    const { syntaxHighlighterDarkTheme } = Settings.app.markdown;
+    const appMarkdown = Settings.app.markdown || {
+        skipHtml: true,
+        syntaxHighlighterProps: {
+            showLineNumbers: false,
+        },
+        syntaxHighlighterDarkTheme: false,
+    };
+    const { skipHtml } = appMarkdown;
+    const markdownSyntaxHighlighterProps = appMarkdown.syntaxHighlighterProps || {};
+    const { syntaxHighlighterDarkTheme } = appMarkdown;
 
     const loadContentForDoc = () => {
         const docPromise = restAPI.getInlineContentOfDocument(apiId, doc.documentId);
