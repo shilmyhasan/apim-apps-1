@@ -60,7 +60,7 @@ describe("Subscribe unsubscribe to application from api details page", () => {
         });
     })
 
-    after(() => {
+    afterEach(() => {
         cy.deleteApp(appName);
         Utils.deleteAPI(testApiId);
     })

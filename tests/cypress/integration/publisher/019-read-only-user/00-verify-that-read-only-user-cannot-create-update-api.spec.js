@@ -108,7 +108,7 @@ describe("Publisher Read-Only Mode", () => {
 
         //2 -a. should not be able to update thumbnail
         cy.get('#edit-api-thumbnail-btn').click();
-        cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
+        cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout}).should('be.visible');
         cy.get('#itest-api-name-version').contains(apiVersion);
         
         //2 -b. rest of the form field should not be editable
@@ -143,13 +143,13 @@ describe("Publisher Read-Only Mode", () => {
 
         //5. should not be able to add documents
         cy.get('#left-menu-itemdocuments').click();
-        cy.get('[data-testid="add-document-btn"]',{timeout: 30000 }).get('[aria-disabled="true"]').should('exist');        
+        cy.get('[data-testid="add-document-btn"]',{timeout: Cypress.config().largeTimeout}).get('[aria-disabled="true"]').should('exist');        
 
         //6. should not be able to comments
         cy.get('#left-menu-itemcomments').click();
-        cy.get('#standard-multiline-flexible',{timeout: 30000 }).should('be.disabled');
+        cy.get('#standard-multiline-flexible',{timeout: Cypress.config().largeTimeout}).should('be.disabled');
         cy.contains('button','Reply').click();
-        cy.get('#standard-multiline-flexible',{timeout: 30000 }).should('be.disabled');
+        cy.get('#standard-multiline-flexible',{timeout: Cypress.config().largeTimeout}).should('be.disabled');
 
         //7. Runtime Configurations
         cy.get('#itest-api-details-api-config-acc').click();

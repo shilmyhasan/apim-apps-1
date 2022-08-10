@@ -23,7 +23,7 @@ describe("Add API Categories and assign via publisher portal", () => {
     const carbonPassword = 'admin';
     let testApiId;
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToAdmin(carbonUsername, carbonPassword);
     })
     it("Add API Categories and assign via publisher portal",{
@@ -54,7 +54,7 @@ describe("Add API Categories and assign via publisher portal", () => {
         })
     });
 
-    after(function () {
+    afterEach(function () {
         if (testApiId) {
             Utils.deleteAPI(testApiId).then(() => {
                 // Delete

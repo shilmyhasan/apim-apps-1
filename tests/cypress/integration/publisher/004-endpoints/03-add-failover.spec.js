@@ -22,7 +22,7 @@ describe("Endpoint testing", () => {
     const { publisher, password, } = Utils.getUserInfo();
     const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
 
-    before(function () {
+    beforeEach(function () {
          // todo need to remove this check after `console.err(err)` -> `console.err(err)` in Endpoints.jsx
         Cypress.on('uncaught:exception', (err, runnable) => {
             // returning false here prevents Cypress from

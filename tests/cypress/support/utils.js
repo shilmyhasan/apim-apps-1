@@ -150,6 +150,30 @@ export default class Utils {
         })
     }
 
+    static deleteAPIProduct(productId) {
+        // todo need to remove this check after `console.err(err)` -> `console.err(err)` in Endpoints.jsx
+        Cypress.on('uncaught:exception', (err, runnable) => {
+            // returning false here prevents Cypress from
+            // failing the test
+            return false
+        });
+        return new Cypress.Promise((resolve, reject) => {
+            try {
+                Utils.getApiToken()
+                    .then((token) => {
+                        const curl = `curl -k -X DELETE \
+                        -H "Content-Type: application/json" \
+                        -H "Authorization: Bearer ${token}"  "${Cypress.config().baseUrl}/api/am/publisher/v3/api-products/${productId}"`;
+                        cy.exec(curl).then(result => {
+                            resolve(result.stdout);
+                        })
+                    })
+            } catch (e) {
+                reject('Error while deleting api product');
+            }
+        })
+    }
+
     static getUserInfo() {
         return {
             publisher: 'publisher',

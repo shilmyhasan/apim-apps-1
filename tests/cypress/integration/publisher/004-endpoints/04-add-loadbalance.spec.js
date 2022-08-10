@@ -22,7 +22,7 @@ describe("Endpoint testing", () => {
     const { publisher, password, } = Utils.getUserInfo();
     const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 

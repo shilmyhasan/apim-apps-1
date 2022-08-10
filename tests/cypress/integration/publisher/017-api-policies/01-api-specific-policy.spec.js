@@ -20,8 +20,9 @@ import Utils from "@support/utils";
 
 describe("Common Policies", () => {
     const { publisher, password, } = Utils.getUserInfo();
+    let apiTestId;
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 
@@ -33,6 +34,7 @@ describe("Common Policies", () => {
         },
     }, () => {
         Utils.addAPI({}).then((apiId) => {
+            apiTestId = apiId;
             cy.visit(`/publisher/apis/${apiId}/policies`);
             //Create API Specific Policy
             cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
@@ -79,8 +81,11 @@ describe("Common Policies", () => {
             cy.visit(`/publisher/apis/${apiId}/policies`);
             cy.wait(2000);
 
-            //Delete API
-            Utils.deleteAPI(apiId);
         });
     });
+    afterEach(function () {
+        //Delete API
+        Utils.deleteAPI(apiTestId);
+    })
+
 })

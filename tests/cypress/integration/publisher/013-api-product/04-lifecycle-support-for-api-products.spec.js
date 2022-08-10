@@ -21,7 +21,7 @@ describe("Life cycle support for API Products", () => {
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 

@@ -45,7 +45,7 @@ describe("Anonymous view apis", () => {
                 cy.get('#left-menu-subscriptions').click();
                 cy.intercept('**/apis**').as('apiGetFirst');
                 cy.contains('Subscribe APIs', {timeout: Cypress.config().largeTimeout}).click();
-                cy.wait('@apiGetFirst', { timeout: 30000 }).then(() => {
+                cy.wait('@apiGetFirst', {timeout: Cypress.config().largeTimeout}).then(() => {
                     cy.wait(2000)
                     cy.get('[aria-labelledby="simple-dialog-title"]').find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
                     cy.contains('1-1 of 1'); 

@@ -29,7 +29,7 @@ describe("Subscription blocking", () => {
     const apiContext = apiName;
     let testApiId;
 
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 
@@ -50,7 +50,7 @@ describe("Subscription blocking", () => {
                 cy.url().should('contain', '/apis?tenant=carbon.super');
                 cy.visit(`/devportal/apis/${apiId}/credentials?tenant=carbon.super`);
                 // Click and select the new application
-                cy.get('#application-subscribe', { timeout: 300000 }).should('be.visible');
+                cy.get('#application-subscribe', {timeout: Cypress.config().largeTimeout}).should('be.visible');
 
                 cy.get('#application-subscribe').click();
                 cy.get(`.MuiAutocomplete-popper li`).contains(appName).click();
@@ -64,7 +64,7 @@ describe("Subscription blocking", () => {
 
 
                 // click the left menu to go to subscriptions page.
-                cy.get('#itest-api-details-portal-config-acc', { timeout: 300000 }).should('be.visible');
+                cy.get('#itest-api-details-portal-config-acc', {timeout: Cypress.config().largeTimeout}).should('be.visible');
                 cy.get('#itest-api-details-portal-config-acc').click();
                 cy.get('#left-menu-itemsubscriptions').click();
                 cy.get('table tr button span').contains('Block Production Only').click();
@@ -76,10 +76,10 @@ describe("Subscription blocking", () => {
         });
     })
 
-    after(() => {
+    afterEach(() => {
         cy.loginToDevportal(developer, password);
         cy.visit(`/devportal/applications?tenant=carbon.super`);
-        cy.get(`#delete-${appName}-btn`, { timeout: 30000 });
+        cy.get(`#delete-${appName}-btn`, {timeout: Cypress.config().largeTimeout});
         cy.get(`#delete-${appName}-btn`).click();
         cy.get(`#itest-confirm-application-delete`).click();
         cy.logoutFromDevportal();

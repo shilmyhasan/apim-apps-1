@@ -21,7 +21,7 @@ describe("Mock the api response and test it", () => {
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
     let testApiID;
-    before(function () {
+    beforeEach(function () {
         cy.loginToPublisher(publisher, password);
     })
 
@@ -72,7 +72,7 @@ describe("Mock the api response and test it", () => {
 
                 cy.intercept('**/swagger').as('swaggerGet');
 
-                cy.get('#api-product-next-btn').click();
+                cy.get('#api-product-next-btn').should('not.have.class', 'Mui-disabled').click({force:true});
 
                 cy.wait('@swaggerGet', { timeout: Cypress.config().largeTimeout }).then(() => {
                     cy.intercept('GET', '**/swagger').as('getSwagger');

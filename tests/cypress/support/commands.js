@@ -136,9 +136,9 @@ Cypress.Commands.add('deleteUser', (name) => {
 Cypress.Commands.add('deleteApi', (name, version) => {
     var cardName='card-'+name+version;
     var actionCardName='card-action-'+name+version;
-    cy.visit(`/publisher/apis`);
     cy.intercept('**/apis*').as('getApis');
-    cy.wait('@getApis', {timeout: 30000}).then(() => {
+    cy.visit(`/publisher/apis`);
+    cy.wait('@getApis', {timeout: Cypress.config().largeTimeout}).then(() => {
         cy.get(`[data-testid="${cardName}"]`).get(`[data-testid="${actionCardName}"]`).within(($panel) => {
             cy.get("#itest-id-deleteapi-icon-button", { timeout: 30000 }).click();
           }) 
