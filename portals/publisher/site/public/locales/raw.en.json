@@ -2565,6 +2565,15 @@
   "Apis.Details.Policies.AttachedPolicyForm.General.saving": {
     "defaultMessage": "Saving"
   },
+  "Apis.Details.Policies.AttachedPolicyForm.General.version.title": {
+    "defaultMessage": "Version"
+  },
+  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.not.provided": {
+    "defaultMessage": "Oops! Looks like this policy does not have a version"
+  },
+  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.provided": {
+    "defaultMessage": "{version}"
+  },
   "Apis.Details.Policies.CreatePolicy.create.new.policy": {
     "defaultMessage": "Create New Policy"
   },
@@ -2639,6 +2648,12 @@
   },
   "Apis.Details.Policies.PolicyForm.GeneralDetails.form.name.label": {
     "defaultMessage": "Name"
+  },
+  "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText": {
+    "defaultMessage": "Version of the policy"
+  },
+  "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.label": {
+    "defaultMessage": "Version"
   },
   "Apis.Details.Policies.PolicyForm.GeneralDetails.title": {
     "defaultMessage": "General Details"
@@ -4031,6 +4046,9 @@
   },
   "CommonPolicies.Listing.table.header.policy.name": {
     "defaultMessage": "Policy Name"
+  },
+  "CommonPolicies.Listing.table.header.policy.version": {
+    "defaultMessage": "Policy Version"
   },
   "CommonPolicies.ViewPolicy.policies.title": {
     "defaultMessage": "Policies"

@@ -289,6 +289,31 @@ const General: FC<GeneralProps> = ({
                         <div>
                             <Typography variant='subtitle2' color='textPrimary'>
                                 <FormattedMessage
+                                    id='Apis.Details.Policies.AttachedPolicyForm.General.version.title'
+                                    defaultMessage='Version'
+                                />
+                            </Typography>
+                            <Typography variant='caption' color='textPrimary'>
+                                {policySpec.version ? (
+                                    <FormattedMessage
+                                        id='Apis.Details.Policies.AttachedPolicyForm.General.version.value.provided'
+                                        defaultMessage='{version}'
+                                        values={{ version: policySpec.version }}
+                                    />
+                                ) : (
+                                    <FormattedMessage
+                                        id={
+                                            'Apis.Details.Policies.AttachedPolicyForm.General.version.value.' +
+                                            'not.provided'
+                                        }
+                                        defaultMessage='Oops! Looks like this policy does not have a version'
+                                    />
+                                )}                            
+                            </Typography>
+                        </div>
+                        <div>
+                            <Typography variant='subtitle2' color='textPrimary'>
+                                <FormattedMessage
                                     id='Apis.Details.Policies.AttachedPolicyForm.General.description.title'
                                     defaultMessage='Description'
                                 />

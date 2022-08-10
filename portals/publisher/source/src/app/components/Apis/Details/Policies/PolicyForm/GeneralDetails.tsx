@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface GeneralDetailsProps {
     displayName: string | null;
+    version: string;
     description: string;
     applicableFlows: string[];
     dispatch?: React.Dispatch<any>;
@@ -55,6 +56,7 @@ interface GeneralDetailsProps {
  */
 const GeneralDetails: FC<GeneralDetailsProps> = ({
     displayName,
+    version,
     description,
     applicableFlows,
     dispatch,
@@ -143,6 +145,34 @@ const GeneralDetails: FC<GeneralDetailsProps> = ({
                         margin='dense'
                         variant='outlined'
                         value={displayName}
+                        onChange={handleInputChange}
+                        inputProps={{
+                            readOnly: isViewMode,
+                            style: isViewMode ? { cursor: 'auto' } : {},
+                        }}
+                    />
+                    <TextField
+                        fullWidth
+                        id='version'
+                        data-testid='version'
+                        name='version'
+                        label={
+                            <>
+                                <FormattedMessage
+                                    id='Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.label'
+                                    defaultMessage='Version'
+                                />
+                            </>
+                        }
+                        helperText={
+                            <FormattedMessage
+                                id='Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText'
+                                defaultMessage='Version of the policy'
+                            />
+                        }
+                        margin='dense'
+                        variant='outlined'
+                        value={version}
                         onChange={handleInputChange}
                         inputProps={{
                             readOnly: isViewMode,

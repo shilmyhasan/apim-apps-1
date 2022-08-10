@@ -97,6 +97,7 @@ function policyReducer(state: NewPolicyState, action: any) {
                         id: uuidv4(),
                         name: null,
                         displayName: null,
+                        version: null,
                         description: '',
                         required: false,
                         type: 'String',
@@ -162,6 +163,7 @@ const PolicyCreateForm: FC<PolicyCreateFormProps> = ({
     const classes = useStyles();
     const initialState: NewPolicyState = {
         displayName: null,
+        version: '',
         description: '',
         applicableFlows: ['request', 'response', 'fault'],
         supportedGateways: ['Synapse'],
@@ -243,6 +245,7 @@ const PolicyCreateForm: FC<PolicyCreateFormProps> = ({
                 category: 'Mediation',
                 name: state.displayName.replace(/[^A-Za-z0-9]+/gi, ''),
                 displayName: state.displayName,
+                version: state.version,
                 description: state.description,
                 applicableFlows: state.applicableFlows,
                 supportedGateways: state.supportedGateways,
@@ -258,6 +261,7 @@ const PolicyCreateForm: FC<PolicyCreateFormProps> = ({
             {/* General details of policy */}
             <GeneralDetails
                 displayName={state.displayName}
+                version={state.version}
                 description={state.description}
                 applicableFlows={state.applicableFlows}
                 dispatch={dispatch}
