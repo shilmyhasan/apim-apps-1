@@ -16,24 +16,23 @@
  * under the License.
  */
 
+import Utils from "@support/utils";
+
 import adavanceConfFalseJson from "../../fixtures/api_artifacts/advanceConfigFlase.json"
 import adavanceConfTrueJson from "../../fixtures/api_artifacts/advanceConfigTrue.json"
 
 describe("Advanced Configurations", () => {
-    const carbonUsername = 'admin';
-    const carbonPassword = 'admin';
+    
+    const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 
-    before(function () {
-        cy.loginToAdmin(carbonUsername, carbonPassword);
-    })
-    it.only("Advanced configurations", () => {
-        
+    const advancedConfiguration = (usernameLocal, passwordLocal, tenant) => {
+        cy.loginToAdmin(usernameLocal, passwordLocal, tenant);
         cy.get('[data-testid="Advanced-child-link"]').click();
 
         cy.intercept('GET', 'https://localhost:9443/api/am/admin/v3/tenant-config', {
             statusCode: 200,
             body: adavanceConfFalseJson
-            
+
         })
         cy.get('[data-testid="Scope Assignments-child-link"]').click();
         cy.get('[data-testid="Advanced-child-link"]').click();
@@ -48,7 +47,12 @@ describe("Advanced Configurations", () => {
         cy.get('[data-testid="Advanced-child-link"]').click();
         cy.wait(2000);
         cy.get('[data-testid="monaco-editor-save"]').click();
-
+    }
+    it.only("Advanced configurations - super admin", () => {
+        advancedConfiguration(carbonUsername, carbonPassword, superTenant);
+    });
+    it.only("Advanced configurations - tenant user", () => {
+        advancedConfiguration(carbonUsername, carbonPassword, testTenant);
     });
 
  })

@@ -25,14 +25,10 @@ const devportalComonPage = new PublisherComonPage();
 let apiId ;
 
 describe("Publish thirdparty api", () => {
-    const { publisher, developer, password, } = Utils.getUserInfo();
-    it.only("Publish thirdparty api", {
-        retries: {
-            runMode: 3,
-            openMode: 0,
-        },
-    }, () => {
-        cy.loginToPublisher(publisher, password);
+    const { publisher, developer, password, superTenant, testTenant} = Utils.getUserInfo();
+    let apiName;
+    const publishThirdPartyApi = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
         publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             // cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/asyncapi`);
             // publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
@@ -46,10 +42,11 @@ describe("Publish thirdparty api", () => {
             // cy.get('#other').should('exist');
             cy.visit(`${Utils.getAppOrigin()}/publisher/apis/create/rest`);
             publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-            cy.get('#itest-id-apiname-input', {timeout: Cypress.config().largeTimeout}).type('ThirdPartyApi');
-            cy.get('#itest-id-apicontext-input').type('/thirdpartyapi');
+            apiName = Utils.generateName().replace('-', '_');
+            cy.get('#itest-id-apiname-input', {timeout: Cypress.config().largeTimeout}).type(apiName);
+            cy.get('#itest-id-apicontext-input').type('/' + apiName);
             cy.get('#itest-id-apiversion-input').type('1.0.0');
-            cy.get('#itest-id-apiendpoint-input').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/api`);
+            cy.get('#itest-id-apiendpoint-input').type(`${Utils.getAppOrigin()}/am/sample/${apiName}/v1/api`);
             cy.get('#itest-id-apiversion-input').click()
             cy.get('body').click(0,0);
             cy.get('#itest-create-default-api-button').click();
@@ -60,8 +57,8 @@ describe("Publish thirdparty api", () => {
                 cy.get('#left-menu-itemDesignConfigurations').click();
                 cy.wait(5000);
                 cy.get('[name="advertised"]:first').click();
-                cy.get('[name="apiExternalProductionEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/externalapi`, {force:true, timeout:30000});
-                cy.get('[name="apiExternalSandboxEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/thirdpartyapi/v1/externalapi`, {force:true});
+                cy.get('[name="apiExternalProductionEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/${apiName}/v1/externalapi`, {force:true, timeout:30000});
+                cy.get('[name="apiExternalSandboxEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/${apiName}/v1/externalapi`, {force:true});
                 cy.get('[name="originalDevPortalUrl"]').type('http://www.mocky.io/v2/5ec501532f00009700dc2dc1', {force:true});
                 cy.get('#design-config-save-btn').click({force:true});
                 cy.get('#itest-api-details-portal-config-acc').click();
@@ -104,32 +101,40 @@ describe("Publish thirdparty api", () => {
                 cy.get('[name="advertised"]:last').click();
                 cy.get('[data-testid="itest-update-api-confirmation"]', {timeout: Cypress.config().largeTimeout}).should('exist');
         
+                Cypress.on('uncaught:exception', (err, runnable) => {
+                    // returning false here prevents Cypress from
+                    // failing the test
+                    return false
+                });
                 cy.visit(`${Utils.getAppOrigin()}/publisher/apis`);
                 cy.wait(10000)
                 publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-                cy.get("#searchQuery").type("ThirdPartyApi").type('{enter}')
+                cy.get("#searchQuery").type(apiName).type('{enter}')
                 cy.wait(10000)
-                cy.get('div[data-testid="card-action-ThirdPartyApi1.0.0"]', {timeout: Cypress.config().largeTimeout}).click();
+                cy.get(`div[data-testid="card-action-${apiName}1.0.0"]`, {timeout: Cypress.config().largeTimeout}).click();
                 cy.wait(3000)
-                cy.get('div[data-testid="card-action-ThirdPartyApi1.0.0"]>div>span', {timeout: Cypress.config().largeTimeout}).contains('PUBLISHED').should('exist');
+                cy.get(`div[data-testid="card-action-${apiName}1.0.0"]>div>span`, {timeout: Cypress.config().largeTimeout}).contains('PUBLISHED').should('exist');
                 
                 
-                cy.get('a[aria-label="ThirdPartyApi Thumbnail"]', {timeout: Cypress.config().largeTimeout})
+                cy.get(`a[aria-label="${apiName} Thumbnail"]`, {timeout: Cypress.config().largeTimeout})
                     .should('exist', {timeout: Cypress.config().largeTimeout});
                     
                 cy.logoutFromPublisher();
-                cy.loginToDevportal(developer, password);
+                cy.loginToDevportal(developer, password, tenant);
                 devportalComonPage.waitUntillPublisherLoadingSpinnerExit();
-                cy.viewThirdPartyApi();
+                cy.viewThirdPartyApi(apiName);
                 cy.logoutFromDevportal();
-
+                cy.log("deleting api ", apiId);
+                cy.loginToPublisher(publisher, password, tenant);
+                publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             });
+    }
+    it.only("Publish thirdparty api - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        publishThirdPartyApi(superTenant);
     });
-    afterEach(function () {
-        cy.log("deleting api ", apiId);
-        cy.loginToPublisher(publisher, password);
-        publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-        Utils.deleteAPI(apiId);
-        cy.logoutFromPublisher();
-    })
 });

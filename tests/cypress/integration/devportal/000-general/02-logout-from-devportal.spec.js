@@ -19,10 +19,25 @@
 import Utils from "@support/utils";
 
 describe("Login logout from devportal", () => {
-    const { developer, password } = Utils.getUserInfo();
+    const { developer, password, testTenant, superTenant } = Utils.getUserInfo();
 
-    it.only("Login logout from devportal", () => {
-        cy.loginToDevportal(developer, password);
+    it.only("Login logout from devportal - super admin", {
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
+        cy.loginToDevportal(developer, password, superTenant);
+        cy.logoutFromDevportal();
+    });
+
+    it.only("Login logout from devportal - tenant user", {
+        retries: {
+          runMode: 3,
+          openMode: 0,
+        },
+      }, () => {
+        cy.loginToDevportal(developer, password, testTenant);
         cy.logoutFromDevportal();
     });
 })

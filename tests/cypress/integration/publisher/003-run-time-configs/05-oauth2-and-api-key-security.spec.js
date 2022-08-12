@@ -18,15 +18,13 @@
 import Utils from "@support/utils";
 
 describe("Runtime configuration", () => {
-    const { publisher, password, } = Utils.getUserInfo();
-    const apiName = Utils.generateName();
+    const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
+    let apiName;
     const apiVersion = '1.0.0';
 
-    beforeEach(function () {
-        cy.loginToPublisher(publisher, password);
-    })
-
-    it.only("OAuth2 and api key security spec", () => {
+    const oauth2AndApiKeySecuritySpec = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
+        apiName = Utils.generateName();
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
@@ -45,5 +43,12 @@ describe("Runtime configuration", () => {
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);
         });
+    }
+
+    it.only("OAuth2 and api key security spec - super admin", () => {
+        oauth2AndApiKeySecuritySpec(superTenant);
+    });
+    it.only("OAuth2 and api key security spec - tenant user", () => {
+        oauth2AndApiKeySecuritySpec(testTenant);
     });
 });

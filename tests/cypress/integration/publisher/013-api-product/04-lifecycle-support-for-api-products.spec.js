@@ -17,20 +17,12 @@
 import Utils from "@support/utils";
 
 describe("Life cycle support for API Products", () => {
-    const { publisher, password, } = Utils.getUserInfo();
+    const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
 
-    beforeEach(function () {
-        cy.loginToPublisher(publisher, password);
-    })
-
-    it("Life cycle support for API Products", {
-        retries: {
-            runMode: 3,
-            openMode: 0,
-        },
-    }, () => {
+    const lifeCycleSupportForApiProduct = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
         cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().largeTimeout});
         cy.get('#open-api-file-select-radio').click();
 
@@ -125,5 +117,22 @@ describe("Life cycle support for API Products", () => {
                 });
             });
         });
+    }
+
+    it("Life cycle support for API Products - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        lifeCycleSupportForApiProduct(superTenant);
+    });
+    it("Life cycle support for API Products - tenant user", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        lifeCycleSupportForApiProduct(testTenant);
     });
 })

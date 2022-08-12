@@ -17,10 +17,10 @@
 import Utils from "@support/utils";
 
 describe("Developer portal smoke tests", () => {
-    const { carbonUsername, carbonPassword } = Utils.getUserInfo();
+    const { carbonUsername, carbonPassword, superTenant, testTenant } = Utils.getUserInfo();
 
-    it.only("Exchange grant UI Test", () => {
-        cy.loginToDevportal(carbonUsername, carbonPassword)
+    const exchangeKeyManagers = (tenant) => {
+        cy.loginToDevportal(carbonUsername, carbonPassword, tenant)
 
         cy.intercept("GET", "/api/am/devportal/v2/applications?sortBy=name&sortOrder=asc&limit=10&offset=0",
             {fixture: 'applicationsList.json'});
@@ -49,5 +49,21 @@ describe("Developer portal smoke tests", () => {
         cy.get('#curl-to-generate-access-token-btn').should('not.be.disabled');
         cy.get('#curl-to-generate-access-token-btn').click();
         cy.get('#responsive-dialog-title h2').should('contain', 'Get CURL to Generate Access Token');
+    }
+    it.only("Exchange grant UI Test - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        exchangeKeyManagers(superTenant);
+    })
+    it.only("Exchange grant UI Test - tenant user", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        exchangeKeyManagers(testTenant);
     })
 })

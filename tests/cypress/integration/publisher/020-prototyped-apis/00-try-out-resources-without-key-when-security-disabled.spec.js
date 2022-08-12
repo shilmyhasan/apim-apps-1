@@ -20,17 +20,16 @@ import PublisherComonPage from "../../../support/pages/publisher/PublisherComonP
 const publisherComonPage = new PublisherComonPage();
 
 describe("prototype apis with security disabled", () => {
+    const { superTenant} = Utils.getUserInfo();
     const userName = 'admin';
     const password = 'admin';
-    const apiName="Prototyped_sample1";
+    const apiName= Utils.generateName();
     const apiVersion='1.0.0';
     let testApiId;
-    before(function () {
 
-    })
-    it.only("try out resources disabling the security without credentials", () => {
+    const tryoutResourcesWithoutKeySecurityDisable = (tenant) => {
         const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
-        cy.loginToPublisher(userName, password);
+        cy.loginToPublisher(userName, password, tenant);
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
@@ -85,7 +84,7 @@ describe("prototype apis with security disabled", () => {
             cy.logoutFromPublisher();
     
             //login to dev portal as Developer
-            cy.loginToDevportal(userName, password);
+            cy.loginToDevportal(userName, password, tenant);
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).click();
             cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();
@@ -95,15 +94,22 @@ describe("prototype apis with security disabled", () => {
            // cy.contains('.live-responses-table .response > td.response-col_status','200').should('exist');
             cy.get('.live-responses-table .response > td.response-col_status').should("contain.text",'200')
             cy.logoutFromDevportal();
+            // Test is done. Now delete the api
+            //cy.logoutFromDevportal();
+            cy.loginToPublisher(userName, password, tenant);
+            publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
         });
-        
+    }
+    it.only("try out resources disabling the security without credentials - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        tryoutResourcesWithoutKeySecurityDisable(superTenant);     
     });
 
-    after(function () {
-        // Test is done. Now delete the api
-        //cy.logoutFromDevportal();
-        cy.loginToPublisher(userName, password);
-        publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
+    afterEach(function () {
         Utils.deleteAPI(testApiId);
     })
 });

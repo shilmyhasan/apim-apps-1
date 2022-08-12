@@ -19,20 +19,11 @@
 import Utils from "@support/utils";
 
 describe("Common Policies", () => {
-    const { publisher, password, } = Utils.getUserInfo();
+    const { publisher, password, superTenant} = Utils.getUserInfo();
     let apiTestId;
 
-    beforeEach(function () {
-        cy.loginToPublisher(publisher, password);
-    })
-
-
-    it("Api Specific Policy", {
-        retries: {
-            runMode: 3,
-            openMode: 0,
-        },
-    }, () => {
+    const apiSpecificPolicy = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
             apiTestId = apiId;
             cy.visit(`/publisher/apis/${apiId}/policies`);
@@ -82,10 +73,16 @@ describe("Common Policies", () => {
             cy.wait(2000);
 
         });
+    }
+
+
+    it("Api Specific Policy - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        apiSpecificPolicy(superTenant);
     });
-    afterEach(function () {
-        //Delete API
-        Utils.deleteAPI(apiTestId);
-    })
 
 })
