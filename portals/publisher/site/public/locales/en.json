@@ -5393,24 +5393,6 @@
       "value": "Saving"
     }
   ],
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.title": [
-    {
-      "type": 0,
-      "value": "Version"
-    }
-  ],
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.not.provided": [
-    {
-      "type": 0,
-      "value": "Oops! Looks like this policy does not have a version"
-    }
-  ],
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.provided": [
-    {
-      "type": 1,
-      "value": "version"
-    }
-  ],
   "Apis.Details.Policies.CreatePolicy.create.new.policy": [
     {
       "type": 0,
@@ -5537,10 +5519,6 @@
     {
       "type": 1,
       "value": "policy"
-    },
-    {
-      "type": 0,
-      "value": " Policy"
     }
   ],
   "Apis.Details.Policies.PolicyConfiguringDrawer.title": [
@@ -5551,10 +5529,6 @@
     {
       "type": 1,
       "value": "policy"
-    },
-    {
-      "type": 0,
-      "value": " Policy"
     }
   ],
   "Apis.Details.Policies.PolicyForm.GeneralDetails.description": [
@@ -5596,7 +5570,7 @@
   "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText": [
     {
       "type": 0,
-      "value": "Version of the policy"
+      "value": "Enter Policy Version ( E.g.: v1 )"
     }
   ],
   "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.label": [

@@ -2565,15 +2565,6 @@
   "Apis.Details.Policies.AttachedPolicyForm.General.saving": {
     "defaultMessage": "Saving"
   },
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.title": {
-    "defaultMessage": "Version"
-  },
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.not.provided": {
-    "defaultMessage": "Oops! Looks like this policy does not have a version"
-  },
-  "Apis.Details.Policies.AttachedPolicyForm.General.version.value.provided": {
-    "defaultMessage": "{version}"
-  },
   "Apis.Details.Policies.CreatePolicy.create.new.policy": {
     "defaultMessage": "Create New Policy"
   },
@@ -2626,10 +2617,10 @@
     "defaultMessage": "Response Flow"
   },
   "Apis.Details.Policies.PolicyConfigurationEditDrawer.title": {
-    "defaultMessage": "Configure {policy} Policy"
+    "defaultMessage": "Configure {policy}"
   },
   "Apis.Details.Policies.PolicyConfiguringDrawer.title": {
-    "defaultMessage": "Configure {policy} Policy"
+    "defaultMessage": "Configure {policy}"
   },
   "Apis.Details.Policies.PolicyForm.GeneralDetails.description": {
     "defaultMessage": "Provide the name, description and applicable flows of the policy."
@@ -2650,7 +2641,7 @@
     "defaultMessage": "Name"
   },
   "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText": {
-    "defaultMessage": "Version of the policy"
+    "defaultMessage": "Enter Policy Version ( E.g.: v1 )"
   },
   "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.label": {
     "defaultMessage": "Version"

@@ -66,6 +66,7 @@ const AppConfig = {
     },
     apis: {
         alwaysShowDeploySampleButton: true,
+        showMultiVersionPolicies: false,
         endpoint: {
             aws: {
                 regions: {

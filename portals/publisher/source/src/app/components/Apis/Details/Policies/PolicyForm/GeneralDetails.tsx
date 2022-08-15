@@ -23,6 +23,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { FormattedMessage } from 'react-intl';
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface GeneralDetailsProps {
     displayName: string | null;
-    version: string;
+    version: string | null;
     description: string;
     applicableFlows: string[];
     dispatch?: React.Dispatch<any>;
@@ -70,6 +71,9 @@ const GeneralDetails: FC<GeneralDetailsProps> = ({
 
     // Name validation
     const nameError = displayName === '';
+
+    // Version validation
+    const versionError = version === '';
 
     /**
      * Function to handle text field inputs
@@ -153,9 +157,11 @@ const GeneralDetails: FC<GeneralDetailsProps> = ({
                     />
                     <TextField
                         fullWidth
+                        type='number'
                         id='version'
                         data-testid='version'
                         name='version'
+                        required
                         label={
                             <>
                                 <FormattedMessage
@@ -164,19 +170,33 @@ const GeneralDetails: FC<GeneralDetailsProps> = ({
                                 />
                             </>
                         }
+                        error={versionError}
                         helperText={
-                            <FormattedMessage
-                                id='Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText'
-                                defaultMessage='Version of the policy'
-                            />
+                            versionError ? (
+                                'Version is Empty'
+                            ) : (
+                                <FormattedMessage
+                                    id='Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText'
+                                    defaultMessage='Enter Policy Version ( E.g.: v1 )'
+                                />
+                            )
                         }
                         margin='dense'
                         variant='outlined'
-                        value={version}
+                        value={
+                            isViewMode && version ? (
+                                version.replace('v', '')
+                            ) : (
+                                version
+                            )
+                        }
                         onChange={handleInputChange}
                         inputProps={{
                             readOnly: isViewMode,
                             style: isViewMode ? { cursor: 'auto' } : {},
+                        }}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">v</InputAdornment>,
                         }}
                     />
                     <TextField

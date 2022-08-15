@@ -31,7 +31,7 @@ export type PolicyAttribute = {
 
 export type NewPolicyState = {
     displayName: string | null;
-    version: string;
+    version: string | null;
     description: string;
     applicableFlows: string[];
     supportedGateways: string[];

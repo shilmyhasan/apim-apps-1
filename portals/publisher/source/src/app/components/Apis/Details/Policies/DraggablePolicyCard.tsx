@@ -38,6 +38,7 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
+        margin: 0,
     },
     listItem: {
         maxHeight: '100%',
@@ -135,20 +136,22 @@ const DraggablePolicyCard: React.FC<DraggablePolicyCardProps> = ({
                                 )}
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText
-                            id={policyObj.displayName}
-                            primary={policyObj.displayName + ' : ' + policyObj.version}
-                            classes={{
-                                primary: classes.policyCardText,
-                            }}
-                        />
-                        {/* <ListItemText
-                            id={policyObj.version}
-                            primary={policyObj.version}
-                            classes={{
-                                primary: classes.policyCardText,
-                            }}
-                        /> */}
+                        <Box display='flex-inline' flexDirection='column' sx={{ flexGrow: 1 }}>
+                            <ListItemText
+                                id={policyObj.displayName}
+                                primary={policyObj.displayName}
+                                classes={{
+                                    primary: classes.policyCardText,
+                                }}
+                            />
+                            <ListItemText
+                                id={policyObj.version}
+                                secondary={policyObj.version}
+                                classes={{
+                                    secondary: classes.policyCardText,
+                                }}
+                            />
+                        </Box>
                         <Box
                             display='flex'
                             justifyContent='flex-end'

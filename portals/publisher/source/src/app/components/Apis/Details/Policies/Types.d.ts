@@ -31,6 +31,7 @@ export type AttachedPolicy = {
     id: string;
     name: string;
     displayName: string;
+    version: string;
     applicableFlows: string[];
     uniqueKey: string;
     attributes?: any;
@@ -69,6 +70,7 @@ export type CreatePolicySpec = {
     category: string;
     name: string;
     displayName: string;
+    version: string;
     description: string;
     applicableFlows: string[];
     supportedGateways: string[];
@@ -79,6 +81,7 @@ export type CreatePolicySpec = {
 export type ApiPolicy = {
     policyName?: string;
     policyId?: string;
+    policyVersion?: string;
     parameters: any;
     uuid?: string;
 };
