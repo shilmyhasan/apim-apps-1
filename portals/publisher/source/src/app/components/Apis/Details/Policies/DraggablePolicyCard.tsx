@@ -38,7 +38,6 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        margin: 0,
     },
     listItem: {
         maxHeight: '100%',
@@ -136,7 +135,12 @@ const DraggablePolicyCard: React.FC<DraggablePolicyCardProps> = ({
                                 )}
                             </Avatar>
                         </ListItemAvatar>
-                        <Box display='flex-inline' flexDirection='column' sx={{ flexGrow: 1 }}>
+                        <Box
+                            display='flex-inline'
+                            flexDirection='column'
+                            sx={{ flexGrow: 1 }}
+                            className={classes.policyCardText}
+                        >
                             <ListItemText
                                 id={policyObj.displayName}
                                 primary={policyObj.displayName}
