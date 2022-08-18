@@ -5519,10 +5519,6 @@
     {
       "type": 1,
       "value": "policy"
-    },
-    {
-      "type": 0,
-      "value": " Policy"
     }
   ],
   "Apis.Details.Policies.PolicyConfiguringDrawer.title": [
@@ -5533,10 +5529,6 @@
     {
       "type": 1,
       "value": "policy"
-    },
-    {
-      "type": 0,
-      "value": " Policy"
     }
   ],
   "Apis.Details.Policies.PolicyForm.GeneralDetails.description": [
@@ -5573,6 +5565,18 @@
     {
       "type": 0,
       "value": "Name"
+    }
+  ],
+  "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.helperText": [
+    {
+      "type": 0,
+      "value": "Enter Policy Version ( E.g.: v1 )"
+    }
+  ],
+  "Apis.Details.Policies.PolicyForm.GeneralDetails.form.version.label": [
+    {
+      "type": 0,
+      "value": "Version"
     }
   ],
   "Apis.Details.Policies.PolicyForm.GeneralDetails.title": [
@@ -8451,6 +8455,12 @@
     {
       "type": 0,
       "value": "Policy Name"
+    }
+  ],
+  "CommonPolicies.Listing.table.header.policy.version": [
+    {
+      "type": 0,
+      "value": "Policy Version"
     }
   ],
   "CommonPolicies.ViewPolicy.policies.title": [
