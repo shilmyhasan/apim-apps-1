@@ -8,7 +8,7 @@ const ID = '';
 const SECRET = '';
 
 // The name of the bucket that you have created
-const BUCKET_NAME = 'apim-3.2.0-ui-testing';
+const BUCKET_NAME = 'apim-ui-testing';
 var secretAccessKey = process.env.S3_SECRET_KEY;
 var accessKeyId = process.env.S3_ACCESS_KEY;
 var testGridEmailPWD = process.env.TESTGRID_EMAIL_PASSWORD;
@@ -43,8 +43,8 @@ const uploadFile = (fileName, destination, contentType) => {
 };
 
 const sendMail = () => {
-  var mochawesomeUploadLocation = `https://s3.us-east-2.amazonaws.com/apim-3.2.0-ui-testing/410-result/mochawesome-bundle-${timestamp}.html `
-  var screenshotUploadLocation = `https://s3.us-east-2.amazonaws.com/apim-3.2.0-ui-testing/410-result/screenshots-${timestamp}.zip `
+  var mochawesomeUploadLocation = `https://s3.us-east-2.amazonaws.com/${BUCKET_NAME}/410-result/mochawesome-bundle-${timestamp}.html `
+  var screenshotUploadLocation = `https://s3.us-east-2.amazonaws.com/${BUCKET_NAME}/410-result/screenshots-${timestamp}.zip `
   var content = `Click on ${mochawesomeUploadLocation} to view the complete test report. Screenshots available in ${screenshotUploadLocation}`;
   var transporter = nodemailer.createTransport({
     host: 'tygra.wso2.com',
