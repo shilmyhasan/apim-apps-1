@@ -19,13 +19,10 @@
 import Utils from "@support/utils";
 
 describe("Common Policies", () => {
-    const { publisher, password, } = Utils.getUserInfo();
+    const { publisher, password, superTenant} = Utils.getUserInfo();
 
-    before(function () {
-        cy.loginToPublisher(publisher, password);
-    })
-
-    it("Common Policy", () => {
+    const commonPolicy = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
         cy.visit(`/publisher/policies`);
         cy.get('[data-testid="add-new-common-policy"]').click();
         cy.get('#name').type('Add Header sample test');
@@ -62,6 +59,9 @@ describe("Common Policies", () => {
         cy.contains('Yes').click();
         
         cy.logoutFromPublisher();
+    }
 
+    it("Common Policy - super admin", () => {
+        commonPolicy(superTenant);
     });
 })

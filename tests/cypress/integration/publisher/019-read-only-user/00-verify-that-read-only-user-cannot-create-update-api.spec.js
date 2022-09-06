@@ -19,6 +19,7 @@
 import Utils from "@support/utils";
 
 describe("Publisher Read-Only Mode", () => {
+    const { superTenant, testTenant} = Utils.getUserInfo();
     const apiName = 'checkreadonlyapi' + Math.floor(Date.now() / 1000);
     const apiVersion = '1.0.0';
     const apiContext = '/readonlycheck' + Math.floor(Date.now() / 1000);;
@@ -29,14 +30,14 @@ describe("Publisher Read-Only Mode", () => {
     const carbonUsername = 'admin';
     const carbonPassword = 'admin';
 
-    before(function () {
+    const createReadOnlyUser = (tenat) => {
       //create developer user
-        cy.carbonLogin(carbonUsername, carbonPassword);
+        cy.carbonLogin(carbonUsername, carbonPassword, tenat);
         cy.addNewUser(readOnlyUser, ['Internal/observer'], readOnlyUserPassword);
         cy.addNewUser(creatorPublisher,  ['Internal/publisher', 'Internal/creator', 'Internal/everyone'], creatorpublisherPassword);
 
         //create an API from publisher portal
-        cy.loginToPublisher(creatorPublisher, creatorpublisherPassword);
+        cy.loginToPublisher(creatorPublisher, creatorpublisherPassword, tenat);
         cy.createAndPublishAPIByRestAPIDesign(apiName,apiVersion,apiContext);
 
         cy.get('#itest-api-details-portal-config-acc').click();
@@ -91,12 +92,11 @@ describe("Publisher Read-Only Mode", () => {
         cy.logoutFromPublisher();
 
         //login to dev portal as Developer
-        cy.loginToPublisher(readOnlyUser, readOnlyUserPassword);
-    })
+        cy.loginToPublisher(readOnlyUser, readOnlyUserPassword, tenat);
+    }
 
-    //should only be able to view APIs
-    it("Verify Configurations are in Read only mode", () => {
-        
+    const verifyReadOnlyUserCannotCreateUpdateApi = (tenant) => {
+        createReadOnlyUser(tenant);
         //1. should not be able to create APIS
         cy.get('#itest-create-api-menu-button', {timeout: Cypress.config().largeTimeout}).should('not.exist');
 
@@ -271,13 +271,20 @@ describe("Publisher Read-Only Mode", () => {
         //16. Header buttons should also be disabled
         cy.get('#itest-id-deleteapi-icon-button').should('not.exist');
         cy.get('#create-new-version-btn').should('not.exist');
-    });
-
-    after(function () {
         cy.logoutFromPublisher();
 
         // Test is done. Now delete the api
-        cy.loginToPublisher(carbonUsername, carbonPassword);
+        cy.loginToPublisher(carbonUsername, carbonPassword, tenant);
+    }
+    //should only be able to view APIs
+    it("Verify Configurations are in Read only mode - super admin", () => {
+        verifyReadOnlyUserCannotCreateUpdateApi(superTenant);
+    });
+    it("Verify Configurations are in Read only mode - tenant user", () => {
+        verifyReadOnlyUserCannotCreateUpdateApi(testTenant);
+    });
+
+    after(function () {
         cy.deleteApi(apiName, apiVersion);
 
         // delete observer user.

@@ -21,19 +21,16 @@ import Utils from "@support/utils";
 describe("prototype apis with security enabled", () => {
     const userName = 'admin';
     const password = 'admin';
-    const apiName="Prototyped_sample3";
-    const applicationName="Prototype client app";
+    const apiName = Utils.generateName().replace('-', '_');
+    let applicationName;
     const apiVersion='1.0.0';
     const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
     let testApiId;
-
-    before(function () {
-    })
-    it.only("try out resources enabling the security without credentials", () => {
-        cy.loginToPublisher(userName, password);
-        testAPISecurityEnabled();
-        let retryCount = 5;
-        function testAPISecurityEnabled() {
+    let retryCount = 5; 
+    const { superTenant} = Utils.getUserInfo(); 
+    
+    const testAPISecurityEnabled = (tenant) =>  {
+            cy.loginToPublisher(userName, password, tenant);
             Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
                 if (apiId !== undefined) {
                     testApiId = apiId;
@@ -74,11 +71,12 @@ describe("prototype apis with security enabled", () => {
                     cy.logoutFromPublisher();
         
                     //login to dev portal as Developer
-                    cy.loginToDevportal(userName, password);
+                    cy.loginToDevportal(userName, password, tenant);
                     
+                    applicationName="Prototype client app" + Math.floor(Date.now() / 1000);
                     cy.createApplication(applicationName,"50PerMin","Sample Description");
                     cy.get('[data-testid="itest-link-to-apis"]',{timeout: Cypress.config().largeTimeout}).click();
-        
+                    cy.get("#searchQuery").type(apiName).type('{enter}')
                     cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
                     cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).click();
         
@@ -106,23 +104,29 @@ describe("prototype apis with security enabled", () => {
                     cy.get('.try-out__btn').click();
                     cy.get('.execute').click();
                     cy.contains('.live-responses-table .response > .response-col_status','200', {timeout: Cypress.config().largeTimeout}).should('exist');
+                    // Test is done.  delete the application
+                    cy.deleteApplication(applicationName);
+                    cy.logoutFromDevportal();
+
+                    // delete the api
+                    cy.loginToPublisher(userName, password, tenant);
                 } else if (retryCount>0) {
                     retryCount--;
-                    testAPISecurityEnabled();
+                    testAPISecurityEnabled(tenant);
                 }
                 
             });
         }
-        
+    it.only("try out resources enabling the security without credentials - super admin", {
+        retries: {
+            runMode: 3,
+            openMode: 0,
+        },
+    }, () => {
+        testAPISecurityEnabled(superTenant);
     });
 
-    after(function () {
-        // Test is done.  delete the application
-        cy.deleteApplication(applicationName);
-        cy.logoutFromDevportal();
-
-        // delete the api
-        cy.loginToPublisher(userName, password);
+    afterEach(function () {
         Utils.deleteAPI(testApiId);
     })
 });

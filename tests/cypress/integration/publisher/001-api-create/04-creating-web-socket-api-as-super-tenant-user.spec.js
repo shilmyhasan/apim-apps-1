@@ -17,7 +17,7 @@
 import Utils from "@support/utils";
 
 describe("Create websocket api - super tenant", () => {
-    const { publisher, password, tenantUser, tenant, } = Utils.getUserInfo();
+    const { publisher, password, tenantUser, testTenant, } = Utils.getUserInfo();
     
     const websocketApiCreate = () => {
         const random_number = Math.floor(Date.now() / 1000);
@@ -57,7 +57,7 @@ describe("Create websocket api - super tenant", () => {
     });
 
     it("Create websocket API from url - tenant user", () => {
-        cy.loginToPublisher(`${tenantUser}@${tenant}`, password);
+        cy.loginToPublisher(`${publisher}@${testTenant}`, password);
         websocketApiCreate();
     });
 

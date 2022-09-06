@@ -19,13 +19,10 @@
 import Utils from "@support/utils";
 
 describe("Landing page", () => {
-    const { publisher, password } = Utils.getUserInfo();
+    const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
-    before(function () {
-        cy.loginToPublisher(publisher, password);
-    })
-
-    it.only("Click and check all cards", () => {
+    const landingPage = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
         cy.visit(`/publisher/apis`);
         cy.intercept(
             {
@@ -81,5 +78,11 @@ describe("Landing page", () => {
                 .should('eq', '/publisher/apis/create/asyncapi');
 
         });
+    }
+    it.only("Click and check all cards - super admin", () => {
+        landingPage(superTenant)
+    });
+    it.only("Click and check all cards - tenant user", () => {
+        landingPage(testTenant)
     });
 });
