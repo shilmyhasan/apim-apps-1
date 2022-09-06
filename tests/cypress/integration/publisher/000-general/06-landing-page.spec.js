@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Landing page", () => {
+describe("publisher-000-06 : Landing page", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const landingPage = (tenant) => {

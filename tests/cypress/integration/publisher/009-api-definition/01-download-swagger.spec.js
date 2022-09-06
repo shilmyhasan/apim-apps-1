@@ -19,7 +19,7 @@
 import Utils from "@support/utils";
 const YAML = require('yamljs')
 
-describe("Download swagger", () => {
+describe("publisher-009-01 : Download swagger", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     const downloadSwagger = (tenant) => {

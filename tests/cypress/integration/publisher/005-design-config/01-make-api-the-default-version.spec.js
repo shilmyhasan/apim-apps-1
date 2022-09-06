@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Make api the default version", () => {
+describe("publisher-005-01 : Make api the default version", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

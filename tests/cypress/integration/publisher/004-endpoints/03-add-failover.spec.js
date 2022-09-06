@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Endpoint testing", () => {
+describe("publisher-004-03 : Endpoint testing - Failover", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
 

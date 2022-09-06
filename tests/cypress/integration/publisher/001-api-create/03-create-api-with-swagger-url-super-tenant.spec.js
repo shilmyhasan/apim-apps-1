@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Create api with swagger file super tenant", () => {
+describe("publisher-001-03 : Create api with swagger file super tenant", () => {
 
     const { publisher, password, tenantUser, testTenant, } = Utils.getUserInfo();
     let testApiID;

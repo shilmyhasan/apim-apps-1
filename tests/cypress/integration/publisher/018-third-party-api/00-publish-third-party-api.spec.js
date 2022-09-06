@@ -24,7 +24,7 @@ const devportalComonPage = new PublisherComonPage();
 
 let apiId ;
 
-describe("Publish thirdparty api", () => {
+describe("publisher-018-00 : Publish thirdparty api", () => {
     const { publisher, developer, password, superTenant, testTenant} = Utils.getUserInfo();
     let apiName;
     const publishThirdPartyApi = (tenant) => {

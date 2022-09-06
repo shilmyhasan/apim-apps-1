@@ -17,7 +17,7 @@
 import Utils from "@support/utils";
 let apiId;
 let activeTenant;
-describe("Create GraphQl API from file", () => {
+describe("publisher-000-03 : Create GraphQl API from file", () => {
   const { superTenant, carbonUsername, carbonPassword} = Utils.getUserInfo();
   const generatedAPIName = Utils.generateName();
     const filepath = 'api_artifacts/schema_graphql.graphql';

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("adding comment", () => {
+describe("publisher-014-00 : Adding comment", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const addCommentToApi = (tenant) => {

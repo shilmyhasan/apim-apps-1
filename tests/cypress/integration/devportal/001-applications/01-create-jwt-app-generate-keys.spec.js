@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Application tests", () => {
+describe("devportal-001-01 : Application tests", () => {
     const { developer, password } = Utils.getUserInfo();
 
     let appName;

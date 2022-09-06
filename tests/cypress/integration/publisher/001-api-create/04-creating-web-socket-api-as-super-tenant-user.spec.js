@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Create websocket api - super tenant", () => {
+describe("publisher-001-04 : Create websocket api - super tenant", () => {
     const { publisher, password, tenantUser, testTenant, } = Utils.getUserInfo();
     
     const websocketApiCreate = () => {

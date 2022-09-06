@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Endpoint testing", () => {
+describe("publisher-004-06 : Endpoint testing - import delete certificate", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const importDeleteCertificate = (tenant) => {

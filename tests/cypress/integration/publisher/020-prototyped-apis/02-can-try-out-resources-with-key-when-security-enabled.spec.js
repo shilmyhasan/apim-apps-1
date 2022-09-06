@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("prototype apis with security enabled", () => {
+describe("publisher-020-02 : prototype apis with security enabled", () => {
     const userName = 'admin';
     const password = 'admin';
     const apiName = Utils.generateName().replace('-', '_');

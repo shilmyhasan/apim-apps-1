@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Publisher Read-Only Mode", () => {
+describe("publisher-019-00 : Publisher Read-Only Mode", () => {
     const { superTenant, testTenant} = Utils.getUserInfo();
     const apiName = 'checkreadonlyapi' + Math.floor(Date.now() / 1000);
     const apiVersion = '1.0.0';

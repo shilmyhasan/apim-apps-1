@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Runtime configuration", () => {
+describe("publisher-003-03 : Runtime configuration-schema validation", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     let apiName;
     const apiVersion = '1.0.0';

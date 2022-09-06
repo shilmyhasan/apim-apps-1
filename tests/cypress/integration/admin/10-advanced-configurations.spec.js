@@ -21,7 +21,7 @@ import Utils from "@support/utils";
 import adavanceConfFalseJson from "../../fixtures/api_artifacts/advanceConfigFlase.json"
 import adavanceConfTrueJson from "../../fixtures/api_artifacts/advanceConfigTrue.json"
 
-describe("Advanced Configurations", () => {
+describe("admin-10 : Advanced Configurations", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

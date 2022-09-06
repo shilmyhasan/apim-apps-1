@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add advanced throttling policies", () => {
+describe("publisher-002-01 : Add advanced throttling policies", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     let apiName

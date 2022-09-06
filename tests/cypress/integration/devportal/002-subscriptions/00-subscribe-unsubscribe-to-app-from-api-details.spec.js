@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Subscribe unsubscribe to application from api details page", () => {
+describe("devportal-002-00 : Subscribe unsubscribe to application from api details page", () => {
     const { publisher, developer, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

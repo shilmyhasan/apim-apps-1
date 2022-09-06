@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Login logout from publisher as supper tenant", () => {
+describe("publisher-001-01 : Login logout from publisher as supper tenant", () => {
     const { password, carbonUsername, carbonPassword, tenantUser, testTenant, } = Utils.getUserInfo();
 
     it.only("Login and logout from publisher", () => {

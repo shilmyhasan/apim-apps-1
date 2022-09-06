@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add deny policies", () => {
+describe("admin-06 : Add deny policies", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

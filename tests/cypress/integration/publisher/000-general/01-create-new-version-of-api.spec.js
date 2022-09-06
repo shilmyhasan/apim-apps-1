@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Create a new version of API", () => {
+describe("publisher-000-01 : Create a new version of API", () => {
     let apiName;
     const apiVersion = '1.0.0';
     const newVersion = '2.0.0';

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add scope mapping", () => {
+describe("admin-07 : Add scope mapping", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

@@ -23,7 +23,7 @@ import APIBasicInfoPage from "../../../support/pages/publisher/APIBasicInfoPage"
 import DeploymentsPage from "../../../support/pages/publisher/DeploymentsPage";
 import LifecyclePage from "../../../support/pages/publisher/LifecyclePage";
 
-describe("Deploy sample api", () => {
+describe("publisher-000-05 : Verify API Search creiterias", () => {
     const { publisher, password} = Utils.getUserInfo();
     const randomNmber = getRandomeNumber()
     const apiName1 = "ABC_API_1_" + randomNmber

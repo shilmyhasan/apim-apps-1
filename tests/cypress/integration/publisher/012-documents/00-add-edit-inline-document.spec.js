@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("creating document", () => {
+describe("publisher-012-00 : creating document", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     
     const addEditInlineDocument = (tenant) => {

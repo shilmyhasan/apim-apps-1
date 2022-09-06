@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Upload api spec from the api definition page", () => {
+describe("publisher-009-02 : Upload api spec from the api definition page", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

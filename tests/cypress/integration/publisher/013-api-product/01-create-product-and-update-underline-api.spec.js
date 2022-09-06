@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Mock the api response and test it", () => {
+describe("publisher-013-01 : Mock the api response and test it", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const productName = Utils.generateName();
     const apiName = Utils.generateName();

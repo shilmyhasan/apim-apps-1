@@ -1,6 +1,6 @@
 import Utils from "@support/utils";
 
-describe("Service catalog delete flow", () => {
+describe("publisher-016-01 : Service catalog delete flow", () => {
     const username = 'admin'
     const password = 'admin'
     const { superTenant, testTenant } = Utils.getUserInfo();

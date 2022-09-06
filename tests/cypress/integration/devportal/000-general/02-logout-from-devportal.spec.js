@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Login logout from devportal", () => {
+describe("devportal-000-02 : Login logout from devportal", () => {
     const { developer, password, testTenant, superTenant } = Utils.getUserInfo();
 
     it.only("Login logout from devportal - super admin", {

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add production sandbox endpoints for SOAP", () => {
+describe("publisher-004-01 : Add production sandbox endpoints for SOAP", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const endpoint = 'https://graphical.weather.gov/xml/SOAP_server/ndfdXMLserver.php?wsdl';
 

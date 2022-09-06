@@ -19,7 +19,7 @@ The product is broken. we need to fix the product. This test case is ignored fro
 */
 import Utils from "@support/utils";
 
-describe("Mock the api response and test it", () => {
+describe("publisher-004-07 : Mock the api response and test it", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     let testApiID;
 

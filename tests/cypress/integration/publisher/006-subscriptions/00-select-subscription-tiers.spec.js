@@ -19,7 +19,7 @@
 import Utils from "@support/utils";
 
 
-describe("Select subscription tiers for the API", () => {
+describe("publisher-006-00 : Select subscription tiers for the API", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

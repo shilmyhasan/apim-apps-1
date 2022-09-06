@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Life cycle support for API Products", () => {
+describe("publisher-013-04 : Life cycle support for API Products", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const productName = Utils.generateName();
     const apiName = Utils.generateName();
