@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Application tests", () => {
+describe("devportal-001-02 : Generate keys", () => {
     const { developer, password, superTenant, testTenant } = Utils.getUserInfo();
 
     let appName;

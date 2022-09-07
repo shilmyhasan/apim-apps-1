@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add Edit Delete subscription throttle policies", () => {
+describe("admin-02 : Add Edit Delete subscription throttle policies", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Invoke API Product", () => {
+describe("devportal-004-00 : Invoke API Product with keys", () => {
     const { publisher, developer, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

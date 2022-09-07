@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add production and sandbox endpoints for an API", () => {
+describe("publisher-004-00 : Add production and sandbox endpoints for an API", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
 

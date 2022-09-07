@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add security to the endpoint", () => {
+describe("publisher-004-05 : Add security to the endpoint", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const addSecurity = (tenant) => {

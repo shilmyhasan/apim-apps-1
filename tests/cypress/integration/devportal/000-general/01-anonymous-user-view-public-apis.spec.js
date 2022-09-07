@@ -15,10 +15,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 import Utils from "@support/utils";
 
-describe("Anonymous view apis", () => {
+describe("devportal-000-01 : Anonymous user view public apis", () => {
     const { publisher, developer, password, tenantUser, tenant, } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

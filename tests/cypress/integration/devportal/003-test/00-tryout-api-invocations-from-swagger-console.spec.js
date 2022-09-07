@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Tryout API invocations", () => {
+describe("devportal-003-00 : Tryout API invocations from swagger console", () => {
     const { publisher, developer, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

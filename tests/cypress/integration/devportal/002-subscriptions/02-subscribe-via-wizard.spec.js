@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Anonymous view apis", () => {
+describe("devportal-002-02 : Subscribe to API via wizard", () => {
     const { publisher, developer, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

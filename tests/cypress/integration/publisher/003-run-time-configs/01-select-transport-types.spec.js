@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Runtime configuration", () => {
+describe("publisher-003-01 : Runtime configuration-transport type", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     let apiName;

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add Edit Delete api categories", () => {
+describe("admin-04 : Add Edit Delete api categories", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

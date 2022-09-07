@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Deploy sample api", () => {
+describe("init-00 : Prepare test data for execution", () => {
     it.only("Util test to add test users", {
         retries: {
           runMode: 3,

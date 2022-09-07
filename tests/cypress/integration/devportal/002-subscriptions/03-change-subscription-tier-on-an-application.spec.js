@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Change subscription tier of an application", () => {
+describe("devportal-002-03 : Change subscription tier of an application", () => {
     const { publisher, developer, password, superTenant } = Utils.getUserInfo();
 
     const apiVersion = '2.0.0';

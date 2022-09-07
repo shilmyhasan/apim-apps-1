@@ -19,7 +19,7 @@ import Utils from "@support/utils";
 import PublisherComonPage from "../../../support/pages/publisher/PublisherComonPage";
 const publisherComonPage = new PublisherComonPage();
 
-describe("prototype apis with security disabled", () => {
+describe("publisher-020-00 : prototype apis with security disabled", () => {
     const { superTenant} = Utils.getUserInfo();
     const userName = 'admin';
     const password = 'admin';

@@ -21,7 +21,7 @@ The product is broken. we need to fix the product. This test case is ignored fro
 */
 import Utils from "@support/utils";
 
-describe("Upload thumbnail", () => {
+describe("publisher-005-00 : Upload thumbnail", () => {
     const { publisher, password, superTenant } = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

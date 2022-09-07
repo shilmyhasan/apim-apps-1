@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Undeploy new revision", () => {
+describe("publisher-015-01 : Undeploy new revision", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     const undeployNewRevision = (tenant) => {

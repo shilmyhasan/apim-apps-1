@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Lifecycle changes", () => {
+describe("publisher-011-01 : Lifecycle changes", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

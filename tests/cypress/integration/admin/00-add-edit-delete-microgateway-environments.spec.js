@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add Edit Delete Microgateway Environments", () => {
+describe("admin-00 : Add Edit Delete Microgateway Environments", () => {
 
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

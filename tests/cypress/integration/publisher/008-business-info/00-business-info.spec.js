@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add business information", () => {
+describe("publisher-008-00 : Add business information", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const businessInfo = (tenant) => {
         const ownerName = 'Raccoon Panda';

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Common Policies", () => {
+describe("publisher-017-01 : Common Policies", () => {
     const { publisher, password, superTenant} = Utils.getUserInfo();
     let apiTestId;
 

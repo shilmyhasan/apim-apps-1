@@ -17,7 +17,7 @@
  */
 import Utils from "@support/utils";
 
-describe("Runtime configuration", () => {
+describe("publisher-003-02 : Runtime configuration-response caching", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     let apiName;
     const apiVersion = '1.0.0';

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Create new revision and deploy", () => {
+describe("publisher-015-00 : Create new revision and deploy", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     const createNewRevisionAndDeployApi = (tenant) => {

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Resource add edit operations", () => {
+describe("publisher-002-00 : Resource add edit operations", () => {
 
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const target = '/test';

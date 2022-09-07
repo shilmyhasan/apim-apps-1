@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Api Definition", () => {
+describe("publisher-009-00 : Api Definition - Download API", () => {
     const { publisher, password,  superTenant, testTenant } = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

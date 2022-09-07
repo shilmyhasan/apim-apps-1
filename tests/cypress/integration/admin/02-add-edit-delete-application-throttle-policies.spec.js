@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add Edit Delete application throttle policies", () => {
+describe("admin-02 : Add Edit Delete application throttle policies", () => {
     
     const { carbonUsername, carbonPassword, testTenant, superTenant } = Utils.getUserInfo();
 

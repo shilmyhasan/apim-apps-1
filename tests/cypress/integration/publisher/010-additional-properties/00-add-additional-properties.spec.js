@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Add additional properties", () => {
+describe("publisher-010-00 : Add additional properties", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

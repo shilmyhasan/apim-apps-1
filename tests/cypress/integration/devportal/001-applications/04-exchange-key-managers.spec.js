@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Developer portal smoke tests", () => {
+describe("devportal-001-04 : Exchange key mangers", () => {
     const { carbonUsername, carbonPassword, superTenant, testTenant } = Utils.getUserInfo();
 
     const exchangeKeyManagers = (tenant) => {

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Subscription blocking", () => {
+describe("publisher-006-01 : Subscription blocking", () => {
 
 
     const { publisher, password, developer, superTenant } = Utils.getUserInfo();

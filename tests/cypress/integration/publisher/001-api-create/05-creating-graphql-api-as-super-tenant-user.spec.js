@@ -16,7 +16,7 @@
 
 import Utils from "@support/utils";
 
-describe("Create GraphQl API from file", () => {
+describe("publisher-001-05 : Create GraphQl API from file", () => {
     const {carbonUsername, carbonPassword, testTenant} = Utils.getUserInfo();
     let testApiId;
     it("Create GraphQl API from file - supper admin", () => {

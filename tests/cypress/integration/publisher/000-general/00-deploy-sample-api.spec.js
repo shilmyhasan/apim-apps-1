@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Deploy sample api", () => {
+describe("publisher-000-00 : Deploy sample api", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     const deploySampleApi = (tenant) => {

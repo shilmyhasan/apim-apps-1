@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Runtime configuration", () => {
+describe("publisher-003-00 : Runtime configuration-Authorization Header ", () => {
     const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
 
     let apiName;

@@ -2,7 +2,7 @@ import { getSampleServiceMeta, getSampleOpenAPI } from '../../../support/mockDat
 import Utils from "@support/utils";
 
 
-describe("Service catalog create flow", () => {
+describe("publisher-016-00 : Service catalog create flow", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
 
     const serviceCreate = (tenant) => {

@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Set publisher access control and visibility by roles", () => {
+describe("publisher-005-02 : Set publisher access control and visibility by roles", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     const apiName = Utils.generateName();
     const apiVersion = '1.0.0';

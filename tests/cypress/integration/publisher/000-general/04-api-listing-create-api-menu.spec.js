@@ -18,7 +18,7 @@
 
 import Utils from "@support/utils";
 
-describe("Landing page", () => {
+describe("publisher-000-04 : Landing page API List", () => {
     const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
     let testApiId;
 
