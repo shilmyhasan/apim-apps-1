@@ -82,6 +82,10 @@ describe("devportal-001-02 : Generate keys", () => {
     })
 
     afterEach(() => {
-       cy.deleteApp(appName, activeTenant);
+        cy.intercept('DELETE','**/applications/**').as('appDelete');
+        cy.deleteApp(appName, activeTenant);
+        cy.wait('@appDelete',{timeout: 15000}).its('response.statusCode').should('equal', 200)
+        cy.contains(`Application ${appName} deleted successfully!`)
+        cy.wait(5000)
     })
 })
