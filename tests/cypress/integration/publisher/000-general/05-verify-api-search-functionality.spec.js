@@ -77,7 +77,7 @@ describe("publisher-000-05 : Verify API Search creiterias", () => {
 
         // default/content search
         searchAndVerifyAPIByCreiteria("default",apiName1,apiName1)
-        searchAndVerifyAPIByCreiteria("default",apiVersion3,apiName3)
+        //searchAndVerifyAPIByCreiteria("default",apiVersion3,apiName3)
         searchAndVerifyAPIByCreiteria("default",apiContext2,apiName2)
         searchAndVerifyAPIByCreiteria("default",api1Status,apiName1)
         searchAndVerifyAPIByCreiteria("default",apiDescription1,apiName1)
