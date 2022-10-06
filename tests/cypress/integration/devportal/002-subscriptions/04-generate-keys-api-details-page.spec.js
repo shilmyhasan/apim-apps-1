@@ -42,6 +42,7 @@ describe("devportal-002-04 : Generate keys from api details page", () => {
                 appName = Utils.generateName();
                 cy.createApp(appName, 'application description', tenant);
                 cy.visit(`/devportal/apis?tenant=${tenant}`);
+                cy.wait(3000)
                 cy.url().should('contain', `/apis?tenant=${tenant}`);
                 cy.get(`[title="${apiName}"]`, { timeout: 30000 });
                 cy.get(`[title="${apiName}"]`).click();
