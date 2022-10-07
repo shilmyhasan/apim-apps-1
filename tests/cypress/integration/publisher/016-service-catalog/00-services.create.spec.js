@@ -49,12 +49,12 @@ describe("publisher-016-00 : Service catalog create flow", () => {
             })
         cy.visit(`/publisher/service-catalog`);
     }
-    it.skip("Deploy sample service", () => {
-        cy.visit(`/publisher/service-catalog`);
-        cy.get('#itest-service-catalog-onboarding').should('be.visible')
-        cy.get('#itest-services-landing-deploy-sample').click()
+    // it.skip("Deploy sample service", () => {
+    //     cy.visit(`/publisher/service-catalog`);
+    //     cy.get('#itest-service-catalog-onboarding').should('be.visible')
+    //     cy.get('#itest-services-landing-deploy-sample').click()
 
-    });
+    // });
 
     it("Create 15~25 services - super admin", () => {
         serviceCreate(superTenant);

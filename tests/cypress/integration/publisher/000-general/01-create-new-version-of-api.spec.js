@@ -17,8 +17,12 @@
  */
 
 import Utils from "@support/utils";
+import PublisherComonPage from "../../../support/pages/publisher/PublisherComonPage";
 
 describe("publisher-000-01 : Create a new version of API", () => {
+    Cypress.on('uncaught:exception', (err, runnable) => {
+        return false;
+      });
     let apiName;
     const apiVersion = '1.0.0';
     const newVersion = '2.0.0';
@@ -29,9 +33,12 @@ describe("publisher-000-01 : Create a new version of API", () => {
         cy.loginToPublisher(publisher, password, tenant);
         apiName = Utils.generateName();
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
+            cy.wait(5000)
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
+            PublisherComonPage.waitUntillLoadingComponentsExit()
             cy.get('#create-new-version-btn').click();
+            cy.wait(3000)
             cy.get('#newVersion').type(newVersion);
             cy.intercept('**/apis/**').as('apiGet');
             cy.get('#createBtn').click();
