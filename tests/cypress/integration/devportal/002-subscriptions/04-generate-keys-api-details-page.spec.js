@@ -66,13 +66,14 @@ describe("devportal-002-04 : Generate keys from api details page", () => {
         activeTenant = superTenant;  
         generateKeysApiDetailsPage(superTenant);
     })
-    it.only("Generate keys from api details page - tenant user", () => {   
-        activeTenant = testTenant;
-        generateKeysApiDetailsPage(testTenant);
-    })
+    // it.only("Generate keys from api details page - tenant user", () => {   
+    //     activeTenant = testTenant;
+    //     generateKeysApiDetailsPage(testTenant);
+    // })
 
     after(() => {
         cy.deleteApp(appName, activeTenant);
+        cy.wait(5000)
         Utils.deleteAPI(testApiId);
     })
 })
