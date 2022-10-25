@@ -183,7 +183,7 @@ const TryOutConsole = () => {
                         console.error(`Can't find ${transport}Port `
                             + `in selected deployment ( ${selectedDeploymentVhost.name} )`);
                     }
-                    if (transportPort !== -1) {
+                    if (transportPort !== null) {
                         const baseURL = `${transport}://${selectedDeployment.vhost}:${transportPort}`;
                         let url;
                         if (isAPIProduct) {
@@ -218,10 +218,10 @@ const TryOutConsole = () => {
                         .replace('{version}', `${api.version}`);
                 }
                 let schemes = api.transport.slice().sort((a, b) => ((a > b) ? -1 : 1));
-                if (selectedDeploymentVhost.httpPort === -1){
+                if (selectedDeploymentVhost.httpPort === null){
                     schemes = schemes.filter(item => item !== 'http');
                 }
-                if (selectedDeploymentVhost.httpsPort === -1){
+                if (selectedDeploymentVhost.httpsPort === null){
                     schemes = schemes.filter(item => item !== 'https');
                 }
                 oasCopy.schemes = schemes;
