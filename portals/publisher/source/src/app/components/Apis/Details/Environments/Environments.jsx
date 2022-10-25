@@ -1388,10 +1388,10 @@ export default function Environments() {
         }
 
         const httpContext = vhost.httpContext ? '/' + vhost.httpContext.replace(/^\//g, '') : '';
-        if (vhost.httpPort !== 80) {
+        if (vhost.httpPort !== -1) {
             endpoints.primary = 'http://' + vhost.host + ':' + vhost.httpPort + httpContext;
         }
-        if (vhost.httpsPort !== 443) {
+        if (vhost.httpsPort !== -1) {
             endpoints.secondary = 'https://' + vhost.host + ':' + vhost.httpsPort + httpContext;
         }
         endpoints.combined = endpoints.secondary + ' ' + endpoints.primary;
