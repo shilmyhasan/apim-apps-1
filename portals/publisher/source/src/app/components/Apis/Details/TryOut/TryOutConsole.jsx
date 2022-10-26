@@ -177,13 +177,13 @@ const TryOutConsole = () => {
             }
             oasCopy = cloneDeep(oasDefinition); // If not we are directly mutating the state
             if (oasDefinition.openapi) { // Assumed as OAS 3.x definition
-                let servers = api.transport.map((transport) => {
+                const unfilteredServers = api.transport.map((transport) => {
                     const transportPort = selectedDeploymentVhost[`${transport}Port`];
                     if (!transportPort) {
                         console.error(`Can't find ${transport}Port `
                             + `in selected deployment ( ${selectedDeploymentVhost.name} )`);
                     }
-                    if (transportPort !== null) {
+                    if (transportPort) {
                         const baseURL = `${transport}://${selectedDeployment.vhost}:${transportPort}`;
                         let url;
                         if (isAPIProduct) {
@@ -198,7 +198,7 @@ const TryOutConsole = () => {
                     }
                     return null;
                 });
-                servers = servers.filter(url => url);
+                const servers = unfilteredServers.filter(url => url);
                 oasCopy.servers = servers.sort((a, b) => ((a.url > b.url) ? -1 : 1));
             } else { // Assume the API definition is Swagger 2
                 let transportPort = selectedDeploymentVhost.httpsPort;
@@ -218,10 +218,10 @@ const TryOutConsole = () => {
                         .replace('{version}', `${api.version}`);
                 }
                 let schemes = api.transport.slice().sort((a, b) => ((a > b) ? -1 : 1));
-                if (selectedDeploymentVhost.httpPort === null){
+                if (!selectedDeploymentVhost.httpPort){
                     schemes = schemes.filter(item => item !== 'http');
                 }
-                if (selectedDeploymentVhost.httpsPort === null){
+                if (!selectedDeploymentVhost.httpsPort){
                     schemes = schemes.filter(item => item !== 'https');
                 }
                 oasCopy.schemes = schemes;
