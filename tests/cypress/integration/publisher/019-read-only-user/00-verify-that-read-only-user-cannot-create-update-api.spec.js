@@ -34,7 +34,8 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
       //create developer user
         cy.carbonLogin(carbonUsername, carbonPassword, tenat);
         cy.addNewUser(readOnlyUser, ['Internal/observer'], readOnlyUserPassword);
-        cy.addNewUser(creatorPublisher,  ['Internal/publisher', 'Internal/creator', 'Internal/everyone'], creatorpublisherPassword);
+        cy.addNewUser(creatorPublisher,  ['Internal/publisher', 'Internal/creator', 'Internal/everyone'], 
+            creatorpublisherPassword);
 
         //create an API from publisher portal
         cy.loginToPublisher(creatorPublisher, creatorpublisherPassword, tenat);
@@ -65,7 +66,8 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
     
         //set resources
         cy.get('#left-menu-itemresources').click();
-        cy.createResource('api','20KPerMin',"POST",'testuri','sampledesc','sample summary',false,'creatorscope','tname','Query','Number',true);
+        cy.createResource('api','20KPerMin',"POST",'testuri','sampledesc','sample summary',
+            false,'creatorscope','tname','Query','Number',true);
 
         //set policy
         cy.location('pathname').then((pathName) => {
@@ -143,7 +145,8 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
 
         //5. should not be able to add documents
         cy.get('#left-menu-itemdocuments').click();
-        cy.get('[data-testid="add-document-btn"]',{timeout: Cypress.config().largeTimeout}).get('[aria-disabled="true"]').should('exist');        
+        cy.get('[data-testid="add-document-btn"]',{timeout: Cypress.config().largeTimeout})
+            .get('[aria-disabled="true"]').should('exist');        
 
         //6. should not be able to comments
         cy.get('#left-menu-itemcomments').click();
@@ -234,17 +237,22 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         //11. Localscopes
         cy.get('#left-menu-itemLocalScopes').click();
         cy.contains('a','Add New Local Scope').get('[aria-disabled="true"]').should('exist');
-        cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]').get('[data-testid="MuiDataTableBodyCell-4-0"]').get('[aria-label="Edit creatorscope"]').get('[aria-disabled="true"]').should('exist');
-        cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]').get('[data-testid="MuiDataTableBodyCell-4-0"]').contains('button','Delete').should('be.disabled');
+        cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]')
+        .get('[data-testid="MuiDataTableBodyCell-4-0"]').get('[aria-label="Edit creatorscope"]')
+            .get('[aria-disabled="true"]').should('exist');
+        cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]')
+            .get('[data-testid="MuiDataTableBodyCell-4-0"]').contains('button','Delete').should('be.disabled');
 
         //12. Policies should be checked. (UI issue fixed by PR #11297 in carbon-apimgt)
         cy.get("#left-menu-policies").click();
         cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="displayname"]').type("test name");
-        cy.get('[data-testid="create-policy-form"]').get('[data-testid="gateway-details-panel"]').get('[data-testid="file-drop-zone"]').then(function () {
+        cy.get('[data-testid="create-policy-form"]').get('[data-testid="gateway-details-panel"]')
+            .get('[data-testid="file-drop-zone"]').then(function () {
             cy.get('input[type="file"]').attachFile('api_artifacts/sampleAddHeader.j2');
         });
-        cy.get('[data-testid="create-policy-form"]').get('[data-testid="policy-add-btn-panel"]').get('[data-testid="policy-create-save-btn"]').should('be.disabled');
+        cy.get('[data-testid="create-policy-form"]').get('[data-testid="policy-add-btn-panel"]')
+            .get('[data-testid="policy-create-save-btn"]').should('be.disabled');
         cy.get('[data-testid="create-policy-form"]').get('[aria-label="Close"]').click();
 
         //13. monetization ,lifecycle menus are not visible to observer

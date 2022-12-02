@@ -126,8 +126,8 @@ Cypress.Commands.add('deleteUser', (name) => {
 });
 
 Cypress.Commands.add('deleteApi', (name, version) => {
-    var cardName='card-'+name+version;
-    var actionCardName='card-action-'+name+version;
+    var cardName = 'card-' + name + version;
+    var actionCardName = 'card-action-' + name + version;
     cy.visit(`/publisher/apis`);
     cy.intercept('**/apis*').as('getApis');
     cy.wait('@getApis', {timeout: Cypress.config().largeTimeout}).then(() => {
@@ -300,9 +300,10 @@ Cypress.Commands.add('addBusinessInfo', (businessOwnerName,businessOwnerEmail,te
  * @param {boolean} required  true | false
  */
 
-Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,uripattern,description=null,summary=null,security=true,scope,parametername=null,parametertype=null,datatype=null,required=false) => {
-    const uriId=httpverb.toLowerCase()+'\/'+uripattern;
-
+Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel, httpverb, uripattern, 
+    description = null, summary = null, security = true, scope, parametername = null, parametertype = null, 
+    datatype = null, required = false) => {
+    const uriId = httpverb.toLowerCase() + '\/' + uripattern;
     if(ratelimitlevel=="api"){
         cy.get('#api-rate-limiting-api-level').click();
         cy.get('#operation_throttling_policy').click();
@@ -321,7 +322,6 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
     
     cy.get(`[id="${uriId}"]`, { timeout: 30000 }).click();
 
-    
     if(description!= null){
         cy.get(`[data-testid="description-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="description-${uriId}"]`).type(description);
@@ -344,7 +344,6 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
         cy.contains('li',limitinglevel).click();
     }
 
-
     //parameters
     if(parametertype!=null){
         cy.get(`[id="param-${uriId}"]`).click();
@@ -359,7 +358,6 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel,httpverb,u
         cy.contains('td',parametername).should('exist');
     }
     cy.get('#resources-save-operations', { timeout: 30000 }).click();
-
 })
 
 
@@ -441,13 +439,11 @@ Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
         .type(searchCmd,{force:true});
     cy.get('.find-part .input').type('modified schema file');
     cy.contains('.find-actions','1 of').should('be.visible');
-    
    
 })
 
 
 Cypress.Commands.add('createLocalScope', (name, displayname='sample display name',description='sample description',roles=[]) => {
-
     cy.get('h3',  {timeout: Cypress.config().largeTimeout}).contains("Create New Scope",  { timeout: 30000 });
     cy.wait(1000);
     cy.get('#name',{timeout:30000}).type(name, {force:true});
@@ -465,7 +461,6 @@ Cypress.Commands.add('createLocalScope', (name, displayname='sample display name
 
     //check the table and verify whether entered scope names exist
     cy.get('table').get('tbody').find("tr").contains(name);
-
 })
 
 
@@ -494,7 +489,6 @@ Cypress.Commands.add('createAPIWithoutEndpoint', (name=null,version=null,type = 
 
     cy.visit(`/publisher/apis/`);
     cy.get(`#${apiName}`,{timeout: Cypress.config().largeTimeout}).click();
-
 
     cy.get('#itest-api-name-version', { timeout: 30000 }).should('be.visible');
     cy.get('#itest-api-name-version').contains(`${apiVersion}`);
@@ -576,11 +570,9 @@ Cypress.Commands.add('createAndPublishApi', (apiName = null) => {
     cy.wait(2000);
     cy.get('[data-testid="Publish-btn"]').click();
     cy.get('button[data-testid="Demote to Created-btn"]').should('exist');
-
 })
 
 Cypress.Commands.add('logoutFromDevportal', (referer = '/devportal/apis') => {
-
     cy.get('#userToggleButton').click();
     cy.get("#userPopup").get("#menu-list-grow").get('ul').contains('li','Logout').click();
     cy.url().should('contain', '/devportal/logout');
@@ -615,7 +607,6 @@ Cypress.Commands.add('viewThirdPartyApi', (apiName = null) => {
     cy.get('#left-menu-test').click();
     cy.get('#advAuthHeader', {timeout: Cypress.config().largeTimeout}).should('exist');
     cy.get('#advAuthHeaderValue').should('exist');
-
 })
 
 /**
