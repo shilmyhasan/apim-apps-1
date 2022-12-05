@@ -25,7 +25,8 @@ describe("publisher-015-02 : Verify Gateway Environments", () => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPIWithEndpoints({}).then((apiId) => {
             cy.intercept('GET', `/api/am/publisher/v3/settings`, {fixture:'multipleEnvironments.json'}).as('settings');
-            cy.intercept('GET', `/api/am/publisher/v3/apis/${apiId}/revisions?query=deployed%3Atrue`, {fixture:'multipleDeployments.json'}).as('revisions');
+            cy.intercept('GET', `/api/am/publisher/v3/apis/${apiId}/revisions?query=deployed%3Atrue`, 
+            {fixture:'multipleDeployments.json'}).as('revisions');
             
             // Go to overview page
             cy.visit(`/publisher/apis/${apiId}/overview`);
@@ -44,7 +45,8 @@ describe("publisher-015-02 : Verify Gateway Environments", () => {
             cy.wait(2000);
 
             // Verify environments
-            cy.get('#gateway-access-url-cell > div').should('have.text', 'http://localhost:8280https://localhost:8243https://wso2.comhttp://apim.com:8280').should('exist');
+            cy.get('#gateway-access-url-cell > div').should('have.text', 
+            'http://localhost:8280https://localhost:8243https://wso2.comhttp://apim.com:8280').should('exist');
 
             // Delete API
             Utils.deleteAPI(apiId);
