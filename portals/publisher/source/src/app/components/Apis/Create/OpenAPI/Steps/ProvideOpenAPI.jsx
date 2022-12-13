@@ -87,6 +87,7 @@ export default function ProvideOpenAPI(props) {
                     info.content = content;
                     inputsDispatcher({ action: 'preSetAPI', value: info });
                     setValidity({ ...isValid, url: null });
+                    setValidationErrors(null);
                 } else {
                     setValidity({ ...isValid, url: { message: 'OpenAPI content validation failed!' } });
                     setValidationErrors(errors);
@@ -109,7 +110,7 @@ export default function ProvideOpenAPI(props) {
      */
     function onDrop(files) {
         setIsValidating(true);
-
+        setValidationErrors(null);
         // Why `files.pop()` below is , We only handle one OpenAPI file at a time,
         // So if use provide multiple, We would only
         // accept the first file. This information is shown in the dropdown helper text
@@ -235,7 +236,10 @@ export default function ProvideOpenAPI(props) {
                     && (
                         <Grid item md={11}>
                             <Banner
-                                onClose={() => setValidity({ file: null })}
+                                onClose={() => {
+                                    setValidity({ file: null });
+                                    setValidationErrors(null);
+                                }}
                                 disableActions
                                 dense
                                 paperProps={{ elevation: 1 }}
@@ -264,6 +268,7 @@ export default function ProvideOpenAPI(props) {
                                                 edge='end'
                                                 aria-label='delete'
                                                 onClick={() => {
+                                                    setValidationErrors(null);
                                                     inputsDispatcher({ action: 'inputValue', value: null });
                                                     inputsDispatcher({ action: 'isFormValid', value: false });
                                                 }}
