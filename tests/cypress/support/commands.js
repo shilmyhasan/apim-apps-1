@@ -304,11 +304,11 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel, httpverb,
     description = null, summary = null, security = true, scope, parametername = null, parametertype = null, 
     datatype = null, required = false) => {
     const uriId = httpverb.toLowerCase() + '\/' + uripattern;
-    if(ratelimitlevel=="api"){
+    if (ratelimitlevel == "api") {
         cy.get('#api-rate-limiting-api-level').click();
         cy.get('#operation_throttling_policy').click();
         cy.contains('li',limitinglevel).click();
-    }else{
+    } else {
         cy.get('#api-rate-limiting-operation-level').click();
     }
     cy.get('#add-operation-selection-dropdown').click();
@@ -322,36 +322,36 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel, httpverb,
     
     cy.get(`[id="${uriId}"]`, { timeout: 30000 }).click();
 
-    if(description!= null){
+    if (description != null) {
         cy.get(`[data-testid="description-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="description-${uriId}"]`).type(description);
 
     }
-    if(summary!=null){
+    if (summary != null) {
         cy.get(`[data-testid="summary-${uriId}"]`, { timeout: 30000 }).click();
         cy.get(`[data-testid="summary-${uriId}"]`).type(summary);
     }
-    if(security==false){
+    if (security == false) {
         cy.get(`[data-testid="security-${uriId}"]`).click();
-    }else{
+    } else {
         cy.get(`[id="${uriId}-operation-scope-select"]`, { timeout: 30000 }).click();
         cy.contains('li',scope).click();
         cy.get('#menu-').click();
     }
 
-    if(ratelimitlevel=="operation"){
+    if (ratelimitlevel == "operation") {
         cy.get(`[id="${uriId}-operation_throttling_policy-label"]`).click();
         cy.contains('li',limitinglevel).click();
     }
 
     //parameters
-    if(parametertype!=null){
+    if (parametertype != null) {
         cy.get(`[id="param-${uriId}"]`).click();
         cy.contains('li',parametertype).click();
         cy.get(`[id="name-${uriId}"]`).type(parametername);
         cy.get(`[id="data-${uriId}"]`).click();
         cy.get(`[id="data-${uriId}/${datatype.toLowerCase()}"]`).click();
-        if(required){
+        if (required) {
             cy.get(`[data-testid="required-${uriId}"]`).click();
         }
         cy.get(`[id="param-${uriId}-add-btn"]`).click();
@@ -367,7 +367,7 @@ Cypress.Commands.add('addProperty',(name,value,ifSendToDevPortal)=>{
     cy.get('#property-name', {timeout: Cypress.config().largeTimeout}).focus().type(name);
     cy.get('#property-value').focus().type(value);
 
-    if(ifSendToDevPortal)
+    if (ifSendToDevPortal)
         cy.contains('label','Show in devportal').click();
     cy.get('#properties-add-btn').should('exist');
     cy.get('#properties-add-btn').click();
@@ -468,10 +468,10 @@ Cypress.Commands.add('createAPIWithoutEndpoint', (name=null,version=null,type = 
     const random_number = Math.floor(Date.now() / 1000);
     var apiVersion=`v${random_number}`;
     var apiName = `0sample_api_${random_number}`;
-    if(name){
+    if (name) {
         apiName=name;
     }
-    if(version){
+    if (version) {
         apiVersion=version;
     }
     cy.visit(`/publisher/apis`);
@@ -623,7 +623,7 @@ Cypress.Commands.add('createApplication', (applicationName,perTokenQuota,applica
     cy.get('#per-token-quota').click();
     cy.get('ul').contains('li',perTokenQuota).click();
 
-    if(applicationDescription){
+    if (applicationDescription) {
         cy.get('#application-description').type(applicationDescription);
     }
     cy.get("#itest-application-create-save").click();
