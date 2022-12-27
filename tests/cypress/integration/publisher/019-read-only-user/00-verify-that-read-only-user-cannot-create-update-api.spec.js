@@ -238,7 +238,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('#left-menu-itemLocalScopes').click();
         cy.contains('a','Add New Local Scope').get('[aria-disabled="true"]').should('exist');
         cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]')
-        .get('[data-testid="MuiDataTableBodyCell-4-0"]').get('[aria-label="Edit creatorscope"]')
+            .get('[data-testid="MuiDataTableBodyCell-4-0"]').get('[aria-label="Edit creatorscope"]')
             .get('[aria-disabled="true"]').should('exist');
         cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]')
             .get('[data-testid="MuiDataTableBodyCell-4-0"]').contains('button','Delete').should('be.disabled');
@@ -248,9 +248,10 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="displayname"]').type("test name");
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="gateway-details-panel"]')
-            .get('[data-testid="file-drop-zone"]').then(function () {
-            cy.get('input[type="file"]').attachFile('api_artifacts/sampleAddHeader.j2');
-        });
+            .get('[data-testid="file-drop-zone"]').then(
+                function () {
+                cy.get('input[type="file"]').attachFile('api_artifacts/sampleAddHeader.j2');
+            });
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="policy-add-btn-panel"]')
             .get('[data-testid="policy-create-save-btn"]').should('be.disabled');
         cy.get('[data-testid="create-policy-form"]').get('[aria-label="Close"]').click();
