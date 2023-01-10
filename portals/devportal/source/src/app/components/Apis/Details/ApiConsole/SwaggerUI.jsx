@@ -3,18 +3,35 @@ import PropTypes from 'prop-types';
 import 'swagger-ui-react/swagger-ui.css';
 import SwaggerUILib from 'swagger-ui-react';
 import CustomPadLock from './CustomPadLock';
+import Configurations from 'Config';
 
 const disableAuthorizeAndInfoPlugin = function (spec) {
-    return {
-        wrapComponents: {
-            info: () => () => null,
-            authorizeBtn: () => () => null,
-            authorizeOperationBtn: () => () => null,
-            OperationSummary: (original) => (props) => {
-                return <CustomPadLock BaseLayout={original} oldProps={props} spec={spec} />;
+    if (Configurations.swaggerValidationBehaviour === 'default'
+        || Configurations.swaggerValidationBehaviour === null) {
+        return {
+            wrapComponents: {
+                info: () => () => null,
+                authorizeBtn: () => () => null,
+                authorizeOperationBtn: () => () => null,
+                OperationSummary: (original) => (props) => {
+                    return <CustomPadLock BaseLayout={original} oldProps={props} spec={spec} />;
+                },
             },
-        },
-    };
+        };
+    } else {
+        return {
+            wrapComponents: {
+                info: () => () => null,
+                authorizeBtn: () => () => null,
+                authorizeOperationBtn: () => () => null,
+                OperationSummary: (original) => (props) => {
+                    return <CustomPadLock BaseLayout={original} oldProps={props} spec={spec} />;
+                },
+                errSelectors: () => () => null,
+                errors: () => () => null,
+            },
+        };
+    }
 };
 
 /**

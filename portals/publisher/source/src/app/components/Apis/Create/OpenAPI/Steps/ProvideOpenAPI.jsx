@@ -19,7 +19,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -43,12 +42,11 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import debounce from 'lodash.debounce'; // WARNING: This is coming from mui-datatable as a transitive dependency
 
-import Banner from 'AppComponents/Shared/Banner';
 import APIValidation from 'AppData/APIValidation';
 import API from 'AppData/api';
 import DropZoneLocal, { humanFileSize } from 'AppComponents/Shared/DropZoneLocal';
-import SpecErrors from 'AppComponents/Apis/Details/Resources/components/SpecErrors';
-
+import Paper from '@material-ui/core/Paper';
+import SwaggerValidationErrors from 'AppComponents/Apis/Create/OpenAPI/Steps/SwaggerValidationErrors';
 
 const useStyles = makeStyles((theme) => ({
     mandatoryStar: {
@@ -70,10 +68,13 @@ export default function ProvideOpenAPI(props) {
     const classes = useStyles();
     // If valid value is `null`,that means valid, else an error object will be there
     const [isValid, setValidity] = useState({});
-    const [validationErrors, setValidationErrors] = useState(null);
     const [isValidating, setIsValidating] = useState(false);
+    const [errorDetails, setErrorDetails] = useState({ isValid: false, errors: [] });
+    const [noOfErrors, setNoOfErrors] = useState(0);
     useEffect(() => {
-        setValidationErrors(null);
+        setErrorDetails({ isValid: false, errors: [] });
+        setNoOfErrors(0);
+        setValidity({});
     }, [apiInputs.inputType]);
     const validateURLDebounced = useCallback(
         debounce((newURL) => { // Example: https://codesandbox.io/s/debounce-example-l7fq3?file=/src/App.js
@@ -87,10 +88,12 @@ export default function ProvideOpenAPI(props) {
                     info.content = content;
                     inputsDispatcher({ action: 'preSetAPI', value: info });
                     setValidity({ ...isValid, url: null });
-                    setValidationErrors(null);
+                    setErrorDetails({ isValid: response.body.isValid, errors });
+                    setNoOfErrors(response.body.errors.length);
                 } else {
                     setValidity({ ...isValid, url: { message: 'OpenAPI content validation failed!' } });
-                    setValidationErrors(errors);
+                    setErrorDetails({ isValid: response.body.isValid, errors });
+                    setNoOfErrors(response.body.errors.length);
                 }
                 onValidate(isValidURL);
                 setIsValidating(false);
@@ -99,6 +102,13 @@ export default function ProvideOpenAPI(props) {
                 onValidate(false);
                 setIsValidating(false);
                 console.error(error);
+                const errors = [];
+                const errorData = {
+                    description: 'OpenAPI content validation failed!',
+                };
+                errors.push(errorData);
+                setErrorDetails({ isValid: false, errors });
+                setNoOfErrors(1);
             });
         }, 750),
         [],
@@ -110,7 +120,9 @@ export default function ProvideOpenAPI(props) {
      */
     function onDrop(files) {
         setIsValidating(true);
-        setValidationErrors(null);
+        setErrorDetails({ isValid: false, errors: [] });
+        setNoOfErrors(0);
+        setValidity({});
         // Why `files.pop()` below is , We only handle one OpenAPI file at a time,
         // So if use provide multiple, We would only
         // accept the first file. This information is shown in the dropdown helper text
@@ -125,14 +137,24 @@ export default function ProvideOpenAPI(props) {
                     validFile = file;
                     inputsDispatcher({ action: 'preSetAPI', value: info });
                     setValidity({ ...isValid, file: null });
+                    setErrorDetails({ isValid: response.body.isValid, errors });
+                    setNoOfErrors(response.body.errors.length);
                 } else {
                     setValidity({ ...isValid, file: { message: 'OpenAPI content validation failed!' } });
-                    setValidationErrors(errors);
+                    setErrorDetails({ isValid: response.body.isValid, errors });
+                    setNoOfErrors(response.body.errors.length);
                 }
             })
             .catch((error) => {
+                const errors = [];
+                const errorData = {
+                    description: 'OpenAPI content validation failed!',
+                };
+                errors.push(errorData);
                 setValidity({ ...isValid, file: { message: 'OpenAPI content validation failed!' } });
                 console.error(error);
+                setErrorDetails({ isValid: false, errors });
+                setNoOfErrors(1);
             })
             .finally(() => {
                 setIsValidating(false); // Stop the loading animation
@@ -162,6 +184,9 @@ export default function ProvideOpenAPI(props) {
     }
 
     useEffect(() => {
+        setErrorDetails({ isValid: false, errors: [] });
+        setNoOfErrors(0);
+        setValidity({});
         if (inputValue) {
             if (inputType === ProvideOpenAPI.INPUT_TYPES.FILE) {
                 onDrop([inputValue]);
@@ -232,22 +257,15 @@ export default function ProvideOpenAPI(props) {
                         </RadioGroup>
                     </FormControl>
                 </Grid>
-                {isValid.file
-                    && (
-                        <Grid item md={11}>
-                            <Banner
-                                onClose={() => {
-                                    setValidity({ file: null });
-                                    setValidationErrors(null);
-                                }}
-                                disableActions
-                                dense
-                                paperProps={{ elevation: 1 }}
-                                type='error'
-                                message={isValid.file.message}
-                            />
-                        </Grid>
-                    )}
+                <Grid item xs={10} md={11}>
+                    <Paper elevation={3}>
+                        <SwaggerValidationErrors
+                            errorDetails={errorDetails}
+                            noOfErrors={noOfErrors}
+                            isValid={isValid}
+                        />
+                    </Paper>
+                </Grid>
                 <Grid item xs={10} md={11}>
                     {isFileInput ? (
                         <>
@@ -268,7 +286,8 @@ export default function ProvideOpenAPI(props) {
                                                 edge='end'
                                                 aria-label='delete'
                                                 onClick={() => {
-                                                    setValidationErrors(null);
+                                                    setErrorDetails({ isValid: false, errors: [] });
+                                                    setNoOfErrors(0);
                                                     inputsDispatcher({ action: 'inputValue', value: null });
                                                     inputsDispatcher({ action: 'isFormValid', value: false });
                                                 }}
@@ -290,7 +309,7 @@ export default function ProvideOpenAPI(props) {
                                             <FormattedMessage
                                                 id='Apis.Create.OpenAPI.Steps.ProvideOpenAPI.Input.file.dropzone'
                                                 defaultMessage={'Drag & Drop Open API File/Archive '
-                                                 + 'here {break} or {break} Browse files'}
+                                                    + 'here {break} or {break} Browse files'}
                                                 values={{ break: <br /> }}
                                             />,
                                             <Button
@@ -335,14 +354,6 @@ export default function ProvideOpenAPI(props) {
                         />
                     )}
                 </Grid>
-                {validationErrors && (
-                    <Grid item xs={10} md={11}>
-                        <Box display='flex' justifyContent='right' alignItems='center'>
-                            Show Errors
-                            <SpecErrors specErrors={validationErrors} />
-                        </Box>
-                    </Grid>
-                )}
                 <Grid item xs={2} md={5} />
             </Grid>
         </>

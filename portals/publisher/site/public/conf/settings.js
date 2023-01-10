@@ -95,6 +95,7 @@ const AppConfig = {
             },
         },
     },
+    swaggerValidationBehaviour: 'default',
 };
 
 if (typeof module !== 'undefined') {
