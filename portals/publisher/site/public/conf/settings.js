@@ -96,6 +96,10 @@ const AppConfig = {
         },
     },
     swaggerValidationBehaviour: 'default',
+    /*
+    'default' : used when the old/default behaviour is needed. All validation errors will be displayed as usual for the already created APIs and front-end swagger validation will be used.
+    'updated' : used to hide swagger validation errors for already created API's and to use backend swagger validation instead of front-end validation.
+    */
 };
 
 if (typeof module !== 'undefined') {
