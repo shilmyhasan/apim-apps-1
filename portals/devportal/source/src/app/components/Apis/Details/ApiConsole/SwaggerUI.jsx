@@ -20,8 +20,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import 'swagger-ui-react/swagger-ui.css';
 import SwaggerUILib from 'swagger-ui-react';
-import CustomPadLock from './CustomPadLock';
 import Configurations from 'Config';
+import CustomPadLock from './CustomPadLock';
 
 const disableAuthorizeAndInfoPlugin = function (spec) {
     if (Configurations.swaggerValidationBehaviour === 'default'
