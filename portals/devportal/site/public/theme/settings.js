@@ -63,6 +63,11 @@ const Settings = {
     'updated' : used to hide swagger validation errors for already created API's 
     and to use backend swagger validation instead of front-end validation.
     */
+    'enableTokenGenForMappedApps' : false,
+    /*
+    The property is used to decide whether token generation button should be enabled for
+    mapped/provisioned apps.
+    */
 };
 
 
