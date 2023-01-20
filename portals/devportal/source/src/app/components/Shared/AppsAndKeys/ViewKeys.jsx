@@ -40,6 +40,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import ResourceNotFound from '../../Base/Errors/ResourceNotFound';
 import Loading from '../../Base/Loading/Loading';
 import Application from '../../../data/Application';
+import Settings from 'Settings';
 import Tokens from './Tokens';
 import ViewToken from './ViewToken';
 import ViewSecret from './ViewSecret';
@@ -616,7 +617,7 @@ class ViewKeys extends React.Component {
                             <div className={classes.tokenSection}>
                                 {(keyManagerConfig.enableTokenGeneration && supportedGrantTypesUnchanged
                                     && supportedGrantTypesUnchanged.find((a) => a.includes('client_credentials')))
-                                    && mode !== 'MAPPED'
+                                    && (mode !== 'MAPPED' || Settings.enableTokenGenForMappedApps === true)
                                     && (
                                         <Button
                                             id='generate-access-token-oauth2'
