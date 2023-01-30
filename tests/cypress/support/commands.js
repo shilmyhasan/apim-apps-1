@@ -405,7 +405,8 @@ Cypress.Commands.add('createGraphqlAPIfromFile', (name,version,context,filepath)
         cy.get('body').click(0,0);
 
         // Saving the form
-        cy.get('[data-testid="itest-create-graphql-api-button"]',).click({force:true, timeout: Cypress.config().largeTimeout});
+        cy.get('[data-testid="itest-create-graphql-api-button"]',)
+            .click({force:true, timeout: Cypress.config().largeTimeout});
 
         //Checking the version in the overview
         cy.get('#itest-api-name-version', {timeout: Cypress.config().largeTimeout}).should('be.visible');
@@ -429,7 +430,8 @@ Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
     cy.get('[data-testid="browse-to-upload-btn"]')
     cy.get('input[type="file"]').attachFile(filepath);
     cy.contains('h2','Import GraphQL Schema Definition').should('exist');
-    uploadedDefinitionPanel=cy.get('[data-testid="uploaded-list-graphql"]').get('li').get('[data-testid="uploaded-list-content-graphql"]')
+    uploadedDefinitionPanel=cy.get('[data-testid="uploaded-list-graphql"]')
+        .get('li').get('[data-testid="uploaded-list-content-graphql"]')
     //uploadedDefinitionPanel.contains(`[data-testid="file-input-${filename}"]`,filename).should('be.visible');
     uploadedDefinitionPanel.get('[data-testid="btn-delete-imported-file"]').should('be.visible');
     cy.get('#import-open-api-btn').click();
@@ -443,7 +445,8 @@ Cypress.Commands.add('modifyGraphqlSchemaDefinition', (filepath)=>{
 })
 
 
-Cypress.Commands.add('createLocalScope', (name, displayname='sample display name',description='sample description',roles=[]) => {
+Cypress.Commands.add('createLocalScope',
+    (name, displayname='sample display name',description='sample description',roles=[]) => {
     cy.get('h3',  {timeout: Cypress.config().largeTimeout}).contains("Create New Scope",  { timeout: 30000 });
     cy.wait(1000);
     cy.get('#name',{timeout:30000}).type(name, {force:true});
@@ -628,7 +631,8 @@ Cypress.Commands.add('createApplication', (applicationName,perTokenQuota,applica
     }
     cy.get("#itest-application-create-save").click();
 
-    cy.get("#itest-info-bar-application-name", {timeout: Cypress.config().largeTimeout}).contains(applicationName).should('exist');
+    cy.get("#itest-info-bar-application-name", {timeout: Cypress.config().largeTimeout}).contains(applicationName)
+        .should('exist');
     cy.get("#production-keys").click();
     cy.get("#generate-keys").click();
 
