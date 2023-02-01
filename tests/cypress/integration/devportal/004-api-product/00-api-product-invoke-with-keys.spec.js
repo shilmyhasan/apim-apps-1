@@ -99,7 +99,7 @@ describe("devportal-004-00 : Invoke API Product with keys", () => {
                         cy.get('#left-menu-itemlifecycle').click();
 
                         // Publishing api product
-                        cy.wait(2000);
+                        cy.wait(10000);
                         cy.get('[data-testid="Publish-btn"]').click({force:true});
                         cy.get('[data-testid="itest-api-state"]').contains('PUBLISHED');
                         cy.visit(`/publisher/api-products/${uuidProduct}/runtime-configuration`);
