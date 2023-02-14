@@ -172,8 +172,9 @@ class SubscriptionPoliciesManage extends Component {
                                             <FormattedMessage
                                                 id='Apis.Details.Subscriptions.SubscriptionPoliciesManage.sub.migrated'
                                                 defaultMessage={`Following policies are migrated from an 
-                                                                old version of APIM. You can uncheck and select a different policy. 
-                                                                Note that this is an irreversible operation.`}
+                                                                old version of APIM. You can uncheck and select a 
+                                                                different policy. Note that this is an irreversible
+                                                                 operation.`}
                                             />
                                         </Typography>
                                     </Box>
