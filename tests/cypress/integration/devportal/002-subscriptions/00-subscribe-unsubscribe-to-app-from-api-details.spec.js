@@ -51,7 +51,11 @@ describe("devportal-002-00 : Subscribe unsubscribe to application from api detai
                 cy.get(`.MuiAutocomplete-popper li`).contains(appName).click();
                 cy.get(`#subscribe-to-api-btn`).click();
                 cy.get(`#subscription-table td`).contains(appName).should('exist');
-            
+
+                // Check Manage App Button is working
+                cy.get(`DefaultApplication-MA`).should('exist');
+                cy.get(`#subscribe-to-api-btn`).click();
+                cy.get(`itest-info-bar-application-name`).should('exist');
             });
         });
     }
