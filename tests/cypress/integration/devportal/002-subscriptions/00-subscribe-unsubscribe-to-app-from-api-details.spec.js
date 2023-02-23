@@ -53,9 +53,9 @@ describe("devportal-002-00 : Subscribe unsubscribe to application from api detai
                 cy.get(`#subscription-table td`).contains(appName).should('exist');
 
                 // Check Manage App Button is working
-                cy.get(`DefaultApplication-MA`).should('exist');
-                cy.get(`#subscribe-to-api-btn`).click();
-                cy.get(`itest-info-bar-application-name`).should('exist');
+                cy.contains('MANAGE APP').should('exist');
+                cy.contains('MANAGE APP').click();
+                cy.get(`#itest-info-bar-application-name`).should('exist');
             });
         });
     }
