@@ -505,7 +505,8 @@ function AdvanceEndpointConfig(props) {
                     className={classes.textField}
                     id='duration-input'
                     value={advanceConfigObj.actionDuration}
-                    onChange={(event) => handleConfigFieldChange(event, 'actionDuration')}
+                    onKeyDown={(event) => ["e", "E", "+", "-"].includes(event.key) && event.preventDefault()}
+                    onChange= {(event) => handleConfigFieldChange(event, 'actionDuration')}
                     label={(
                         <FormattedMessage
                             id='Apis.Details.Endpoints.AdvancedConfig.AdvanceEndpointConfig.duration.ms'
@@ -524,6 +525,7 @@ function AdvanceEndpointConfig(props) {
                     disabled={isRestricted(['apim:api_create'], api)}
                     variant='contained'
                     style={{ marginRight: '10px' }}
+                    id='endpoint-configuration-submit-btn'
                 >
                     <FormattedMessage
                         id='Apis.Details.Endpoints.AdvancedConfig.AdvanceEndpointConfig.config.save.button'
