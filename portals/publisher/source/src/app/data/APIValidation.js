@@ -138,6 +138,11 @@ const definition = {
         .error((errors) => {
             return errors.map((error) => ({ ...error, message: 'Context ' + getMessage(error.type, 200) }));
         }),
+    apiContextWithoutKeyWords: Joi.string().max(200).regex(/^[^{}]*$/)
+        .required()
+        .error((errors) => {
+            return errors.map((error) => ({ ...error, message: 'Context ' + getMessage(error.type, 200) }));
+        }),
     gatewayVendor: Joi.string().max(50).regex(/^[^~!@#;:%^*()+={}|\\<>"',&$\s+[\]/]*$/).required()
         .error((errors) => {
             return errors.map((error) => ({ ...error, message: 'Name ' + getMessage(error.type, 50) }));

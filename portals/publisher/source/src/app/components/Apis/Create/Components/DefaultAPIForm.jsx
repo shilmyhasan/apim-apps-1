@@ -184,27 +184,90 @@ export default function DefaultAPIForm(props) {
                 break;
             }
             case 'context': {
-                const contextValidity = APIValidation.apiContext.required().validate(value, { abortEarly: false })
+                let contextValidity = APIValidation.apiContext.required().validate(value, { abortEarly: false })
                     .error;
+                // eslint-disable-next-line no-console
+                console.log("hello")
                 const apiContext = value.startsWith('/') ? value : '/' + value;
                 if (contextValidity === null) {
-                    APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
-                        const count = result.body.list.length;
-                        if (count > 0 && checkContext(value, result.body.list)) {
-                            updateValidity({
-                                ...validity,
-                                // eslint-disable-next-line max-len
-                                context: { details: [{ message:  isWebSocket ? apiContext + ' channel already exists' : apiContext + ' context already exists' }] },
-                            });
-                        } else if (count > 0 && checkContext(value, result.body.list)) {
-                            updateValidity({
-                                ...validity,
-                                context: { details: [{ message: apiContext + ' dynamic context already exists' }] },
-                            });
-                        } else {
-                            updateValidity({ ...validity, context: contextValidity, version: null });
+                    // const regex = '/(\b(?/{version}\b)[^ $]+\b)/g'
+                    // const regex = '///{version}/g';
+                    const splitContext = apiContext.split('{version}');
+
+                    if(splitContext.length>2) {
+                        updateValidity({
+                            ...validity,
+                            context: { details: [{ message:  '{version} cannot exist more than once' }] },
+                        }); 
+                    } else if(splitContext[0]!=='' && splitContext[0].charAt(splitContext[0].length-1)!=='/') {
+                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                            validate(value, { abortEarly: false }).error;
+                        if(contextValidity!==null) {
+                            updateValidity({ ...validity, context: contextValidity });
                         }
-                    });
+                    } else if(splitContext[1]!=='' && splitContext[1].charAt(0)!=='/') {
+                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                            validate(value, { abortEarly: false }).error;
+                        if(contextValidity!==null) {
+                            updateValidity({ ...validity, context: contextValidity });
+                        } 
+                    } else if(splitContext[0]==='/' && splitContext[1]==='') {
+                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                            validate(value, { abortEarly: false }).error;
+                        if(contextValidity!==null) {
+                            updateValidity({ ...validity, context: contextValidity });
+                        }                        
+                    } else if(splitContext[0]==='/' && splitContext[1]==='/') {
+                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                            validate(value, { abortEarly: false }).error;
+                        if(contextValidity!==null) {
+                            updateValidity({ ...validity, context: contextValidity });
+                        }                        
+                    }
+                    // if(splitContext[0].charAt(splitContext[0].length-1)!=='/')
+                    // // eslint-disable-next-line no-console
+                    // console.log("split"+ splitContext)
+                    // let occur = splitContext.length-1;
+                    // if(splitContext[0]==='' || splitContext[occur]==='') {
+                    //     occur -= 1;
+                    // }
+                    // // eslint-disable-next-line no-console
+                    // console.log("iterations"+ occur)
+                    // if(occur<0) {
+                    //     // eslint-disable-next-line no-console
+                    //     console.log("conditions"+ occur)
+                    //     contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                    //         validate(value, { abortEarly: false }).error;
+                    //     if(contextValidity!==null) {
+                    //         updateValidity({ ...validity, context: contextValidity });
+                    //     }
+                    // }
+                    // if(occur>1) {
+                    //     updateValidity({
+                    //         ...validity,
+                    //         context: { details: [{ message:  '{version} cannot exist more than once' }] },
+                    //     }); 
+                    // }
+
+                    if(contextValidity===null && splitContext.length===2) {
+                        APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
+                            const count = result.body.list.length;
+                            if (count > 0 && checkContext(value, result.body.list)) {
+                                updateValidity({
+                                    ...validity,
+                                    // eslint-disable-next-line max-len
+                                    context: { details: [{ message:  isWebSocket ? apiContext + ' channel already exists' : apiContext + ' context already exists' }] },
+                                });
+                            } else if (count > 0 && checkContext(value, result.body.list)) {
+                                updateValidity({
+                                    ...validity,
+                                    context: { details: [{ message: apiContext + ' dynamic context already exists' }] },
+                                });
+                            } else {
+                                updateValidity({ ...validity, context: contextValidity, version: null });
+                            }
+                        });
+                    }
                 } else {
                     updateValidity({ ...validity, context: contextValidity });
                 }
