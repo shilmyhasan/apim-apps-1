@@ -186,12 +186,8 @@ export default function DefaultAPIForm(props) {
             case 'context': {
                 let contextValidity = APIValidation.apiContext.required().validate(value, { abortEarly: false })
                     .error;
-                // eslint-disable-next-line no-console
-                console.log("hello")
                 const apiContext = value.startsWith('/') ? value : '/' + value;
                 if (contextValidity === null) {
-                    // const regex = '/(\b(?/{version}\b)[^ $]+\b)/g'
-                    // const regex = '///{version}/g';
                     const splitContext = apiContext.split('{version}');
 
                     if(splitContext.length>2) {
@@ -224,30 +220,6 @@ export default function DefaultAPIForm(props) {
                             updateValidity({ ...validity, context: contextValidity });
                         }                        
                     }
-                    // if(splitContext[0].charAt(splitContext[0].length-1)!=='/')
-                    // // eslint-disable-next-line no-console
-                    // console.log("split"+ splitContext)
-                    // let occur = splitContext.length-1;
-                    // if(splitContext[0]==='' || splitContext[occur]==='') {
-                    //     occur -= 1;
-                    // }
-                    // // eslint-disable-next-line no-console
-                    // console.log("iterations"+ occur)
-                    // if(occur<0) {
-                    //     // eslint-disable-next-line no-console
-                    //     console.log("conditions"+ occur)
-                    //     contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                    //         validate(value, { abortEarly: false }).error;
-                    //     if(contextValidity!==null) {
-                    //         updateValidity({ ...validity, context: contextValidity });
-                    //     }
-                    // }
-                    // if(occur>1) {
-                    //     updateValidity({
-                    //         ...validity,
-                    //         context: { details: [{ message:  '{version} cannot exist more than once' }] },
-                    //     }); 
-                    // }
 
                     if(contextValidity===null && splitContext.length===2) {
                         APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
