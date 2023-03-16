@@ -29,14 +29,18 @@ describe("publisher-003-05 : Runtime configuration - OAuth2 and api key security
             cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemRuntimeConfigurations').click();
+            cy.wait(2000);
             cy.get('#applicationLevel').click();
             // Checking the two options
+            cy.wait(2000);
             cy.get('#api-security-basic-auth-checkbox').click();
+            cy.wait(2000);
             cy.get('#api-security-api-key-checkbox').click();
 
             cy.get('#save-runtime-configurations').click();
             cy.get('#save-runtime-configurations').then(() => {
                 cy.get('#applicationLevel').click();
+                cy.wait(2000);
                 cy.get('#api-security-basic-auth-checkbox').should('be.checked');
                 cy.get('#api-security-api-key-checkbox').should('be.checked');
             })
