@@ -191,8 +191,12 @@ const TryOutConsole = () => {
                                 + `${selectedDeploymentVhost.httpContext}${api.context}`;
                         } else {
                             url = `${baseURL}${pathSeparator}`
-                                + `${selectedDeploymentVhost.httpContext}${api.context}/${api.version}`
-                                    .replace('{version}', `${api.version}`);
+                                + `${selectedDeploymentVhost.httpContext}${api.context}/${api.version}`;
+                            if (`${api.context}`.includes('{version}')) {
+                                url = `${baseURL}${pathSeparator}`
+                                                + `${selectedDeploymentVhost.httpContext}${api.context}`
+                                                    .replaceAll('{version}', `${api.version}`);
+                            }
                         }
                         return {url};
                     }
