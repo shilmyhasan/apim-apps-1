@@ -188,40 +188,15 @@ export default function DefaultAPIForm(props) {
                     .error;
                 const apiContext = value.startsWith('/') ? value : '/' + value;
                 if (contextValidity === null) {
-                    const splitContext = apiContext.split('{version}');
-
-                    if(splitContext.length>2) {
-                        updateValidity({
-                            ...validity,
-                            context: { details: [{ message:  '{version} cannot exist more than once' }] },
-                        }); 
-                    } else if(splitContext[0]!=='' && splitContext[0].charAt(splitContext[0].length-1)!=='/') {
-                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                            validate(value, { abortEarly: false }).error;
-                        if(contextValidity!==null) {
-                            updateValidity({ ...validity, context: contextValidity });
+                    const splitContext = apiContext.split('/');
+                    for(const param of splitContext) {
+                        if(param!=="{version}") {
+                            contextValidity = APIValidation.apiContextWithoutKeyWords.required().
+                                validate(value, { abortEarly: false }).error;                          
                         }
-                    } else if(splitContext[1]!=='' && splitContext[1].charAt(0)!=='/') {
-                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                            validate(value, { abortEarly: false }).error;
-                        if(contextValidity!==null) {
-                            updateValidity({ ...validity, context: contextValidity });
-                        } 
-                    } else if(splitContext[0]==='/' && splitContext[1]==='') {
-                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                            validate(value, { abortEarly: false }).error;
-                        if(contextValidity!==null) {
-                            updateValidity({ ...validity, context: contextValidity });
-                        }                        
-                    } else if(splitContext[0]==='/' && splitContext[1]==='/') {
-                        contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                            validate(value, { abortEarly: false }).error;
-                        if(contextValidity!==null) {
-                            updateValidity({ ...validity, context: contextValidity });
-                        }                        
                     }
 
-                    if(contextValidity===null && splitContext.length===2) {
+                    if(contextValidity===null) {
                         APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
                             const count = result.body.list.length;
                             if (count > 0 && checkContext(value, result.body.list)) {
