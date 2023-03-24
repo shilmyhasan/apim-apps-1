@@ -190,9 +190,14 @@ export default function DefaultAPIForm(props) {
                 if (contextValidity === null) {
                     const splitContext = apiContext.split('/');
                     for(const param of splitContext) {
-                        if(param!=="{version}") {
+                        if(param!=="{version}" && (param.includes('{') || param.includes('}'))) {
                             contextValidity = APIValidation.apiContextWithoutKeyWords.required().
-                                validate(value, { abortEarly: false }).error;                          
+                                validate(value, { abortEarly: false }).error;
+                            updateValidity({
+                                ...validity,
+                                // eslint-disable-next-line max-len
+                                context: { details: [{ message: '{version} cannot exist as a substring in a path param' }] },
+                            });                   
                         }
                     }
 
