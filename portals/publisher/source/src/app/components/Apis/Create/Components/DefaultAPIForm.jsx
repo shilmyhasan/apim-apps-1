@@ -201,7 +201,33 @@ export default function DefaultAPIForm(props) {
                         }
                     }
 
-                    if(contextValidity===null) {
+                    let charCount = 0;
+
+                    for(const a of apiContext) {
+                        if(a==="(") {
+                            charCount++;
+                        } else if(a===")") {
+                            charCount--;
+                        }
+
+                        if(charCount<0) {
+                            updateValidity({
+                                ...validity,
+                                // eslint-disable-next-line max-len
+                                context: { details: [{ message: 'Parentheses should be balanced in API context' }] },
+                            });                            
+                        }
+                    }
+
+                    if(charCount!==0) {
+                        updateValidity({
+                            ...validity,
+                            // eslint-disable-next-line max-len
+                            context: { details: [{ message: 'Parentheses should be balanced in API context' }] },
+                        });                        
+                    }
+
+                    if(contextValidity===null && charCount===0) {
                         APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
                             const count = result.body.list.length;
                             if (count > 0 && checkContext(value, result.body.list)) {
