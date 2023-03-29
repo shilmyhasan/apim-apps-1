@@ -19,11 +19,9 @@
 import Utils from "@support/utils";
 
 describe("publisher-012-00 : creating document", () => {
-    const { publisher, password, superTenant, testTenant} = Utils.getUserInfo();
-    
-    const addEditInlineDocument = (tenant) => {
-        cy.loginToPublisher(publisher, password, tenant);
-        const documentName = 'api_document';
+    const { publisher, password, superTenant, testTenant } = Utils.getUserInfo();
+
+    const addDoc = (documentName) => {
         const documentSummary = 'api document summery';
         Utils.addAPI({}).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/overview`);
@@ -44,6 +42,13 @@ describe("publisher-012-00 : creating document", () => {
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);
         });
+    };
+    const addEditInlineDocument = (tenant) => {
+        cy.loginToPublisher(publisher, password, tenant);
+        const documentName = 'api_document';
+        const documentName2 = 'api document name with space';
+        addDoc(documentName);
+        addDoc(documentName2);
     }
     it.only("Creating inline document - super admin", () => {
         addEditInlineDocument(superTenant);
