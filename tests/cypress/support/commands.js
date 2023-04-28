@@ -19,10 +19,17 @@
 import Utils from "@support/utils";
 import 'cypress-file-upload';
 
+import AddNewRoleEnterDetailsPage from "./pages/carbon/AddNewRoleEnterDetailsPage";
+import AddNewRoleSelectPermissionPage from "./pages/carbon/AddNewRoleSelectPermissionPage";
+import RolesManagementPage from "./pages/carbon/RolesManagementPage";
+
+
+
 Cypress.Commands.add('carbonLogin', (username, password, tenant = 'carbon.super') => {
-    if (username != 'carbon.super') {
-        username = `${username}@${tenant}`
+    if (tenant != 'carbon.super') {
+        username = `${username}@${tenant}`;
     }
+   
     Cypress.log({
         name: 'carbonLogin',
         message: `${username} | ${password}`,
@@ -115,6 +122,21 @@ Cypress.Commands.add('addNewUser', (name = 'newuser', roles = [], password = 'te
     // Finish wizard
     cy.get('.buttonRow input:first-child').click();
     // cy.get('#messagebox-info p').contains(`User PRIMARY/${name} is added successfully.`).should('exist');
+})
+
+Cypress.Commands.add('addNewTenantUser', (
+    tenantUser,
+    password = 'test123',
+    tenantRoles = ['Internal/publisher', 'Internal/creator', 'Internal/subscriber', 'Internal/everyone'],
+    tenant = 'wso2.com',
+    tenantAdminUsername = 'admin',
+    tenantAdminPassword = 'admin'
+) => {
+    cy.addNewTenant(tenant, tenantAdminUsername, tenantAdminPassword);
+    cy.reload();
+    cy.carbonLogout();
+    cy.carbonLogin(`${tenantAdminUsername}@${tenant}`, tenantAdminPassword);
+    cy.addNewUser(tenantUser, tenantRoles, password);
 })
 
 
@@ -590,6 +612,10 @@ Cypress.Commands.add('logoutFromPublisher', () => {
     cy.visit(`/publisher/services/logout`);
 })
 
+Cypress.Commands.add('logoutFromAdminPortal', () => {
+    cy.visit(`${Utils.getAppOrigin()}/admin/services/logout`);
+})
+
 Cypress.Commands.add('viewThirdPartyApi', (apiName = null) => {
     cy.get("#searchQuery").type(apiName).type('{enter}')
     cy.get(`[area-label="Go to ${apiName}"]`, { timeout: Cypress.config().largeTimeout }).click();
@@ -646,3 +672,130 @@ Cypress.Commands.add('deleteApplication', (applicationName) => {
         .find('td').eq(5).get(`[id="delete-${applicationName}-btn"]`).click();
     cy.get("#itest-confirm-application-delete").click();
 });
+
+Cypress.Commands.add('addNewUserUsingSelfSignUp', (username, password, firstName, lastName, email, tenant) => {
+    Cypress.log({
+        name: 'Add New User Using Self SignUp ',
+        message: ' for ' + tenant
+    })
+
+    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
+    cy.get('#itest-devportal-sign-in').click();
+    cy.get('#registerLink').click();
+    cy.get('#username').type(username);
+    cy.get('#registrationSubmit').click();
+
+    // Uncaught ReferenceError: Handlebars is not defined
+    Cypress.on('uncaught:exception', (err, runnable) => {
+        return false;
+    });
+
+    cy.get('[name="http://wso2.org/claims/givenname"]').type(firstName);
+    cy.get('[name="http://wso2.org/claims/lastname"]').type(lastName);
+    cy.get('#password').type(password);
+    cy.get('#password2').type(password);
+    cy.get('[name="http://wso2.org/claims/emailaddress"]').type(email);
+    cy.get('#termsCheckbox').check();
+    cy.get('#registrationSubmit').click();
+    cy.contains('User registration completed successfully').should('exist');
+    cy.get('[type="button"]').click();
+})
+
+
+Cypress.Commands.add('addExistingUserUsingSelfSignUp', (username, tenant) => {
+    Cypress.log({
+        name: 'Add Existing User Using Self SignUp ',
+        message: ' for ' + tenant
+    })
+
+    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
+    cy.get('#itest-devportal-sign-in').click();
+    cy.get('#registerLink').click();
+    cy.get('#username').type(username);
+    cy.get('#registrationSubmit').click();
+    cy.contains('Username \'' + username + '\' is already taken. Please pick a different username').should('exist');
+})
+
+Cypress.Commands.add('portalLoginUsingIncorrectUserCredentials', (username, password, portal, tenant = 'carbon.super') => {
+    Cypress.log({
+        name: 'Portal Login Using Incorrect User Credentials ',
+        message: `${username} | ${password}`,
+    });
+
+    cy.visit(`${Utils.getAppOrigin()}/${portal}`);
+    if (portal === 'devportal') {
+        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
+        cy.get('#itest-devportal-sign-in').click();
+    }
+    cy.url().should('contains', `${Utils.getAppOrigin()}/authenticationendpoint/login.do`);
+    cy.get('[data-testid=login-page-username-input]').click();
+    cy.get('[data-testid=login-page-username-input]').type(username);
+    cy.get('[data-testid=login-page-password-input]').type(password);
+    cy.get('#loginForm').submit();
+    cy.contains('Login failed! Please recheck the username and password and try again.').should('exist');
+})
+
+Cypress.Commands.add('disableSelfSignUpInCarbonPortal', (username, password, tenant = 'carbon.super') => {
+    Cypress.log({
+        name: 'Disable Self Signup In Carbon Portal',
+        message: ' for ' + tenant
+    })
+
+    cy.carbonLogin(username, password, tenant);
+    cy.get('[style="background-image: url(../idpmgt/images/resident-idp.png);"]').click();
+    cy.contains('User Onboarding').click();
+    cy.contains('Self Registration').click();
+    cy.get('[value="SelfRegistration.Enable"]').uncheck({force: true});
+    cy.get('#idp-mgt-edit-local-form').submit();
+    cy.get('[class="ui-button ui-corner-all ui-widget"]').click();
+    cy.carbonLogout();
+})
+
+Cypress.Commands.add('enableSelfSignUpInCarbonPortal', (username, password, tenant = 'carbon.super') => {
+    Cypress.log({
+        name: 'Enable Self Signup In Carbon Portal',
+        message: ' for ' + tenant
+    })
+
+    cy.carbonLogin(username, password, tenant);
+    cy.get('[style="background-image: url(../idpmgt/images/resident-idp.png);"]').click();
+    cy.contains('User Onboarding').click();
+    cy.contains('Self Registration').click();
+    cy.get('[value="SelfRegistration.Enable"]').check({force: true});
+    cy.get('#idp-mgt-edit-local-form').submit();
+    cy.get('[class="ui-button ui-corner-all ui-widget"]').click();
+    cy.carbonLogout();
+})
+
+Cypress.Commands.add('addNewRole', (roleName = 'newrole', domain = "PRIMARY", permissions = []) => {
+    cy.visit(`${Utils.getAppOrigin()}` + AddNewRoleEnterDetailsPage.getUrl())
+
+    AddNewRoleEnterDetailsPage.getDomainDropdown().select(domain)
+    AddNewRoleEnterDetailsPage.getRoleNameTextBox().type(roleName)
+    AddNewRoleEnterDetailsPage.getNextButton().click();
+
+    permissions.forEach(permission => {
+        selectPermission.getpermissionCheckboxOf(permission).click();
+    });
+
+    AddNewRoleSelectPermissionPage.getFinishButton().click()
+    AddNewRoleSelectPermissionPage.getMessageBoxInfo().should('have.text', `Role ${domain}/${roleName} is added successfully.`)
+    AddNewRoleSelectPermissionPage.getMessageBoxOkButton().click()
+})
+
+Cypress.Commands.add('deleteRole', (roleName) => {
+
+    cy.log(`Delete role ${roleName} ...`)
+    cy.visit(`${Utils.getAppOrigin()}` + RolesManagementPage.getUrl())
+
+    RolesManagementPage.getRoleNameTextBox().clear().type(roleName);
+    RolesManagementPage.getSearchRolesButton().click();
+    RolesManagementPage.getDeleteButtonOfRole(roleName).click()
+    RolesManagementPage.getDialogYesButton().click();
+    cy.wait(3000)
+    RolesManagementPage.getDialogOkButton(1).click(); // ok button of "No matching users found" dialog
+    //cy.get('#messagebox-info p').contains(`User ${userNametoDelete} is deleted successfully.`).should('exist');
+    RolesManagementPage.getDialogOkButton(0).click(); // OK button of user delted successfully dialog box
+})
+
+
