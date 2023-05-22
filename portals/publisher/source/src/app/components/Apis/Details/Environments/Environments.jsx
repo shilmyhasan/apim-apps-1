@@ -353,7 +353,9 @@ export default function Environments() {
     useEffect(() => {
         if (settings) {
             const defaultVhosts = internalGateways.map(
-                (e) => (e.vhosts && e.vhosts.length > 0 ? { env: e.name, vhost: e.vhosts[0].host } : undefined),
+                (e) => (e.vhosts && e.vhosts.length > 0 
+                    ? { env: e.name, vhost: api.isWebSocket() 
+                        ? e.vhosts[0].wsHost : e.vhosts[0].host } : undefined),
             );
             setVhosts(defaultVhosts);
             setVhostsDeploy(defaultVhosts);
@@ -1381,8 +1383,8 @@ export default function Environments() {
         }
 
         if (type === 'WS') {
-            endpoints.primary = 'ws://' + vhost.host + ':' + vhost.wsPort;
-            endpoints.secondary = 'wss://' + vhost.host + ':' + vhost.wssPort;
+            endpoints.primary = 'ws://' + vhost.wsHost + ':' + vhost.wsPort;
+            endpoints.secondary = 'wss://' + vhost.wssHost + ':' + vhost.wssPort;
             endpoints.combined = endpoints.secondary + ' ' + endpoints.primary;
             return endpoints;
         }
@@ -1411,9 +1413,16 @@ export default function Environments() {
     function getVhostHelperText(env, selectionList, shorten, maxTextLen) {
         const selected = selectionList && selectionList.find((v) => v.env === env);
         if (selected) {
-            const vhost = internalGateways.find((e) => e.name === env).vhosts.find(
-                (v) => v.host === selected.vhost,
-            );
+            let vhost;
+            if (api.isWebSocket() ) {
+                vhost = internalGateways.find((e) => e.name === env).vhosts.find(
+                    (v) => v.wsHost === selected.vhost,
+                );
+            } else {
+                vhost = internalGateways.find((e) => e.name === env).vhosts.find(
+                    (v) => v.host === selected.vhost,
+                );
+            }
 
             const maxtLen = maxTextLen || 30;
             if (api.isGraphql() && !shorten) {
@@ -1707,10 +1716,12 @@ export default function Environments() {
                                                                     >
                                                                         {row.vhosts.map(
                                                                             (vhost) => (
-                                                                                <MenuItem value={vhost.host}>
-                                                                                    {vhost.host}
+                                                                                <MenuItem value={api.isWebSocket() 
+                                                                                    ? vhost.wsHost : vhost.host}>
+                                                                                    {api.isWebSocket() 
+                                                                                        ? vhost.wsHost : vhost.host}
                                                                                 </MenuItem>
-                                                                            ),
+                                                                            )
                                                                         )}
                                                                     </TextField>
                                                                 </Tooltip>
@@ -2211,10 +2222,12 @@ export default function Environments() {
                                                         >
                                                             {row.vhosts.map(
                                                                 (vhost) => (
-                                                                    <MenuItem value={vhost.host}>
-                                                                        {vhost.host}
+                                                                    <MenuItem value={api.isWebSocket() 
+                                                                        ? vhost.wsHost : vhost.host}>
+                                                                        {api.isWebSocket() 
+                                                                            ? vhost.wsHost : vhost.host}
                                                                     </MenuItem>
-                                                                ),
+                                                                )
                                                             )}
                                                         </TextField>
                                                     </Tooltip>
