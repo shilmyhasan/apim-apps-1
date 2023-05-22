@@ -352,11 +352,16 @@ export default function Environments() {
     const [selectedVhostDeploy, setVhostsDeploy] = useState([]);
     useEffect(() => {
         if (settings) {
-            const defaultVhosts = internalGateways.map(
-                (e) => (e.vhosts && e.vhosts.length > 0 
-                    ? { env: e.name, vhost: api.isWebSocket() 
-                        ? e.vhosts[0].wsHost : e.vhosts[0].host } : undefined),
-            );
+            const defaultVhosts = internalGateways.map((e) => {
+                if (e.vhosts && e.vhosts.length > 0) {
+                    return {
+                        env: e.name,
+                        vhost: api.isWebSocket() ? e.vhosts[0].wsHost : e.vhosts[0].host
+                    };
+                } else {
+                    return undefined;
+                }
+            });
             setVhosts(defaultVhosts);
             setVhostsDeploy(defaultVhosts);
         }
