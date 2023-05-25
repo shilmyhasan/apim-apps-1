@@ -828,7 +828,7 @@ class Details extends Component {
                                 updateAPI={this.updateAPI}
                             />
                             <div className={classes.contentInside}>
-                                <LastUpdatedTime lastUpdatedTime={api.lastUpdatedTime} />
+                                <LastUpdatedTime lastUpdatedTime={api.lastUpdatedTimestamp} />
                                 <Switch>
                                     <Redirect exact from={Details.subPaths.BASE} to={redirectUrl} />
                                     <Route
