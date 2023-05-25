@@ -30,9 +30,10 @@ describe("publisher-005-00 : Upload thumbnail", () => {
     const addThumbnailImage = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            wait(1000);
             cy.visit(`/publisher/apis/${apiId}/overview`);
             testApiID = apiId;
-            cy.get('#itest-api-details-portal-config-acc', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#itest-api-details-portal-config-acc', {timeout: 25000}).click();
             cy.get('#left-menu-itemDesignConfigurations').click();
             cy.get('#edit-api-thumbnail-btn').children('button').click({force:true});
             cy.get('#edit-api-thumbnail-upload').click();

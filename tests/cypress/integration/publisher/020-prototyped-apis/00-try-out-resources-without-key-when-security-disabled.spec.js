@@ -31,15 +31,16 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
         const endpoint = 'https://petstore.swagger.io/v2/store/inventory';
         cy.loginToPublisher(userName, password, tenant);
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
+            cy.wait(1000)
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
             publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
-            cy.get('#itest-api-details-api-config-acc', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#itest-api-details-api-config-acc', {timeout:25000}).click();
             cy.get('#left-menu-itemendpoints').click();
             cy.get('[data-testid="http/restendpoint-add-btn"]').click({force:true});
     
             // Add the prod and sandbox endpoints
-            cy.get('#production-endpoint-checkbox', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#production-endpoint-checkbox', {timeout:25000}).click();
             cy.get('#production_endpoints', {timeout: Cypress.config().largeTimeout}).focus().type(endpoint);
             cy.get('#sandbox-endpoint-checkbox').click();
             cy.get('#sandbox_endpoints').focus().type(endpoint);
@@ -102,7 +103,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
     }
     it.only("try out resources disabling the security without credentials - super admin", {
         retries: {
-            runMode: 3,
+            runMode: 0,
             openMode: 0,
         },
     }, () => {
