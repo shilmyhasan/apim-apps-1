@@ -33,7 +33,7 @@ describe("publisher-000-01 : Create a new version of API", () => {
         cy.loginToPublisher(publisher, password, tenant);
         apiName = Utils.generateName();
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
-            cy.wait(5000)
+            cy.wait(1000)
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
             PublisherComonPage.waitUntillLoadingComponentsExit()

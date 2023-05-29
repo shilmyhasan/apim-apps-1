@@ -27,8 +27,9 @@ describe("publisher-003-03 : Runtime configuration-schema validation", () => {
         cy.loginToPublisher(publisher, password, tenant);
         apiName = Utils.generateName();
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
-            cy.get('#itest-api-details-api-config-acc').click();
+            cy.wait(1000)
+            cy.visit(`/publisher/apis/${apiId}/overview`, { timeout: 25000 });
+            cy.get('#itest-api-details-api-config-acc', {timeout: 25000}).click();
             cy.get('#left-menu-itemRuntimeConfigurations').click();
             cy.get('#schema-validation-switch').click();
             cy.get('#schema-validation-yes-btn').click();
