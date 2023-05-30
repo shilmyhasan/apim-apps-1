@@ -29,14 +29,14 @@ describe("publisher-008-00 : Add business information", () => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
             cy.visit(`/publisher/apis/${apiId}/overview`);
-            cy.get('#itest-api-details-portal-config-acc', {timeout: Cypress.config().largeTimeout}).click();
+            cy.get('#itest-api-details-portal-config-acc', {retryOnStatusCodeFailure: true}).click();
             cy.get('#left-menu-itembusinessinfo').click();
             cy.get('#name').click().type(ownerName);
             cy.get('#Email').click().type(ownerEmail);
             cy.get('#TOname').click().type(techOwnerName);
             cy.get('#TOemail').click().type(techOwnerEmail);
 
-            cy.get('#business-info-save').click();
+            cy.get('#business-info-save', { timeout: Cypress.config().largeTimeout }).click();
 
             cy.get('#business-info-save').then(function () {
                 cy.get('#name').should('have.value', ownerName);

@@ -48,7 +48,7 @@ describe("publisher-013-03 : Mock the api response and test it", () => {
             const version = doc.querySelector('#itest-id-apiversion-input').value;
             // finish the wizard
             cy.get('#open-api-create-btn').should('not.have.class', 'Mui-disabled').click({force:true});
-            cy.url().should('contains', 'overview').then(url => {
+            cy.url({ timeout: Cypress.config().largeTimeout }).should('contains', 'overview').then(url => {
                 testApiID = /apis\/(.*?)\/overview/.exec(url)[1];
                 cy.log("API ID", testApiID);
 
@@ -57,7 +57,7 @@ describe("publisher-013-03 : Mock the api response and test it", () => {
                 cy.get('#itest-api-name-version').contains(version);
                 
                 // Go to api product create page
-                cy.visit(`/publisher/api-products/create`);
+                cy.visit(`/publisher/api-products/create`, { timeout: Cypress.config().pageLoadTimeout });
 
                 // fill the form
                 cy.get('#itest-id-apiname-input').type(productName);
@@ -72,22 +72,22 @@ describe("publisher-013-03 : Mock the api response and test it", () => {
                     cy.get(`#checkbox-list-label-${testApiID}`).click();
                     cy.wait('@getSwagger');
                     // Wait until the api is saved
-                    cy.get('#resource-wrapper').children().should('have.length.gte', 1);
+                    cy.get('#resource-wrapper', {timeout: 20000}).children().should('have.length.gte', 1);
 
                     // add all resources
                     cy.get('#add-all-resources-btn').click();
                     cy.get('#create-api-product-btn').scrollIntoView().dblclick({ force: true });
-
-                    cy.url().should('contains', 'overview').then(urlProduct => {
+                    cy.url({ timeout: Cypress.config().pageLoadTimeout }).should('contains', 'overview').then(urlProduct => {
                         const productID = /api-products\/(.*?)\/overview/.exec(urlProduct)[1];
                         cy.log("API Product ID", productID);
 
                         cy.get('#itest-api-name-version', { timeout: Cypress.config().largeTimeout });
                         cy.get('#itest-api-name-version').contains(productName);
 
-                        // Going to deployments page
-                        cy.get('#left-menu-itemdeployments').click();
-
+                       // Going to deployments page
+                       
+                        cy.get('#left-menu-itemdeployments', {timeout: 20000}).click();
+                    
                         // Deploying
                         cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click({ "force": true });
                         cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');

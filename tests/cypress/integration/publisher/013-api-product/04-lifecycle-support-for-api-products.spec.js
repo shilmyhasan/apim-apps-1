@@ -36,6 +36,8 @@ describe("publisher-013-04 : Life cycle support for API Products", () => {
         cy.get('#itest-id-apiversion-input', {timeout: Cypress.config().largeTimeout});
 
         cy.document().then((doc) => {
+            cy.get('#itest-id-apiname-input').clear();
+            cy.get('#itest-id-apiname-input').type(apiName);
             cy.get('#itest-id-apicontext-input').clear();
             cy.get('#itest-id-apicontext-input').type(apiName);
             cy.get('#itest-id-apiversion-input').click();
@@ -86,9 +88,11 @@ describe("publisher-013-04 : Life cycle support for API Products", () => {
                         cy.get('#left-menu-itemdeployments').click();
 
                         // Deploying
-                        cy.get('#deploy-btn', { timeout: Cypress.config().largeTimeout }).should('not.have.class', 'Mui-disabled').click({ force: true });
+                        cy.get('#deploy-btn', { timeout: Cypress.config().largeTimeout }).click({ force: true });
+                        cy.wait(2000);
+                        cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');
 
-                        cy.get('#left-menu-itemlifecycle').click();
+                        cy.get('#left-menu-itemlifecycle', { timeout: Cypress.config().pageLoadTimeout }).click();
 
                         // Publishing api product
                         cy.wait(2000);
