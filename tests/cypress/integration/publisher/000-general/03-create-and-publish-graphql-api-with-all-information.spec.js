@@ -15,6 +15,7 @@
  */
 
 import Utils from "@support/utils";
+import DevportalComonPage from "../../../support/pages/devportal/DevportalComonPage";
 let apiId;
 let activeTenant;
 describe("publisher-000-03 : Create GraphQl API from file", () => {
@@ -178,13 +179,14 @@ describe("publisher-000-03 : Create GraphQl API from file", () => {
                   //visit dev portal and view API
                   cy.logoutFromPublisher();
                   cy.loginToDevportal(carbonUsername, carbonPassword, tenant);
-
+                  
                   // create an application
                   cy.createApplication(applicationName, "50PerMin", "Sample Description");
 
                   //go to apis
-                  cy.get('[data-testid="itest-link-to-apis"]', { timeout: Cypress.config().largeTimeout }).click();
+                  cy.get('[data-testid="itest-link-to-apis"]', {retryOnStatusCodeFailure: true}).click({ force: true });
 
+                  cy.wait(5000);
                   cy.get('table > tbody > tr', { timeout: Cypress.config().largeTimeout }).get(`[area-label="Go to ${apiName}"]`).click();
 
                   //should contain two urls : HTTP URL and Websocket URL

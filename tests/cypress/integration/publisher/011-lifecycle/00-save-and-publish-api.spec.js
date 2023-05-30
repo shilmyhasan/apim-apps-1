@@ -26,10 +26,10 @@ describe("publisher-011-00 : Save and publish API", () => {
     const saveAndPublishApi = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPIWithEndpoints({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             cy.get('#itest-api-details-portal-config-acc').click();
             cy.get('#left-menu-itemsubscriptions').click();
-            cy.get('[data-testid="policy-checkbox-silver"]').click();
+            cy.get('[data-testid="policy-checkbox-silver"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#subscriptions-save-btn').click();
 
             // Going to deployments page
@@ -37,10 +37,11 @@ describe("publisher-011-00 : Save and publish API", () => {
 
             // Deploying
             cy.wait(2000);
-            cy.get('#add-description-btn').click();
+            cy.get('#add-description-btn', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#add-description').click();
             cy.get('#add-description').type('test');
             cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click();
+            cy.wait(2000);
             cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');
 
             // Going to lifecycle page

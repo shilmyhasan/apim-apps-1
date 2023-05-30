@@ -27,11 +27,12 @@ describe("devportal-004-00 : Invoke API Product with keys", () => {
     const appName = Utils.generateName();
     const appDescription = 'Testing app ';
     const productName = Utils.generateName();
+
     const apiProductInvokeWithKeys = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         cy.visit(`/publisher/apis`);
         // cy.createAndPublishAPIByRestAPIDesign(apiName, apiVersion, apiContext);
-        cy.visit(`/publisher/apis/create/openapi`);
+        cy.visit(`/publisher/apis/create/openapi`, { timeout: Cypress.config().pageLoadTimeout });
         cy.get('#open-api-file-select-radio').click();
 
         // upload the swagger

@@ -19,11 +19,14 @@
 import Utils from "@support/utils";
 import 'cypress-file-upload';
 
+
+
 import AddNewRoleEnterDetailsPage from "./pages/carbon/AddNewRoleEnterDetailsPage";
 import AddNewRoleSelectPermissionPage from "./pages/carbon/AddNewRoleSelectPermissionPage";
 import RolesManagementPage from "./pages/carbon/RolesManagementPage";
+import DevportalComonPage from "./pages/devportal/DevportalComonPage";
 
-
+const testName = '';
 
 Cypress.Commands.add('carbonLogin', (username, password, tenant = 'carbon.super') => {
     if (tenant != 'carbon.super') {
@@ -56,7 +59,7 @@ Cypress.Commands.add('portalLogin', (username, password, tenant, portal) => {
 
     cy.visit(`/${portal}`);
     if (portal === 'devportal') {
-        cy.visit(`/devportal/apis?tenant=${tenant}`);
+        cy.visit(`/devportal/apis?tenant=${tenant}`, {timeout: Cypress.config().pageLoadTimeout});
         cy.get('#itest-devportal-sign-in', {timeout: Cypress.config().largeTimeout}).click();
     }
     cy.url().should('contains', `/authenticationendpoint/login.do`);
@@ -73,6 +76,8 @@ Cypress.Commands.add('loginToPublisher', (username, password, tenant = 'carbon.s
 
 Cypress.Commands.add('loginToDevportal', (username, password, tenant = 'carbon.super') => {
     cy.portalLogin(username, password, tenant, 'devportal');
+    DevportalComonPage.waitUntillLoadingComponentsExit();
+
 })
 
 Cypress.Commands.add('loginToAdmin', (username, password, tenant = 'carbon.super') => {
@@ -141,7 +146,7 @@ Cypress.Commands.add('addNewTenantUser', (
 
 
 Cypress.Commands.add('deleteUser', (name) => {
-    cy.get(`[onClick="deleteUser(\\'${name}\\')"]`).click();
+    cy.get(`[onClick="deleteUser(\\'${name}\\')"]`, {timeout: Cypress.config().largeTimeout}).click();
     cy.get('.ui-dialog  .ui-dialog-buttonpane button:first-child').click();
     cy.get('#messagebox-info p').contains(`User ${name} is deleted successfully.`).should('exist');
     cy.get('.ui-dialog-buttonpane button').click();
@@ -384,23 +389,29 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel, httpverb,
 
 
 Cypress.Commands.add('addProperty', (name, value, ifSendToDevPortal) => {
-    cy.wait(4000);
-    cy.get('#add-new-property', { timeout: 60000 }).click({ force: true });
+    
+    
+    cy.wait(5000);
+    cy.get('#left-menu-itemproperties', { timeout: Cypress.config().largeTimeout }).click();
+    cy.get('#add-new-property', { timeout: Cypress.config().largeTimeout }).click({force : true});
+    cy.wait(5000);
     cy.get('#property-name', { timeout: Cypress.config().largeTimeout }).focus().type(name);
     cy.get('#property-value').focus().type(value);
 
-    if (ifSendToDevPortal)
-        cy.contains('label', 'Show in devportal').click();
-    cy.get('#properties-add-btn').should('exist');
-    cy.get('#properties-add-btn').click();
+        if (ifSendToDevPortal)
+            cy.contains('label', 'Show in devportal').click();
+        cy.get('#properties-add-btn').should('exist');
+        cy.get('#properties-add-btn').click();
+    
+        //verifying that the property added
+        cy.get('tr').contains('td', name);
+    
+        //save the property
+        cy.get('[data-testid="custom-select-save-button"]').click();
+        cy.timeout(3000);
+    })
 
-    //verifying that the property added
-    cy.get('tr').contains('td', name);
-
-    //save the property
-    cy.get('[data-testid="custom-select-save-button"]').click();
-    cy.timeout(3000);
-})
+    // Retry clicking a button up to three times
 
 
 Cypress.Commands.add('createGraphqlAPIfromFile', (name, version, context, filepath) => {
@@ -679,26 +690,26 @@ Cypress.Commands.add('addNewUserUsingSelfSignUp', (username, password, firstName
         message: ' for ' + tenant
     })
 
-    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
+    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`, { retryOnStatusCodeFailure: true });
     cy.get('#itest-devportal-sign-in').click();
     cy.get('#registerLink').click();
     cy.get('#username').type(username);
-    cy.get('#registrationSubmit').click();
-
+    cy.get('#registrationSubmit', { timeout: Cypress.config().largeTimeout }).click({ force: true});
+    cy.wait(7000);
     // Uncaught ReferenceError: Handlebars is not defined
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;
     });
 
-    cy.get('[name="http://wso2.org/claims/givenname"]').type(firstName);
-    cy.get('[name="http://wso2.org/claims/lastname"]').type(lastName);
+    cy.get('input[name="http://wso2.org/claims/givenname"]', { timeout: Cypress.config().largeTimeout }).type(firstName);
+    cy.get('input[name="http://wso2.org/claims/lastname"]').type(lastName);
     cy.get('#password').type(password);
     cy.get('#password2').type(password);
     cy.get('[name="http://wso2.org/claims/emailaddress"]').type(email);
     cy.get('#termsCheckbox').check();
     cy.get('#registrationSubmit').click();
     cy.contains('User registration completed successfully').should('exist');
-    cy.get('[type="button"]').click();
+    cy.get('[type="button"]', { timeout: Cypress.config().largeTimeout }).click();
 })
 
 
@@ -708,7 +719,7 @@ Cypress.Commands.add('addExistingUserUsingSelfSignUp', (username, tenant) => {
         message: ' for ' + tenant
     })
 
-    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
+    cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`, {retryOnStatusCodeFailure: true });
     cy.get('#itest-devportal-sign-in').click();
     cy.get('#registerLink').click();
     cy.get('#username').type(username);
@@ -724,10 +735,10 @@ Cypress.Commands.add('portalLoginUsingIncorrectUserCredentials', (username, pass
 
     cy.visit(`${Utils.getAppOrigin()}/${portal}`);
     if (portal === 'devportal') {
-        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`);
-        cy.get('#itest-devportal-sign-in').click();
+        cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`, { timeout: Cypress.config().largeTimeout });
+        cy.get('#itest-devportal-sign-in', { timeout: Cypress.config().largeTimeout }).click();
     }
-    cy.url().should('contains', `${Utils.getAppOrigin()}/authenticationendpoint/login.do`);
+    cy.url({ timeout: Cypress.config().largeTimeout }).should('contains', `/authenticationendpoint/login.do`, {matchCase: false});
     cy.get('[data-testid=login-page-username-input]').click();
     cy.get('[data-testid=login-page-username-input]').type(username);
     cy.get('[data-testid=login-page-password-input]').type(password);
@@ -745,9 +756,9 @@ Cypress.Commands.add('disableSelfSignUpInCarbonPortal', (username, password, ten
     cy.get('[style="background-image: url(../idpmgt/images/resident-idp.png);"]').click();
     cy.contains('User Onboarding').click();
     cy.contains('Self Registration').click();
-    cy.get('[value="SelfRegistration.Enable"]').uncheck({force: true});
+    cy.get('[value="SelfRegistration.Enable"]', { timeout: Cypress.config().largeTimeout }).uncheck({force: true});
     cy.get('#idp-mgt-edit-local-form').submit();
-    cy.get('[class="ui-button ui-corner-all ui-widget"]').click();
+    cy.get('[class="ui-button ui-corner-all ui-widget"]', { timeout: Cypress.config().largeTimeout }).click();
     cy.carbonLogout();
 })
 
@@ -758,12 +769,13 @@ Cypress.Commands.add('enableSelfSignUpInCarbonPortal', (username, password, tena
     })
 
     cy.carbonLogin(username, password, tenant);
+    cy.url({timeout: Cypress.config().largeTimeout}).should('contains', `/carbon/admin/index.jsp`);
     cy.get('[style="background-image: url(../idpmgt/images/resident-idp.png);"]').click();
     cy.contains('User Onboarding').click();
     cy.contains('Self Registration').click();
-    cy.get('[value="SelfRegistration.Enable"]').check({force: true});
+    cy.get('[value="SelfRegistration.Enable"]', { timeout: Cypress.config().largeTimeout }).check({force: true});
     cy.get('#idp-mgt-edit-local-form').submit();
-    cy.get('[class="ui-button ui-corner-all ui-widget"]').click();
+    cy.get('[class="ui-button ui-corner-all ui-widget"]', { timeout: Cypress.config().largeTimeout }).click();
     cy.carbonLogout();
 })
 

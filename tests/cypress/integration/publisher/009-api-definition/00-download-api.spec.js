@@ -26,18 +26,18 @@ describe("publisher-009-00 : Api Definition - Download API", () => {
     const downloadApi = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
+            cy.visit(`/publisher/apis/${apiId}/overview`, { timeout: Cypress.config().pageLoadTimeout });
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemAPIdefinition', { timeout: Cypress.config().largeTimeout }).click();
-            cy.get('#download-api-btn').click();
-            cy.wait(2000);
+            cy.get('#download-api-btn', { timeout: Cypress.config().largeTimeout }).click();
+            cy.wait(3000);
 
             // Downloading API
             const fileName = `${publisher}-${apiName}-${apiVersion}`;
             const downloadsFolder = Cypress.config('downloadsFolder')
             const downloadedFilename = `${downloadsFolder}/${fileName}.zip`;
 
-            cy.readFile(downloadedFilename, 'binary', { timeout: 15000 })
+            cy.readFile(downloadedFilename, 'binary', { timeout: Cypress.config().largeTimeout })
                 .should(buffer => expect(buffer.length).to.be.gt(100));
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);

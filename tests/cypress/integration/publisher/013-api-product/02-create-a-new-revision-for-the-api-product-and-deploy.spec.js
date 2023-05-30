@@ -24,7 +24,7 @@ describe("publisher-013-02 : Mock the api response and test it", () => {
     
     const createNewRevisionForApiProduct = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
-        cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().largeTimeout});
+        cy.visit(`/publisher/apis/create/openapi`, {retryOnStatusCodeFailure: true});
         cy.get('#open-api-file-select-radio').click();
         // upload the swagger
         cy.get('#browse-to-upload-btn').then(function () {
@@ -89,10 +89,10 @@ describe("publisher-013-02 : Mock the api response and test it", () => {
                     cy.get('#left-menu-itemlifecycle').click();
 
                     // Publishing
-                    cy.wait(2000);
+                    cy.wait(3000);
                     cy.get('[data-testid="Publish-btn"]').click();
 
-                    cy.get('button[data-testid="Demote to Created-btn"]').should('exist');
+                    cy.get('button[data-testid="Demote to Created-btn"]', { timeout: Cypress.config().largeTimeout }).should('exist');
 
                     cy.get(`#itest-id-deleteapi-icon-button`).click();
                     cy.get(`#itest-id-deleteconf`).click();

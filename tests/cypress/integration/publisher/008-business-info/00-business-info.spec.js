@@ -31,6 +31,7 @@ describe("publisher-008-00 : Add business information", () => {
             cy.visit(`/publisher/apis/${apiId}/overview`);
             cy.get('#itest-api-details-portal-config-acc', {retryOnStatusCodeFailure: true}).click();
             cy.get('#left-menu-itembusinessinfo').click();
+            cy.get('#name', { timeout: Cypress.config().largeTimeout }).should('be.visible');
             cy.get('#name').click().type(ownerName);
             cy.get('#Email').click().type(ownerEmail);
             cy.get('#TOname').click().type(techOwnerName);

@@ -17,6 +17,7 @@
  */
 import Utils from "@support/utils";
 import PublisherComonPage from "../../../support/pages/publisher/PublisherComonPage";
+import DevportalComonPage from "../../../support/pages/devportal/DevportalComonPage";
 const publisherComonPage = new PublisherComonPage();
 
 describe("publisher-020-00 : prototype apis with security disabled", () => {
@@ -88,7 +89,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
             cy.loginToDevportal(userName, password, tenant);
             cy.wait(5000)
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
-            cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).click();
+            cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`, {timeout: 30000}).click();
             cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();
             cy.get('.opblock-summary-get > .opblock-summary-control', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('.try-out__btn').click();

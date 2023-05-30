@@ -31,7 +31,7 @@ describe("publisher-020-01 : prototype apis with security enabled", () => {
         cy.loginToPublisher(userName, password, tenant);
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             testApiId = apiId;
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             cy.get('#itest-api-details-api-config-acc', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#left-menu-itemendpoints').click();
             cy.get('[data-testid="http/restendpoint-add-btn"]').click({force:true});
