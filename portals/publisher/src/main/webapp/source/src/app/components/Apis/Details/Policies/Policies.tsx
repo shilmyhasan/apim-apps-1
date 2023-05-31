@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import { makeStyles, Typography } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Alert from 'AppComponents/Shared/Alert';
 import React, { useState, useEffect, useMemo } from 'react';
 import cloneDeep from 'lodash.clonedeep';
@@ -26,13 +26,16 @@ import { useAPI } from 'AppComponents/Apis/Details/components/ApiContext';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { FormattedMessage } from 'react-intl';
+import CONSTS from 'AppData/Constants';
+import { isRestricted } from 'AppData/AuthManager';
 import { mapAPIOperations } from 'AppComponents/Apis/Details/Resources/operationUtils';
 import API from 'AppData/api';
 import { Progress } from 'AppComponents/Shared';
 import { arrayMove } from '@dnd-kit/sortable';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { useAppContext } from 'AppComponents/Shared/AppContext';
+import OperationPolicy from './OperationPolicy';
+import OperationsGroup from './OperationsGroup';
 import PolicyList from './PolicyList';
 import type { ApiPolicy, Policy, PolicySpec, ApiLevelPolicy } from './Types';
 import GatewaySelector from './GatewaySelector';
@@ -81,8 +84,8 @@ const Policies: React.FC = () => {
     const [expandedResource, setExpandedResource] = useState<string | null>(null);
     const [isChoreoConnectEnabled, setIsChoreoConnectEnabled] = useState(api.gatewayType === 'wso2/choreo-connect');
     const [selectedTab, setSelectedTab] = useState((api.apiPolicies != null) ? 0 : 1);
+    const [apiPoliciesEnabled, setApiPoliciesEnabled] = useState<boolean>(false);
     const { showMultiVersionPolicies } = Configurations.apis;
-    const { settings } = useAppContext();
 
     // If Choreo Connect radio button is selected in GatewaySelector, it will pass 
     // value as true to render other UI changes specific to the Choreo Connect.
@@ -143,9 +146,23 @@ const Policies: React.FC = () => {
     const [openAPISpec, setOpenAPISpec] = useState<any>(null);
 
     useEffect(() => {
-        console.log("Hello world");
-        console.log(settings.isAPIPoliciesEnabled)
-        console.log("-----------");
+        // Check if API level policy support feature is enabled
+        const fetchData = async () => {
+            try {
+                const settings: any = await API.getSettings();
+                if (settings.isAPIPoliciesEnabled != null) {
+                    setApiPoliciesEnabled(settings.isAPIPoliciesEnabled);
+                }
+            } catch (error) {
+                // Handle any errors that occurred during the API call
+                console.error(error);
+                setApiPoliciesEnabled(false); // Default value in case of an error
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
         // Handle operation level policies
         const currentOperations = getInitState();
         setApiOperations(currentOperations);
@@ -512,69 +529,111 @@ const Policies: React.FC = () => {
                 <Box display='flex' flexDirection='row'>
                     <Box width='65%' p={1} height='115vh' className={classes.operationListingBox}>
                         <Paper className={classes.paper}>
-                            <Box p={1}>
-                                <Tabs
-                                    value={selectedTab}
-                                    onChange={(event, tab) =>
-                                        handleTabChange(tab)
-                                    }
-                                    indicatorColor='primary'
-                                    textColor='primary'
-                                    variant='fullWidth'
-                                    aria-label='Policies local to API'
-                                    className={classes.flowTabs}
-                                >
-                                    <Tab
-                                        label={
-                                            <span className={classes.flowTab}>
-                                                API Level Policies
-                                            </span>
+                            {apiPoliciesEnabled && (
+                                <Box p={1}>
+                                    <Tabs
+                                        value={selectedTab}
+                                        onChange={(event, tab) =>
+                                            handleTabChange(tab)
                                         }
-                                        id='request-tab'
-                                        aria-controls='request-tabpanel'
-                                        disabled={isChoreoConnectEnabled}
-                                    />
-                                    <Tab
-                                        label={
-                                            <span className={classes.flowTab}>
-                                                Operation Level Policies
-                                            </span>
-                                        }
-                                        id='response-tab'
-                                        aria-controls='response-tabpanel'
-                                    />
-                                </Tabs>
-                                <Box pt={1} overflow='scroll'>
-                                    <PolicyPanel
-                                        index={apiLevelTab}
-                                        selectedTab={selectedTab}
-                                        openAPISpec={openAPISpec}
-                                        isChoreoConnectEnabled={isChoreoConnectEnabled}
-                                        isAPILevelTabSelected
-                                        allPolicies={allPolicies}
-                                        policyList={policies}
-                                        api={localAPI}
-                                        expandedResource={expandedResource}
-                                        setExpandedResource={
-                                            setExpandedResource
-                                        }
-                                    />
-                                    <PolicyPanel
-                                        index={operationLevelTab}
-                                        selectedTab={selectedTab}
-                                        openAPISpec={openAPISpec}
-                                        isChoreoConnectEnabled={isChoreoConnectEnabled}
-                                        isAPILevelTabSelected={false}
-                                        allPolicies={allPolicies}
-                                        policyList={policies}
-                                        api={localAPI}
-                                        expandedResource={expandedResource}
-                                        setExpandedResource={
-                                            setExpandedResource
-                                        }
-                                    />
+                                        indicatorColor='primary'
+                                        textColor='primary'
+                                        variant='fullWidth'
+                                        aria-label='Policies local to API'
+                                        className={classes.flowTabs}
+                                    >
+                                        <Tab
+                                            label={
+                                                <span className={classes.flowTab}>
+                                                    API Level Policies
+                                                </span>
+                                            }
+                                            id='request-tab'
+                                            aria-controls='request-tabpanel'
+                                            disabled={isChoreoConnectEnabled}
+                                        />
+                                        <Tab
+                                            label={
+                                                <span className={classes.flowTab}>
+                                                    Operation Level Policies
+                                                </span>
+                                            }
+                                            id='response-tab'
+                                            aria-controls='response-tabpanel'
+                                        />
+                                    </Tabs>
+                                    <Box pt={1} overflow='scroll'>
+                                        <PolicyPanel
+                                            index={apiLevelTab}
+                                            selectedTab={selectedTab}
+                                            openAPISpec={openAPISpec}
+                                            isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                            isAPILevelTabSelected
+                                            allPolicies={allPolicies}
+                                            policyList={policies}
+                                            api={localAPI}
+                                            expandedResource={expandedResource}
+                                            setExpandedResource={
+                                                setExpandedResource
+                                            }
+                                        />
+                                        <PolicyPanel
+                                            index={operationLevelTab}
+                                            selectedTab={selectedTab}
+                                            openAPISpec={openAPISpec}
+                                            isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                            isAPILevelTabSelected={false}
+                                            allPolicies={allPolicies}
+                                            policyList={policies}
+                                            api={localAPI}
+                                            expandedResource={expandedResource}
+                                            setExpandedResource={
+                                                setExpandedResource
+                                            }
+                                        />
+                                    </Box>
                                 </Box>
-                            </Box>
+                            )}
+                            {!apiPoliciesEnabled && Object.entries(openAPISpec.paths).map(
+                                ([target, verbObject]: [string, any]) => (
+                                    <Grid key={target} item xs={12}>
+                                        <OperationsGroup
+                                            openAPI={openAPISpec}
+                                            tag={target}
+                                        >
+                                            <Grid
+                                                container
+                                                direction='column'
+                                                justify='flex-start'
+                                                spacing={1}
+                                                alignItems='stretch'
+                                            >
+                                                {Object.entries(verbObject).map(([verb, operation]) => {
+                                                    return CONSTS.HTTP_METHODS.includes(verb) ? (
+                                                        <Grid
+                                                            key={`${target}/${verb}`}
+                                                            item className={classes.gridItem}
+                                                        >
+                                                            <OperationPolicy
+                                                                target={target}
+                                                                verb={verb}
+                                                                highlight
+                                                                operation={operation}
+                                                                api={localAPI}
+                                                                disableUpdate={isRestricted(['apim:api_create'], api)}
+                                                                expandedResource={expandedResource}
+                                                                setExpandedResource={setExpandedResource}
+                                                                policyList={policies}
+                                                                allPolicies={allPolicies}
+                                                                isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                                            />
+                                                        </Grid>
+                                                    ) : null;
+                                                })}
+                                            </Grid>
+                                        </OperationsGroup>
+                                    </Grid>
+                                ))}
                         </Paper>
                     </Box>
                     <Box width='35%' p={1}>
