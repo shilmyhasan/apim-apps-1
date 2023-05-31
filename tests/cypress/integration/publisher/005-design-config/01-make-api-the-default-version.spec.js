@@ -26,15 +26,16 @@ describe("publisher-005-01 : Make api the default version", () => {
     const makeApiTheDefaultVersion = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             cy.get('#itest-api-details-portal-config-acc').click();
             cy.get('#left-menu-itemDesignConfigurations').click();
             cy.get('#default-version-yes').scrollIntoView().click();
-            cy.get('#design-config-save-btn').click();
+            cy.get('#design-config-save-btn', {timeout:30000}).click();
             cy.get('#default-version-yes')
                 .parent()
                 .find('input')
                 .should('be.checked');
+
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);
         });

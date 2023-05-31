@@ -81,7 +81,8 @@ describe("publisher-013-02 : Mock the api response and test it", () => {
                     cy.get('#left-menu-itemdeployments').click();
 
                     // Deploying
-                    cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click({ "force": true });
+                    cy.get('#deploy-btn', {timeout: 25000}).should('not.have.class', 'Mui-disabled').click({ "force": true });
+                    cy.wait(2000);
                     cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');
 
                     // Going to lifecycle page

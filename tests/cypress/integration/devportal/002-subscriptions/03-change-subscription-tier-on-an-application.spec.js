@@ -32,7 +32,7 @@ describe("devportal-002-03 : Change subscription tier of an application", () => 
             testApiId = apiId;
             Utils.publishAPI(apiId).then(() => {
                 
-                cy.visit(`/publisher/apis/${apiId}/subscriptions`);
+                cy.visit(`/publisher/apis/${apiId}/subscriptions`, {retryOnStatusCodeFailure: true});
                 cy.get('[data-testid="policy-checkbox-silver"]', {timeout: Cypress.config().largeTimeout});
                 cy.get('[data-testid="policy-checkbox-silver"]').click();
                 cy.get('#subscriptions-save-btn').click();
@@ -49,16 +49,16 @@ describe("devportal-002-03 : Change subscription tier of an application", () => 
                 cy.get('#left-menu-subscriptions').click();
                 cy.contains('Subscribe APIs').click();
                 
-                cy.get('[aria-labelledby="simple-dialog-title"]').find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
+                cy.get('[aria-labelledby="simple-dialog-title"]', { timeout: Cypress.config().largeTimeout }).find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
                 cy.contains('1-1 of 1'); 
 
                 cy.get(`#policy-select`).click();
                 cy.get(`#policy-select-Unlimited`).click();
-                cy.get(`#policy-subscribe-btn-${apiId}`).contains('Subscribe').click();
+                cy.get(`#policy-subscribe-btn-${apiId}`, { timeout: Cypress.config().largeTimeout }).contains('Subscribe').click();
                 cy.get('button[aria-label="close"]').click();
 
                 // Check the subscriptions existence
-                cy.contains(`${apiName} - ${apiVersion}`).should('exist');
+                cy.contains(`${apiName} - ${apiVersion}`, { timeout: Cypress.config().largeTimeout }).should('exist');
 
                 // Edit the subscription
                 cy.get(`#edit-api-subscription-${apiId}`).click();

@@ -24,11 +24,12 @@ describe("publisher-009-02 : Upload api spec from the api definition page", () =
     const uploadApi = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemAPIdefinition').click();
-            cy.get('#import-definition-btn').click();
-            cy.get('#open-api-file-select-radio').click();
+            cy.get('#itest-api-details-api-definition-head').should('be.visible');
+            cy.get('#import-definition-btn', { timeout: 30000 }).click();
+            cy.get('#open-api-file-select-radio', { timeout: 30000 }).click();
 
             // upload the swagger
             cy.get('#browse-to-upload-btn').then(function () {
@@ -41,11 +42,12 @@ describe("publisher-009-02 : Upload api spec from the api definition page", () =
 
             // Wait until the api is saved
             cy.intercept('**/apis/**').as('apiGet');
-            cy.wait('@apiGet', { timeout: 3000 }).then((res) => {
+            cy.wait('@apiGet', { timeout:10000 }).then((res) => {
                 // Check the resource exists
                 const uuid = res.response.body.id
 
                 cy.visit(`/publisher/apis/${uuid}/resources`, { timeout: 30000 });
+                cy.get('#itest-api-details-resources-head', { timeout: 30000 }).should('be.visible');
                 cy.get('#\\/pets\\/\\{petId\\}', { timeout: 30000 }).scrollIntoView();
                 cy.get('#\\/pets\\/\\{petId\\}').should('be.visible');
             });

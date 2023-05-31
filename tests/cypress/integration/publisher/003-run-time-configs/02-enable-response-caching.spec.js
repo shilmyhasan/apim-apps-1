@@ -26,10 +26,10 @@ describe("publisher-003-02 : Runtime configuration-response caching", () => {
         cy.loginToPublisher(publisher, password, tenant);
         apiName = Utils.generateName();
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemRuntimeConfigurations').click();
-            cy.get('#response-caching-switch').click();
+            cy.get('#response-caching-switch', { timeout: 30000 }).click();
             cy.get('#save-runtime-configurations').click();
             cy.get('#response-caching-switch').should('be.checked');
             // Test is done. Now delete the api

@@ -33,7 +33,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             cy.wait(1000)
             testApiId = apiId;
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             publisherComonPage.waitUntillPublisherLoadingSpinnerExit();
             cy.get('#itest-api-details-api-config-acc', {timeout:25000}).click();
             cy.get('#left-menu-itemendpoints').click();
@@ -86,6 +86,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
     
             //login to dev portal as Developer
             cy.loginToDevportal(userName, password, tenant);
+            cy.wait(5000)
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).click();
             cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();

@@ -35,10 +35,10 @@ describe("publisher-000-06 : Landing page", () => {
         ).as('apiGet');
         cy.wait("@apiGet", { timeout: 180000 }).then((interceptions) => {
             console.log(interceptions);
-            cy.get('div').contains('REST API').scrollIntoView().should('be.visible');
-            cy.get('div').contains('SOAP API').scrollIntoView().should('be.visible');
-            cy.get('div').contains('GraphQL').scrollIntoView().should('be.visible');
-            cy.get('div').contains('Streaming API').scrollIntoView().should('be.visible');
+            cy.get('div', { timeout: Cypress.config().largeTimeout }).contains('REST API').scrollIntoView().should('be.visible');
+            cy.get('div', { timeout: Cypress.config().largeTimeout }).contains('SOAP API').scrollIntoView().should('be.visible');
+            cy.get('div', { timeout: Cypress.config().largeTimeout }).contains('GraphQL').scrollIntoView().should('be.visible');
+            cy.get('div', { timeout: Cypress.config().largeTimeout }).contains('Streaming API').scrollIntoView().should('be.visible');
 
             // Checking links under rest apis
             cy.get('div').contains('REST API').scrollIntoView().click();

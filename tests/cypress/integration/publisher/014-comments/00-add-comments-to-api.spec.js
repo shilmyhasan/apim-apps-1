@@ -26,14 +26,15 @@ describe("publisher-014-00 : Adding comment", () => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
             cy.intercept('**/comments?limit=5&offset=0').as('commentsGet');
-            cy.visit(`/publisher/apis/${apiId}/comments`);
+            cy.visit(`/publisher/apis/${apiId}/comments`, {retryOnStatusCodeFailure: true});
             cy.wait('@commentsGet', {timeout: 30000}).then(() => {
+                cy.get('#itest-api-details-comments-head').should('be.visible');
                 cy.get('#standard-multiline-flexible').click();
                 cy.get('#standard-multiline-flexible').type(comment);
                 cy.get('#add-comment-btn').click();
     
                 // Checking it's existence
-                cy.get('#comment-list').contains(comment).should('be.visible');
+                cy.get('#comment-list',{timeout: 20000}).contains(comment).should('be.visible');
                 // Test is done. Now delete the api
                 Utils.deleteAPI(apiId);
             })
