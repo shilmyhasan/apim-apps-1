@@ -134,15 +134,16 @@
             }
         }  
         HttpClient client = HttpClient.newHttpClient();
+        HttpRequest post;
         if (isBypassClientCredentials && codeVerifier != null) {
-            HttpRequest post = HttpRequest.newBuilder()
+            post = HttpRequest.newBuilder()
                 .uri(URI.create(tokenEndpoint))
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         }
         else {
-            HttpRequest post = HttpRequest.newBuilder()
+            post = HttpRequest.newBuilder()
                 .uri(URI.create(tokenEndpoint))
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .header("Content-Type", "application/x-www-form-urlencoded")
