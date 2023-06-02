@@ -92,7 +92,7 @@
             }
         }  
         HttpClient client = HttpClient.newHttpClient();
-        if (isBypassClientCredentials && codeVerifier !== null) {
+        if (isBypassClientCredentials && codeVerifier != null) {
             HttpRequest post = HttpRequest.newBuilder()
                 .uri(URI.create(tokenEndpoint))
                 .POST(HttpRequest.BodyPublishers.ofString(data))
