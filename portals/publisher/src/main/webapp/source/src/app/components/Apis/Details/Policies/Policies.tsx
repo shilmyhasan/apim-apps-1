@@ -156,7 +156,7 @@ const Policies: React.FC = () => {
             } catch (error) {
                 // Handle any errors that occurred during the API call
                 console.error(error);
-                setApiPoliciesEnabled(false); // Default value in case of an error
+                setApiPoliciesEnabled(false);
             }
         };
         fetchData();
@@ -633,7 +633,8 @@ const Policies: React.FC = () => {
                                             </Grid>
                                         </OperationsGroup>
                                     </Grid>
-                                ))}
+                                )
+                            )}
                         </Paper>
                     </Box>
                     <Box width='35%' p={1}>
