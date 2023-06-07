@@ -691,18 +691,18 @@ Cypress.Commands.add('addNewUserUsingSelfSignUp', (username, password, firstName
     })
 
     cy.visit(`${Utils.getAppOrigin()}/devportal/apis?tenant=${tenant}`, { retryOnStatusCodeFailure: true });
-    cy.get('#itest-devportal-sign-in').click();
+    cy.get('#itest-devportal-sign-in', { timeout: Cypress.config().largeTimeout }).click();
     cy.get('#registerLink').click();
     cy.get('#username').type(username);
     cy.get('#registrationSubmit', { timeout: Cypress.config().largeTimeout }).click({ force: true});
-    cy.wait(7000);
+    cy.wait(8000);
     // Uncaught ReferenceError: Handlebars is not defined
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;
     });
 
-    cy.get('input[name="http://wso2.org/claims/givenname"]', { timeout: Cypress.config().largeTimeout }).type(firstName);
-    cy.get('input[name="http://wso2.org/claims/lastname"]').type(lastName);
+    cy.get('[name="http://wso2.org/claims/givenname"]', { timeout: Cypress.config().largeTimeout }).type(firstName);
+    cy.get('[name="http://wso2.org/claims/lastname"]').type(lastName);
     cy.get('#password').type(password);
     cy.get('#password2').type(password);
     cy.get('[name="http://wso2.org/claims/emailaddress"]').type(email);
@@ -774,7 +774,8 @@ Cypress.Commands.add('enableSelfSignUpInCarbonPortal', (username, password, tena
     cy.contains('User Onboarding').click();
     cy.contains('Self Registration').click();
     cy.get('[value="SelfRegistration.Enable"]', { timeout: Cypress.config().largeTimeout }).check({force: true});
-    cy.get('#idp-mgt-edit-local-form').submit();
+    cy.get('[name="property__SelfRegistration.Enable"]').should('have.attr', 'value', 'true');
+    cy.get('#idp-mgt-edit-local-form', { timeout: Cypress.config().largeTimeout }).submit();
     cy.get('[class="ui-button ui-corner-all ui-widget"]', { timeout: Cypress.config().largeTimeout }).click();
     cy.carbonLogout();
 })
