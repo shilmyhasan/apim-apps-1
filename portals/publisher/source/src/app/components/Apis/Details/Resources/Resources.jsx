@@ -497,6 +497,12 @@ export default function Resources(props) {
         }
         updateSecurityDefinition(copyOfOperations);
         setSpecScopesFromSecurityDefScopes();
+        const results = {};
+        const scoepsSet = api.scopes;
+        for (const scopes of scoepsSet) {
+            results[scopes.scope.name] = scopes.scope.description
+        }
+        openAPISpec.components.securitySchemes.default.flows.implicit.scopes = results;
         if (apiThrottlingPolicy !== api.apiThrottlingPolicy) {
             return updateAPI({ apiThrottlingPolicy })
                 .catch((error) => {
