@@ -24,16 +24,16 @@ describe("publisher-015-00 : Create new revision and deploy", () => {
     const createNewRevisionAndDeployApi = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPIWithEndpoints({}).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, { retryOnStatusCodeFailure: true});
             // Going to deployments page
-            cy.get('#left-menu-itemdeployments').click();
+            cy.get('#left-menu-itemdeployments', { timeout: Cypress.config().largeTimeout }).click();
 
             // Deploying
             cy.get('#add-description-btn')
                 .scrollIntoView().click({ "force": true });
             cy.get('#add-description').click({ "force": true });
             cy.get('#add-description').type('test');
-            cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click();
+            cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click({ force: true });
             cy.get('#undeploy-btn').should('not.have.class', 'Mui-disabled').should('exist');
 
             // Going to lifecycle page

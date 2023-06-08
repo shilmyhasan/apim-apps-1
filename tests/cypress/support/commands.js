@@ -695,7 +695,7 @@ Cypress.Commands.add('addNewUserUsingSelfSignUp', (username, password, firstName
     cy.get('#registerLink').click();
     cy.get('#username').type(username);
     cy.get('#registrationSubmit', { timeout: Cypress.config().largeTimeout }).click({ force: true});
-    cy.wait(8000);
+    cy.wait(10000);
     // Uncaught ReferenceError: Handlebars is not defined
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;

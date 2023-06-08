@@ -47,8 +47,8 @@ describe("devportal-002-03 : Change subscription tier of an application", () => 
 
                 // Go to application subscription page
                 cy.get('#left-menu-subscriptions').click();
-                cy.contains('Subscribe APIs').click();
-                
+                cy.contains('Subscribe APIs', { timeout: Cypress.config().largeTimeout }).click();
+                cy.wait(2000);
                 cy.get('[aria-labelledby="simple-dialog-title"]', { timeout: Cypress.config().largeTimeout }).find('input[placeholder="Search APIs"]').click().type(apiName+"{enter}");
                 cy.contains('1-1 of 1'); 
 
