@@ -382,9 +382,9 @@ export default function Resources(props) {
                     SwaggerParser.validate(specCopy, (err, result) => {
                         let spec = result;
                         setResolvedSpec(() => {
-                            const errors = response.body.errors ? response.body.errors : [];
+                            const errors = response.body.errors || [];
                             // use response.body.info only if spec from swagger parser is undefined
-                            spec = !spec ? response.body.info : spec;
+                            spec = spec || response.body.info;
                             return {
                                 spec,
                                 errors,
