@@ -68,10 +68,20 @@ interface GeneralProps {
     policySpec: PolicySpec;
     handleDrawerClose: () => void;
     isEditMode: boolean;
+    isAPILevelPolicy: boolean;
 }
 
 const General: FC<GeneralProps> = ({
-    policyObj, setDroppedPolicy, currentFlow, target, verb, apiPolicy, policySpec, handleDrawerClose, isEditMode
+    policyObj,
+    setDroppedPolicy,
+    currentFlow,
+    target,
+    verb,
+    apiPolicy,
+    policySpec,
+    handleDrawerClose,
+    isEditMode,
+    isAPILevelPolicy,
 }) => {
     const intl = useIntl();
     const classes = useStyles();
@@ -407,7 +417,7 @@ const General: FC<GeneralProps> = ({
                             )}
                         </Grid>
                     ))}
-                    {setDroppedPolicy && (
+                    {setDroppedPolicy && !isAPILevelPolicy && (
                         <Grid item container justify='flex-start' xs={12}>
                             <FormControlLabel
                                 control={
