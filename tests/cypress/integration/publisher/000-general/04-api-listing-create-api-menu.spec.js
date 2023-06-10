@@ -25,7 +25,9 @@ describe("publisher-000-04 : Landing page API List", () => {
     const apiListingCreateApiMenu = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
+            cy.intercept('**/apis?limit=10&offset=0').as('getapis');
             cy.visit(`/publisher/apis`);
+            cy.wait('@getapis', { timeout: Cypress.config().largeTimeout });
             testApiId = apiId;
             cy.get('#itest-create-api-menu-button', { timeout: 30000 }).should('be.visible').click();
 

@@ -27,9 +27,12 @@ describe("publisher-009-00 : Api Definition - Download API", () => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             cy.wait(5000);
+            cy.intercept('GET', '**/apis/**').as('getapi');
             cy.visit(`/publisher/apis/${apiId}/overview`, { retryOnStatusCodeFailure: true});
+            cy.wait('@getapi',{ timeout: Cypress.config().largeTimeout });
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemAPIdefinition', { timeout: Cypress.config().largeTimeout }).click();
+            cy.get('#download-api-btn').then(function () {
             cy.get('#download-api-btn', { timeout: Cypress.config().largeTimeout }).click({ force: true});
             cy.wait(5000);
 
@@ -42,6 +45,8 @@ describe("publisher-009-00 : Api Definition - Download API", () => {
                 .should(buffer => expect(buffer.length).to.be.gt(100));
             // Test is done. Now delete the api
             Utils.deleteAPI(apiId);
+
+            });
         });
     }
 

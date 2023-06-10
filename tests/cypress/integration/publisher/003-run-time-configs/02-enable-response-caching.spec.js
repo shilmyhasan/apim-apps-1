@@ -26,7 +26,9 @@ describe("publisher-003-02 : Runtime configuration-response caching", () => {
         cy.loginToPublisher(publisher, password, tenant);
         apiName = Utils.generateName();
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
+            cy.wait(3000);
             cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
+            cy.url({ timeout: Cypress.config().largeTimeout }).should('include', `/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc').click();
             cy.get('#left-menu-itemRuntimeConfigurations').click();
             cy.get('#response-caching-switch', { timeout: 30000 }).click();

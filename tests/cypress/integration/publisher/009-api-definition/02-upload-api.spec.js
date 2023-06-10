@@ -24,8 +24,9 @@ describe("publisher-009-02 : Upload api spec from the api definition page", () =
     const uploadApi = (tenant) => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
-            cy.get('#itest-api-details-api-config-acc').click();
+            cy.visit(`/publisher/apis/${apiId}/overview`, { timeout: Cypress.config().pageLoadTimeout });
+            cy.url({ timeout: Cypress.config().largeTimeout }).should('include', `/apis/${apiId}/overview`);
+            cy.get('#itest-api-details-api-config-acc', { timeout: Cypress.config().largeTimeout }).click();
             cy.get('#left-menu-itemAPIdefinition').click();
             cy.get('#itest-api-details-api-definition-head').should('be.visible');
             cy.get('#import-definition-btn', { timeout: 30000 }).click();

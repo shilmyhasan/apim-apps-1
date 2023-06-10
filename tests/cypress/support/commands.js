@@ -695,25 +695,30 @@ Cypress.Commands.add('addNewUserUsingSelfSignUp', (username, password, firstName
     cy.get('#registerLink').click();
     cy.get('#username').type(username);
     cy.get('#registrationSubmit', { timeout: Cypress.config().largeTimeout }).click({ force: true});
-    cy.wait(5000);
-    cy.url({ timeout: Cypress.config().largeTimeout }).should('contains', `/accountrecoveryendpoint/signup.do`, {matchCase: false});
-
+ 
     // Uncaught ReferenceError: Handlebars is not defined
     Cypress.on('uncaught:exception', (err, runnable) => {
         return false;
     });
 
-    cy.get('[name="http://wso2.org/claims/givenname"]', { timeout: Cypress.config().largeTimeout }).type(firstName);
-    cy.get('[name="http://wso2.org/claims/lastname"]').type(lastName);
-    cy.get('#password').type(password);
-    cy.get('#password2').type(password);
-    cy.get('[name="http://wso2.org/claims/emailaddress"]').type(email);
-    cy.get('#termsCheckbox').check();
-    cy.get('#registrationSubmit').click();
-    cy.contains('User registration completed successfully').should('exist');
-    cy.get('[type="button"]', { timeout: Cypress.config().largeTimeout }).click();
-})
+    cy.wait(15000);
+    cy.url({ timeout: Cypress.config().largeTimeout }).should('contains', `/accountrecoveryendpoint/signup.do`, {matchCase: false});
+    cy.get('[name="http://wso2.org/claims/givenname"]').then(function () {
 
+        cy.get('[name="http://wso2.org/claims/givenname"]', { timeout: Cypress.config().largeTimeout }).type(firstName);
+        cy.get('[name="http://wso2.org/claims/lastname"]').type(lastName);
+        cy.get('#password').type(password);
+        cy.get('#password2').type(password);
+        cy.get('[name="http://wso2.org/claims/emailaddress"]').type(email);
+        cy.get('#termsCheckbox').check();
+        cy.get('#registrationSubmit').click();
+        cy.contains('User registration completed successfully').should('exist');
+        cy.get('[type="button"]', { timeout: Cypress.config().largeTimeout }).click();
+    });
+    
+
+    })
+   
 
 Cypress.Commands.add('addExistingUserUsingSelfSignUp', (username, tenant) => {
     Cypress.log({

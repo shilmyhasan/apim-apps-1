@@ -24,9 +24,10 @@ describe("publisher-013-01 : Mock the api response and test it", () => {
 
   const createProductAndUpdateUnderlineApiSpec = (tenant) => {
     cy.loginToPublisher(publisher, password, tenant);
-    cy.visit(`/publisher/apis/create/openapi`, {
-      timeout: Cypress.config().largeTimeout,
-    });
+    cy.wait(6000);
+    cy.intercept("GET", "**/apis/**").as("apiGet");
+    cy.visit(`/publisher/apis/create/openapi`, { timeout: Cypress.config().largeTimeout });
+    cy.wait("@apiGet", { timeout: Cypress.config().largeTimeout });
     cy.get("#open-api-file-select-radio").click();
 
     // upload the swagger
@@ -65,9 +66,9 @@ describe("publisher-013-01 : Mock the api response and test it", () => {
           //Get the api id;
 
           // Go to api product create page
-          cy.visit(`/publisher/api-products/create`, {
-            retryOnStatusCodeFailure: true,
-          });
+          cy.intercept("GET", "**/api-products/create").as("apiProductCreate");
+          cy.visit(`/publisher/api-products/create`, {retryOnStatusCodeFailure: true});
+          cy.wait("@apiProductCreate", { timeout: Cypress.config().largeTimeout });
 
           // fill the form
           cy.get("#itest-id-apiname-input").type(productName);
@@ -147,7 +148,10 @@ describe("publisher-013-01 : Mock the api response and test it", () => {
                 cy.get("#save-product-resources").click();
 
                 // Deleting the api and api product
+                cy.wait(5000);
+                cy.intercept("GET", "**/api-products/**").as("getapiproducts")
                 cy.visit(`/publisher/api-products/${productID}/overview`);
+                cy.wait("@getapiproducts", {  timeout: Cypress.config().largeTimeout });
                 cy.get("#itest-api-name-version", {
                   timeout: Cypress.config().largeTimeout,
                 });

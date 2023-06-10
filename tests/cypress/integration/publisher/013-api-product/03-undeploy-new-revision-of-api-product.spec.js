@@ -31,6 +31,7 @@ describe("publisher-013-03 : Mock the api response and test it", () => {
         });
         cy.wait(5000);
         cy.visit(`/publisher/apis/create/openapi`, {timeout: Cypress.config().pageLoadTimeout});
+        cy.url({ timeout: Cypress.config().largeTimeout }).should('contains', '/publisher/apis/create/openapi');
         cy.get('#open-api-file-select-radio', {timeout: Cypress.config().largeTimeout}).should('be.visible');
         cy.get('#open-api-file-select-radio', {timeout: Cypress.config().largeTimeout}).click();
 

@@ -29,6 +29,7 @@ describe("publisher-003-03 : Runtime configuration-schema validation", () => {
         Utils.addAPI({ name: apiName, version: apiVersion }).then((apiId) => {
             cy.wait(1000)
             cy.visit(`/publisher/apis/${apiId}/overview`, { timeout: 25000 });
+            cy.url({ timeout: Cypress.config().largeTimeout }).should('include', `/apis/${apiId}/overview`);
             cy.get('#itest-api-details-api-config-acc', {timeout: 25000}).click();
             cy.get('#left-menu-itemRuntimeConfigurations').click();
             cy.get('#schema-validation-switch').click();
