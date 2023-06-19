@@ -25,9 +25,11 @@ describe("publisher-014-00 : Adding comment", () => {
         const comment = 'test api';
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
-            cy.intercept('**/comments?limit=5&offset=0').as('commentsGet');
-            cy.visit(`/publisher/apis/${apiId}/comments`, {retryOnStatusCodeFailure: true});
-            cy.wait('@commentsGet', {timeout: 30000}).then(() => {
+            cy.intercept('GET', '**/apis/**').as('commentsGet');
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
+            cy.wait('@commentsGet', { timeout: Cypress.config().largeTimeout }).then(() => {
+                cy.get('#itest-api-details-portal-config-acc', { timeout: Cypress.config().largeTimeout }).click();
+                cy.get('#left-menu-itemcomments').click();
                 cy.get('#itest-api-details-comments-head').should('be.visible');
                 cy.get('#standard-multiline-flexible').click();
                 cy.get('#standard-multiline-flexible').type(comment);

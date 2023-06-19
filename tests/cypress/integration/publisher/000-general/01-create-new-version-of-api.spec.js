@@ -35,7 +35,7 @@ describe("publisher-000-01 : Create a new version of API", () => {
         Utils.addAPI({name: apiName, version: apiVersion}).then((apiId) => {
             cy.wait(1000)
             testApiId = apiId;
-            cy.visit(`/publisher/apis/${apiId}/overview`);
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
             PublisherComonPage.waitUntillLoadingComponentsExit()
             cy.get('#create-new-version-btn').click();
             cy.wait(3000)

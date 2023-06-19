@@ -26,7 +26,7 @@ describe("publisher-017-01 : Common Policies", () => {
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
             apiTestId = apiId;
-            cy.visit(`/publisher/apis/${apiId}/policies`);
+            cy.visit(`/publisher/apis/${apiId}/policies`, {retryOnStatusCodeFailure: true});
             //Create API Specific Policy
             cy.get('[data-testid="add-new-api-specific-policy"]', {timeout: Cypress.config().largeTimeout}).click();
             cy.get('#name').type('Add Header sample test');
@@ -40,6 +40,7 @@ describe("publisher-017-01 : Common Policies", () => {
                 cy.get('input[type="file"]').attachFile(filepath)
             });
 
+            cy.wait(3000);
             cy.get('#add-policy-attributes-btn').click();
             cy.get('[data-testid="add-policy-attribute-name-btn"]').type('headerName');
             cy.get('[data-testid="add-policy-attribute-display-name-btn"]').type('Header Name');
@@ -69,8 +70,8 @@ describe("publisher-017-01 : Common Policies", () => {
             cy.get('#headerName').type('Testing');
             cy.get('[data-testid="policy-attached-details-save"]').click();
             cy.get('[data-testid="custom-select-save-button"]').scrollIntoView().click();
-            cy.visit(`/publisher/apis/${apiId}/scopes`);
-            cy.visit(`/publisher/apis/${apiId}/policies`);
+            cy.visit(`/publisher/apis/${apiId}/scopes` , {timeout: Cypress.config().largeTimeout});
+            cy.visit(`/publisher/apis/${apiId}/policies`, {timeout: Cypress.config().largeTimeout});
             cy.wait(2000);
 
         });

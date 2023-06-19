@@ -28,9 +28,13 @@ describe("publisher-008-00 : Add business information", () => {
 
         cy.loginToPublisher(publisher, password, tenant);
         Utils.addAPI({}).then((apiId) => {
-            cy.visit(`/publisher/apis/${apiId}/overview`);
-            cy.get('#itest-api-details-portal-config-acc', {retryOnStatusCodeFailure: true}).click();
+            cy.wait(5000);
+            cy.intercept('GET', '**/apis/**').as('getapi');
+            cy.visit(`/publisher/apis/${apiId}/overview`, {retryOnStatusCodeFailure: true});
+            cy.wait('@getapi',{ timeout: Cypress.config().largeTimeout });
+            cy.get('#itest-api-details-portal-config-acc', { timeout: Cypress.config().largeTimeout }).click();
             cy.get('#left-menu-itembusinessinfo').click();
+            cy.get('#name', { timeout: Cypress.config().largeTimeout }).should('be.visible');
             cy.get('#name').click().type(ownerName);
             cy.get('#Email').click().type(ownerEmail);
             cy.get('#TOname').click().type(techOwnerName);

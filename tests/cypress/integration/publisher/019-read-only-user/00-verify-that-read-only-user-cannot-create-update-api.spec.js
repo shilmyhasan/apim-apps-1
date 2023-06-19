@@ -88,7 +88,8 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
             cy.get('[data-testid="custom-select-save-button"]').scrollIntoView().click();
 
             //add property
-            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/properties`);
+            cy.visit(`${Utils.getAppOrigin()}/publisher/apis/${uuid}/overview`, {retryOnStatusCodeFailure: true});
+            cy.get('#itest-api-details-api-config-acc').click();
             cy.addProperty("property1", "value1", true);
         });
         cy.logoutFromPublisher();
@@ -128,7 +129,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('#design-config-save-btn').should('be.disabled');
 
         //3. should not be able to update business information
-        cy.get('#left-menu-itembusinessinfo').click();
+        cy.get('#left-menu-itembusinessinfo', { timeout: Cypress.config().largeTimeout }).click();
         cy.get('#name').should('be.disabled');
         cy.get('#Email').should('be.disabled');
         cy.get('#TOname').should('be.disabled');
@@ -136,7 +137,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('#business-info-save').should('be.disabled');
 
         //4. should not be able to update subscriptions (if no any subscriptions yet)
-        cy.get('#left-menu-itemsubscriptions').click();
+        cy.get('#left-menu-itemsubscriptions', { timeout: Cypress.config().largeTimeout }).click();
         cy.get('input').get('[name="Bronze"]').should('be.disabled');
         cy.get('input').get('[name="Gold"]').should('be.disabled');
         cy.get('input').get('[name="Silver"]').should('be.disabled');
@@ -156,7 +157,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
 
         //7. Runtime Configurations
         cy.get('#itest-api-details-api-config-acc').click();
-        cy.get('#left-menu-itemRuntimeConfigurations').click();
+        cy.get('#left-menu-itemRuntimeConfigurations', { timeout: Cypress.config().largeTimeout }).click();
 
         //7-a. transport level
         cy.get('#transportLevel').click();
@@ -189,11 +190,11 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('[value="specify"]').should('be.disabled');
 
         //8. Resources
-        cy.get('#left-menu-itemresources').click();
+        cy.get('#left-menu-itemresources', { timeout: Cypress.config().largeTimeout }).click();
         cy.get('#api-rate-limiting-api-level').get('[aria-disabled="true"]').should('exist');
         cy.get('#api-rate-limiting-operation-level').get('[aria-disabled="true"]').should('exist');
         cy.get('#operation_throttling_policy').get('[aria-disabled="true"]').should('exist');
-        cy.get(`[id="post/testuri"]`, { timeout: 30000 }).click();
+        cy.get(`[id="post/testuri"]`, { timeout: Cypress.config().largeTimeout }).click();
         cy.get(`[data-testid="description-post/testuri"]`).get('[aria-disabled="true"]').should('exist');
         cy.get(`[data-testid="summary-post/testuri"]`).get('[aria-disabled="true"]').should('exist');
         cy.get(`[data-testid="security-post/testuri"]`).get('[aria-disabled="true"]').should('exist');
@@ -235,7 +236,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.contains('button', 'Save').should('be.disabled');
 
         //11. Localscopes
-        cy.get('#left-menu-itemLocalScopes').click();
+        cy.get('#left-menu-itemLocalScopes', { timeout: Cypress.config().largeTimeout }).click();
         cy.contains('a', 'Add New Local Scope').get('[aria-disabled="true"]').should('exist');
         cy.get('table').get('tbody').get('[data-testid="MUIDataTableBodyRow-0"]')
             .get('[data-testid="MuiDataTableBodyCell-4-0"]').get('[aria-label="Edit creatorscope"]')
@@ -244,7 +245,8 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
             .get('[data-testid="MuiDataTableBodyCell-4-0"]').contains('button', 'Delete').should('be.disabled');
 
         //12. Policies should be checked. (UI issue fixed by PR #11297 in carbon-apimgt)
-        cy.get("#left-menu-policies").click();
+        cy.wait(3000)
+        cy.get("#left-menu-policies", { timeout: Cypress.config().largeTimeout }).click();
         cy.get('[data-testid="add-new-api-specific-policy"]', { timeout: Cypress.config().largeTimeout }).click();
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="displayname"]').type("test name");
         cy.get('[data-testid="create-policy-form"]').get('[data-testid="gateway-details-panel"]')
@@ -261,7 +263,7 @@ describe("publisher-019-00 : Publisher Read-Only Mode", () => {
         cy.get('[data-testid="left-menu-monetization"]').should('not.exist');
 
         //14. Properties
-        cy.get('#left-menu-itemproperties').click();
+        cy.get('#left-menu-itemproperties', { timeout: Cypress.config().largeTimeout }).click();
         cy.get('#add-new-property', { timeout: Cypress.config().largeTimeout }).should('be.disabled');
         cy.get('table').get('tbody').get('tr').contains('td', 'property1').should('be.visible');
         cy.get('table').get('tbody').get('tr').get('[aria-label="Edit property1"]').should('be.disabled');
