@@ -35,6 +35,7 @@ import PublishWithoutDeploy from 'AppComponents/Apis/Details/LifeCycle/Component
 import PublishWithoutDeployProduct from 'AppComponents/Apis/Details/LifeCycle/Components/PublishWithoutDeployProduct';
 import Configurations from 'Config';
 import APIProduct from 'AppData/APIProduct';
+import Progress from 'AppComponents/Shared/Progress';
 import LifeCycleImage from './LifeCycleImage';
 import CheckboxLabels from './CheckboxLabels';
 import LifecyclePending from './LifecyclePending';
@@ -92,6 +93,9 @@ class LifeCycleUpdate extends Component {
             pageError: null,
             isOpen: false,
             deploymentsAvailable: false,
+            isMandatoryPropertiesAvailable: false,
+            loading: true,
+            isMandatoryPropertiesConfigured: false,
         };
         this.setIsOpen = this.setIsOpen.bind(this);
         this.handleClick = this.handleClick.bind(this);
@@ -99,15 +103,52 @@ class LifeCycleUpdate extends Component {
 
     /**
      *
-     * Set Deployment availability
+     * Set Deployment & Mandatory Properties availability
      */
     componentDidMount() {
+        this.fetchData();
+    }
+
+    fetchData() {
         const {
             api: { id: apiUUID },
         } = this.props;
-        this.api.getRevisionsWithEnv(apiUUID).then((result) => {
-            this.setState({ deploymentsAvailable: result.body.count > 0 });
-        });
+        const { api } = this.context;
+
+        this.api.getRevisionsWithEnv(apiUUID)
+            .then((result) => {
+                this.setState({ deploymentsAvailable: result.body.count > 0 });
+                api.getSettings()
+                    .then((response) => {
+                        const { customProperties } = response;
+                        let isMandatoryPropertiesAvailable;
+                        if (customProperties && customProperties.length > 0) {
+                            const requiredPropertyNames = customProperties
+                                .filter(property => property.Required)
+                                .map(property => property.Name);
+                            if (requiredPropertyNames.length > 0) {
+                                this.setState({ isMandatoryPropertiesConfigured: true })
+                                isMandatoryPropertiesAvailable = requiredPropertyNames.every(propertyName => {
+                                    const property = api.additionalProperties.find(prop => prop.name === propertyName);
+                                    return property && property.value !== '';
+                                });
+                            } else {
+                                isMandatoryPropertiesAvailable = true;
+                            }
+                        } else {
+                            isMandatoryPropertiesAvailable = true;
+                        }
+                        this.setState({ isMandatoryPropertiesAvailable });
+                        this.setState({ loading: false });
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching settings:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error fetching revisions:', error);
+            });
+
     }
 
     /**
@@ -220,7 +261,8 @@ class LifeCycleUpdate extends Component {
             api, lcState, classes, theme, handleChangeCheckList, checkList, certList, isAPIProduct,
         } = this.props;
         const lifecycleStates = [...lcState.availableTransitions];
-        const { newState, pageError, isOpen, deploymentsAvailable } = this.state;
+        const { newState, pageError, isOpen, deploymentsAvailable, isMandatoryPropertiesAvailable, 
+            isMandatoryPropertiesConfigured } = this.state;
         const isWorkflowPending = api.workflowStatus && api.workflowStatus === this.WORKFLOW_STATUS.CREATED;
         const lcMap = new Map();
         lcMap.set('Published', 'Publish');
@@ -250,8 +292,9 @@ class LifeCycleUpdate extends Component {
             }
             if (lifecycleState.event === 'Publish') {
                 const buttonDisabled = (isMutualSSLEnabled && !isCertAvailable)
-                                    || (deploymentsAvailable && !isBusinessPlanAvailable)
-                                    || (isAPIProduct && !isBusinessPlanAvailable);
+                    || (deploymentsAvailable && !isBusinessPlanAvailable)
+                    || (isAPIProduct && !isBusinessPlanAvailable)
+                    || (deploymentsAvailable && !isMandatoryPropertiesAvailable);
                 // When business plans are not assigned and deployments available
 
                 return {
@@ -265,6 +308,11 @@ class LifeCycleUpdate extends Component {
             };
         });
 
+        if (this.state.loading) {
+            return (
+                <Progress />
+            )
+        }
         return (
             <Grid container>
                 {isWorkflowPending ? (
@@ -293,6 +341,8 @@ class LifeCycleUpdate extends Component {
                                             isCertAvailable={isCertAvailable}
                                             isBusinessPlanAvailable={isBusinessPlanAvailable}
                                             isAPIProduct={isAPIProduct}
+                                            isMandatoryPropertiesAvailable={isMandatoryPropertiesAvailable}
+                                            isMandatoryPropertiesConfigured={isMandatoryPropertiesConfigured}
                                         />
                                     </Grid>
                                 )}
@@ -322,28 +372,28 @@ class LifeCycleUpdate extends Component {
                     <ScopeValidation resourcePath={resourcePath.API_CHANGE_LC} resourceMethod={resourceMethod.POST}>
                         <div className={classes.buttonsWrapper}>
                             {!isWorkflowPending
-                            && lifecycleButtons.map((transitionState) => {
-                                /* Skip when transitions available for current state, this occurs in states
-                                where have allowed re-publishing in prototype and published sates */
-                                return (
-                                    <Button
-                                        disabled={transitionState.disabled
-                                        || this.state.isUpdating || api.isRevision}
-                                        variant='contained'
-                                        color='primary'
-                                        className={classes.stateButton}
-                                        key={transitionState.event}
-                                        data-value={transitionState.event}
-                                        onClick={this.updateLifeCycleState}
-                                        data-testid={transitionState.event + '-btn'}
-                                    >
-                                        {transitionState.displayName}
-                                        {this.state.isUpdating === transitionState.event && (
-                                            <CircularProgress size={18} />
-                                        )}
-                                    </Button>
-                                );
-                            })}
+                                && lifecycleButtons.map((transitionState) => {
+                                    /* Skip when transitions available for current state, this occurs in states
+                                    where have allowed re-publishing in prototype and published sates */
+                                    return (
+                                        <Button
+                                            disabled={transitionState.disabled
+                                                || this.state.isUpdating || api.isRevision}
+                                            variant='contained'
+                                            color='primary'
+                                            className={classes.stateButton}
+                                            key={transitionState.event}
+                                            data-value={transitionState.event}
+                                            onClick={this.updateLifeCycleState}
+                                            data-testid={transitionState.event + '-btn'}
+                                        >
+                                            {transitionState.displayName}
+                                            {this.state.isUpdating === transitionState.event && (
+                                                <CircularProgress size={18} />
+                                            )}
+                                        </Button>
+                                    );
+                                })}
                         </div>
                     </ScopeValidation>
                 </Grid>
@@ -373,7 +423,7 @@ class LifeCycleUpdate extends Component {
                     handleClick={this.handleClick}
                     handleClose={() => this.setIsOpen(false)}
                     open={isOpen}
-                /> }
+                />}
             </Grid>
         );
     }
