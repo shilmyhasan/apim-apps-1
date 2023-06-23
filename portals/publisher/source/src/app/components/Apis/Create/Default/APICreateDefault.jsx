@@ -438,7 +438,7 @@ function APICreateDefault(props) {
                     )}
                 </Grid>
                 <Grid item md={1} xs={0} />
-                <Grid item md={11} xs={12}>
+                <Grid item md={11} xs={12} data-testid='default-api-form'>
 
                     <DefaultAPIForm
                         onValidate={handleOnValidate}
