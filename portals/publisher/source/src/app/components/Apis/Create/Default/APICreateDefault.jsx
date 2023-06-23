@@ -122,7 +122,7 @@ function APICreateDefault(props) {
 
     const getDefaultCustomProperties = () => {
         if (settings != null) {
-            if (settings.customProperties.length > 0 ) {
+            if (settings.customProperties && settings.customProperties.length > 0 ) {
                 setIsMandatoryPropsConfigured(true);
             }
         }
