@@ -79,7 +79,8 @@ const useStyles = makeStyles((theme) => ({
 export default function CheckboxLabels(props) {
     const classes = useStyles();
     const {
-        api, isMutualSSLEnabled, isCertAvailable, isAppLayerSecurityMandatory, isBusinessPlanAvailable, isAPIProduct,
+        api, isMutualSSLEnabled, isCertAvailable, isAppLayerSecurityMandatory, isBusinessPlanAvailable, isAPIProduct, 
+        isMandatoryPropertiesAvailable, isMandatoryPropertiesConfigured
     } = props;
     const isEndpointAvailable = !isAPIProduct
         ? api.endpointConfig !== null && !api.endpointConfig.implementation_status
@@ -171,6 +172,24 @@ export default function CheckboxLabels(props) {
                                     </Link>
                                 </Grid>
                             ) }
+                            {isMandatoryPropertiesConfigured && (
+                                <Grid xs={12} className={classes.grid}>
+                                    {isMandatoryPropertiesAvailable ? (
+                                        <CheckIcon className={classes.iconTrue} />
+                                    ) : (
+                                        <CloseIcon className={classes.iconFalse} />
+                                    )}
+                                    <Typography>
+                                        <FormattedMessage
+                                            id='Apis.Details.LifeCycle.CheckboxLabels.mandatory.properties.provided'
+                                            defaultMessage='Mandatory Properties provided'
+                                        />
+                                    </Typography>
+                                    <Link to={'/apis/' + api.id + '/properties'} aria-label='Properties'>
+                                        <LaunchIcon style={{ marginLeft: '2px' }} color='primary' fontSize='small' />
+                                    </Link>
+                                </Grid>
+                            )}
                         </>
                     </Grid>
                 </>
