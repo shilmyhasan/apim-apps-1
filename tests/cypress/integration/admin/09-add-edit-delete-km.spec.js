@@ -47,11 +47,36 @@ describe("admin-09 : Add key manager", () => {
             cy.get('input[name="client_id"]').type(clientId);
             cy.get('input[name="client_secret"]').type(clientSecret);
             cy.get('input[name="audience"]').type(audience);
+            // adding claims under Token Handling Options for JWT type
+            cy.get('#mui-component-select-type').click();
+            cy.contains('li', 'JWT').click();
+            cy.get('input[name="claimKey"]').type('claimKey1');
+            cy.get('input[name="claimValueRegex"]').type('claimValueRegex1');
+            cy.get('[aria-label="[object Object]"]').click();
+            cy.get('input[name="claimKey"]').type('claimKey2');
+            cy.get('input[name="claimValueRegex"]').type('claimValueRegex2');
+            cy.get('[aria-label="[object Object]"]').click();
+            // validating added claims
+            cy.contains('claimKey1').should('exist');
+            cy.contains('claimValueRegex1').should('exist');
+            cy.contains('claimKey2').should('exist');
+            cy.contains('claimValueRegex2').should('exist');
             cy.get('button.MuiButton-containedPrimary span').contains('Add').click();
 
             // validating
             cy.get('td > div').contains(km).should('exist');
         });
+
+        // edit key manager
+        cy.get('td > div').contains(km).click();
+        // editing claims under Token Handling Options for JWT type (adding one more claim and deleting one claim)
+        cy.get('input[name="claimKey"]').type('claimKey3');
+        cy.get('input[name="claimValueRegex"]').type('claimValueRegex3');
+        cy.get('[aria-label="[object Object]"]').click();
+        // deleting claimKey1
+        cy.contains('claimKey1').parents('tr').find('button').click();
+        cy.contains('claimKey1').should('not.exist');
+        cy.get('button.MuiButton-containedPrimary span').contains('Update').click();
 
         // delete
         cy.get(`[data-testid="${km}-actions"] > span:first-child svg`).click();
