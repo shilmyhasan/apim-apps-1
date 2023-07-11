@@ -96,6 +96,6 @@ describe("Add key manager", () => {
         addKeyManager(carbonUsername, carbonPassword, superTenant);
     });
     it.only("Add key manager - tenant user", () => {
-        addKeyManager(carbonUsername, carbonPassword, tenant);
+        addKeyManager(Utils.getTenantUser(carbonUsername, tenant), carbonPassword, tenant);
     });
 })
