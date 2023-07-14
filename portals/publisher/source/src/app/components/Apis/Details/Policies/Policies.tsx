@@ -469,7 +469,7 @@ const Policies: React.FC = () => {
 
         deletePolicyUuid(newApiLevelPolicies);
         // Set operation policies to the API object
-        newApiOperations.forEach((operation: any) => {
+        newApiOperations.forEach((operation: any, index: any, array: any) => {
 
             // handles CC related policies commonly in
             if(previousPolicyTargetForCC === operation.target && isChoreoConnectEnabled) {
