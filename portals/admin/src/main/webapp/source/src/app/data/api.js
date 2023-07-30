@@ -790,6 +790,8 @@ class API extends Resource {
         });
     }
 
+
+
     /**
      * Discover keymanager from well known url
      */
@@ -819,6 +821,18 @@ class API extends Resource {
     keyManagerGet(keyManagerId) {
         return this.client.then((client) => {
             return client.apis['Key Manager (Individual)'].get_key_managers__keyManagerId_(
+                { keyManagerId: keyManagerId },
+                this._requestMetaData(),
+            );
+        });
+    }
+
+     /**
+     * Get key manager usages
+     */
+    getKeyManagerUsages(keyManagerId) {
+        return this.client.then((client) => {
+            return client.apis['Key Manager (Individual)'].get_key_managers_usages__keyManagerId_(
                 { keyManagerId: keyManagerId },
                 this._requestMetaData(),
             );
