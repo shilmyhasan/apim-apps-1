@@ -97,7 +97,8 @@ describe("prototype apis with security disabled", () => {
             cy.get('.try-out__btn').click();
             cy.get('.execute').click();
            // cy.contains('.live-responses-table .response > td.response-col_status','200').should('exist');
-            cy.get('.live-responses-table .response > td.response-col_status').should("contain.text",'200')
+            // cy.get('.live-responses-table .response > td.response-col_status').should("contain.text",'200')
+            cy.get('.responses-table .response > td.response-col_status').should("contain.text",'200')
             cy.logoutFromDevportal();
         });
         
