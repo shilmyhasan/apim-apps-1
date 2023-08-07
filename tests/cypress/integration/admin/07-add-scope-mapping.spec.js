@@ -20,10 +20,8 @@ describe("Add scope mapping", () => {
     const carbonUsername = 'admin';
     const carbonPassword = 'admin';
 
-    before(function () {
-        cy.loginToAdmin(carbonUsername, carbonPassword);
-    })
-    it.only("Add scope mapping", () => {
+    const addScopeMapping = (username, password) => {
+        cy.loginToAdmin(username, password);
         const roleName = 'creator';
 
         cy.get('[data-testid="Scope Assignments-child-link"]').click();
@@ -39,6 +37,36 @@ describe("Add scope mapping", () => {
         cy.get(`[data-testid="${roleName}-delete-btn"]`).click();
         cy.get('[aria-labelledby="delete-confirmation"] button.MuiButton-containedPrimary').click();
         cy.get(`[data-testid="${roleName}"]`).should('not.exist');
+    }
+
+    const addMultipleScopeMapping = (username, password) => {
+        cy.loginToAdmin(username, password);
+        const roleName = 'customRole';
+
+        cy.get('[data-testid="Scope Assignments-child-link"]').click();
+        cy.get('.MuiButton-label').contains('Add scope mappings').click();
+        cy.get('#role-input-field-helper-text').type(roleName);
+        cy.get('button.MuiButton-containedPrimary span').contains('Next').click();  
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/creator').click();
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/publisher').click();
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/subscriber').click();
+        cy.get('button.MuiButton-containedPrimary span').contains('Save').click();
+        cy.get('div').contains(roleName).should('exist');
+        cy.get('[data-testid="Internal/subscriber,Internal/creator,Internal/publisher"]').should('exist');
+
+        // delete
+        cy.get(`[data-testid="${roleName}-delete-btn"]`).click();
+        cy.get('[aria-labelledby="delete-confirmation"] button.MuiButton-containedPrimary').click();
+        cy.get(`[data-testid="${roleName}"]`).should('not.exist');
+    }
+    it.only("Add scope mapping", () => {
+        addScopeMapping(carbonUsername, carbonPassword);
+    });
+    it.only("Add multiple scope mapping", () => {
+        addMultipleScopeMapping(carbonUsername, carbonPassword);
     });
 
 })
