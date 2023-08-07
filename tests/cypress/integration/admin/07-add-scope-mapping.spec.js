@@ -40,11 +40,40 @@ describe("admin-07 : Add scope mapping", () => {
         cy.get('[aria-labelledby="delete-confirmation"] button.MuiButton-containedPrimary').click();
         cy.get(`[data-testid="${roleName}"]`).should('not.exist');
     }
+    const addMultipleScopeMapping = (usernameLocal, passwordLocal, tenant) => {
+        cy.loginToAdmin(usernameLocal, passwordLocal, tenant);
+        const roleName = 'customRole';
+
+        cy.get('[data-testid="Scope Assignments-child-link"]').click();
+        cy.get('.MuiButton-label').contains('Add scope mappings').click();
+        cy.get('#role-input-field-helper-text').type(roleName);
+        cy.get('button.MuiButton-containedPrimary span').contains('Next').click();  
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/creator').click();
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/publisher').click();
+        cy.get('#role-select-dropdown').click();
+        cy.get('#role-select-dropdown-popup li').contains('Internal/subscriber').click();
+        cy.get('button.MuiButton-containedPrimary span').contains('Save').click();
+        cy.get('div').contains(roleName).should('exist');
+        cy.get('[data-testid="Internal/subscriber,Internal/creator,Internal/publisher"]').should('exist');
+
+        // delete
+        cy.get(`[data-testid="${roleName}-delete-btn"]`).click();
+        cy.get('[aria-labelledby="delete-confirmation"] button.MuiButton-containedPrimary').click();
+        cy.get(`[data-testid="${roleName}"]`).should('not.exist');
+    }
     it.only("Add scope mapping - super admin", () => {
         addScopeMapping(carbonUsername, carbonPassword, superTenant);
     });
     it.only("Add scope mapping - tenant user", () => {
         addScopeMapping(carbonUsername, carbonPassword, testTenant);
+    });
+    it.only("Add multiple scope mapping - super admin", () => {
+        addMultipleScopeMapping(carbonUsername, carbonPassword, superTenant);
+    });
+    it.only("Add multiple scope mapping - tenant user", () => {
+        addMultipleScopeMapping(carbonUsername, carbonPassword, testTenant);
     });
 
 })
