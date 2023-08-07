@@ -99,7 +99,12 @@ export default function AddRoleWizard(props) {
         if (!validation.role && newRole) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
         } else if (newRole === '') {
-            Alert.warning('Role name can not be empty!');
+            Alert.warning(
+                intl.formatMessage({
+                    id: 'RolePermissions.Common.AddRoleWizard.add.role.warn.empty',
+                    defaultMessage: 'Role name can not be empty!',
+                }),
+            );
         } else {
             Alert.warning(validation.role);
         }
