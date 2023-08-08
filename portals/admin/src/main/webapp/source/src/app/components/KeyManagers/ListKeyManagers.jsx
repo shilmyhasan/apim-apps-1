@@ -27,7 +27,7 @@ import Alert from 'AppComponents/Shared/Alert';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { Chip } from '@material-ui/core';
-import ThreeSixty from '@material-ui/icons/ThreeSixty';
+import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 
 /**
  * API call to get microgateway labels
@@ -135,7 +135,7 @@ export default function ListKeyManagers() {
                         const artifactId = tableMeta.rowData[tableMeta.rowData.length - 2];
                         return (
                             <RouterLink to={`/settings/key-managers/usages/${artifactId}`}>
-                                <ThreeSixty aria-label='key-manager-delete-icon' />
+                                <FormatListBulletedIcon aria-label='key-manager-delete-icon' />
                             </RouterLink>
                         );
                     } else {
