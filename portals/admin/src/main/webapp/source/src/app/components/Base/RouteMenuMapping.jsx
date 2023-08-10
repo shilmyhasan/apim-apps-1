@@ -198,6 +198,13 @@ const RouteMenuMapping = (intl) => [
         addEditPageDetails: [
             {
                 id: intl.formatMessage({
+                    id: 'Base.RouteMenuMapping.keymanagers.items.Usage',
+                    defaultMessage: 'Key Manager Usage',
+                }),
+                path: '/settings/key-managers/usages/(.*?)$',
+            },
+            {
+                id: intl.formatMessage({
                     id: 'Base.RouteMenuMapping.keymanagers.items.Adding',
                     defaultMessage: 'Add Key Manager',
                 }),
