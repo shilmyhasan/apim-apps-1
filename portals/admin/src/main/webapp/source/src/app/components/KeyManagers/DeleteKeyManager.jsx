@@ -31,14 +31,14 @@ import FormDialogBase from 'AppComponents/AdminPages/Addons/FormDialogBase';
  * @returns {JSX} Loading animation.
  */
 function Delete({ updateList, dataRow }) {
-    const [deletaData, setDeleteData] = React.useState(true);
+    const [deletaData, setDeleteData] = React.useState(false);
     const { id, type } = dataRow;
     const fetchData = () => {
         const restApi = new API();
         restApi.getKeyManagerUsages(id)
             .then((result) => {
                 if (result.body) {
-                    setDeleteData(false);
+                    setDeleteData(true);
                 }
             })
             .catch((error) => {
