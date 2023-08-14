@@ -35,7 +35,7 @@ function Delete({ updateList, dataRow }) {
     const { id, type } = dataRow;
     const fetchData = () => {
         const restApi = new API();
-        restApi.isKeyManagerDeletable(id)
+        restApi.getKeyManagerUsages(id)
             .then((result) => {
                 if (result.body) {
                     setDeleteData(false);
