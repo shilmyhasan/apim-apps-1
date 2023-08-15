@@ -377,8 +377,10 @@ function ListKeyManagerUsages() {
                                         <Grid item xs={12}>
                                             <Box pl={2}>
                                                 <Typography variant='h8' gutterBottom>
-                                                    {data.apiCount === 1 ? '1 API is using this keymanager specifically.'
-                                                        : data.apiCount + ' APIs are using this keymanager specifically.'}
+                                                    {data.apiCount === 1
+                                                        ? '1 API is using this keymanager specifically.'
+                                                        : data.apiCount
+                                                        + ' APIs are using this keymanager specifically.'}
                                                 </Typography>
                                             </Box>
                                         </Grid>
@@ -468,7 +470,8 @@ function ListKeyManagerUsages() {
                                             <Typography variant='h8' gutterBottom>
                                                 <FormattedMessage
                                                     id='KeyManagers.AddEditKeyManager.appplicarion.no.usages'
-                                                    defaultMessage='No Application usages for this keymanager specifically.'
+                                                    defaultMessage='No Application usages
+                                                        for this keymanager specifically.'
                                                 />
                                             </Typography>
                                         </Box>
