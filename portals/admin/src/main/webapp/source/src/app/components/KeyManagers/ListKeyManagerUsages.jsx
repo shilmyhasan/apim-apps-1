@@ -325,7 +325,7 @@ function ListKeyManagerUsages() {
                                 <Grid item xs>
                                     <Typography color='inherit' variant='h5' component='h1'>
                                         <FormattedMessage
-                                            id='KeyManagers.AddEditKeyManager.usages'
+                                            id='KeyManagers.AddEditKeyManager.usages.text'
                                             defaultMessage='Key Manager Usages - '
                                         />
                                         {kmName}
