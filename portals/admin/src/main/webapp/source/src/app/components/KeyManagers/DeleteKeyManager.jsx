@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*
  * Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,7 +17,7 @@
  * under the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import API from 'AppData/api';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -30,8 +31,25 @@ import FormDialogBase from 'AppComponents/AdminPages/Addons/FormDialogBase';
  * @returns {JSX} Loading animation.
  */
 function Delete({ updateList, dataRow }) {
+    const [deletaData, setDeleteData] = React.useState(true);
     const { id, type } = dataRow;
+    const fetchData = () => {
+        const restApi = new API();
+        restApi.getKeyManagerUsages(id)
+            .then((result) => {
+                if (result.body.apiCount === 0 && result.body.applicationCount === 0) {
+                    setDeleteData(false);
+                }
+            })
+            .catch((error) => {
+                const { status } = error;
+                throw (error);
+            });
+    };
 
+    useEffect(() => {
+        fetchData();
+    }, []);
     const formSaveCallback = () => {
         // todo: don't create a new promise
         const promiseAPICall = new Promise((resolve, reject) => {
@@ -65,7 +83,7 @@ function Delete({ updateList, dataRow }) {
             triggerIconProps={{
                 color: 'primary',
                 component: 'span',
-                disabled: type === 'default',
+                disabled: type === 'default' || deletaData,
             }}
         >
             <DialogContentText>
