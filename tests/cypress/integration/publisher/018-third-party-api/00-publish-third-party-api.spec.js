@@ -64,6 +64,13 @@ describe("Publish thirdparty api", () => {
                 cy.get('#left-menu-itemDesignConfigurations').click();
                 cy.wait(5000);
                 cy.get('[name="advertised"]:first').click();
+                // check whether save button is enabled after marking the API as a non third party API
+                cy.get('[name="apiExternalProductionEndpoint"]').type(`${Utils.getAppOrigin()}/am/sample/${apiName}/v1/externalapi`, {force:true, timeout:30000}).clear();
+                cy.get('[name="advertised"]:eq(1)').click();
+                cy.get('#design-config-save-btn').should('not.be.disabled');
+
+                // mark the API as a third party API
+                cy.get('[name="advertised"]:first').click();
                 cy.get('[name="apiExternalProductionEndpoint"]')
                     .type(`${Utils.getAppOrigin()}/am/sample/${apiName}/v1/externalapi`, {force:true, timeout:30000});
                 cy.get('[name="apiExternalSandboxEndpoint"]')
