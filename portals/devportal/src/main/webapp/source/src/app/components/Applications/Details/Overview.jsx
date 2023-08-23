@@ -230,7 +230,7 @@ function Overview(props) {
                                 {application.description}
                             </TableCell>
                         </TableRow>
-                        {tierDescription
+                        {application.throttlingPolicy
                             && (
                                 <TableRow>
                                     <TableCell component='th' scope='row' className={classes.leftCol}>
@@ -251,7 +251,7 @@ function Overview(props) {
                                             <TableCell>
                                                 {application.throttlingPolicy}
                                                 {' '}
-                                                {`(${tierDescription})`}
+                                                {tierDescription && `(${tierDescription})`}
                                             </TableCell>
                                         )}
                                 </TableRow>
