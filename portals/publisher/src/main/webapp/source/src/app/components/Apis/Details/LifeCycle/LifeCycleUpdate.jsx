@@ -256,7 +256,8 @@ class LifeCycleUpdate extends Component {
             }
             if (lifecycleState.event === 'Publish') {
                 const buttonDisabled = (isMutualSSLEnabled && !isCertAvailable)
-                                    || (deploymentsAvailable && !isBusinessPlanAvailable)
+                                    || (!isMutualSSLEnabled && !isBusinessPlanAvailable)
+                                    || !deploymentsAvailable
                                     || (isAPIProduct && !isBusinessPlanAvailable);
                 // When business plans are not assigned and deployments available
 
