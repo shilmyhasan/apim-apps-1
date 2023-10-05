@@ -236,6 +236,8 @@ class LifeCycleUpdate extends Component {
         lcMap.set('Created', 'Create');
         lcMap.set('Retired', 'Retire');
         const isMutualSSLEnabled = api.securityScheme.includes(API_SECURITY_MUTUAL_SSL_MANDATORY);
+        const isMutualSslOnly = api.securityScheme.length === 2 && api.securityScheme.includes('mutualssl')
+            && api.securityScheme.includes(API_SECURITY_MUTUAL_SSL_MANDATORY);
         const isAppLayerSecurityMandatory = api.securityScheme.includes(
             API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY,
         );
@@ -256,7 +258,7 @@ class LifeCycleUpdate extends Component {
             }
             if (lifecycleState.event === 'Publish') {
                 const buttonDisabled = (isMutualSSLEnabled && !isCertAvailable)
-                                    || (!isMutualSSLEnabled && deploymentsAvailable && !isBusinessPlanAvailable)
+                                    || (!isMutualSslOnly && deploymentsAvailable && !isBusinessPlanAvailable)
                                     || (isAPIProduct && !isBusinessPlanAvailable);
                 // When business plans are not assigned and deployments available
 
