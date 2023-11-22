@@ -376,7 +376,7 @@ class Details extends Component {
                     defaultMessage: 'API definition',
                 })}
                 route='api definition'
-                to={pathPrefix + 'api definition'}
+                to={pathPrefix + 'api-definition'}
                 Icon={<CodeIcon />}
                 id='left-menu-itemAPIdefinition'
             />
@@ -392,7 +392,7 @@ class Details extends Component {
                                 defaultMessage: 'Schema Definition',
                             })}
                             route='schema definition'
-                            to={pathPrefix + 'schema definition'}
+                            to={pathPrefix + 'schema-definition'}
                             Icon={<CodeIcon />}
                         />
                     </>
@@ -409,7 +409,7 @@ class Details extends Component {
                                 defaultMessage: 'AsyncAPI Definition',
                             })}
                             route='asyncApi definition'
-                            to={pathPrefix + 'asyncApi definition'}
+                            to={pathPrefix + 'asyncApi-definition'}
                             Icon={<CodeIcon />}
                         />
                     </>
@@ -1017,10 +1017,10 @@ Details.subPaths = {
     BASE_PRODUCT: '/api-products/:apiprod_uuid',
     OVERVIEW: '/apis/:api_uuid/overview',
     OVERVIEW_PRODUCT: '/api-products/:apiprod_uuid/overview',
-    API_DEFINITION: '/apis/:api_uuid/api definition',
+    API_DEFINITION: '/apis/:api_uuid/api-definition',
     WSDL: '/apis/:api_uuid/wsdl',
-    API_DEFINITION_PRODUCT: '/api-products/:apiprod_uuid/api definition',
-    SCHEMA_DEFINITION: '/apis/:api_uuid/schema definition',
+    API_DEFINITION_PRODUCT: '/api-products/:apiprod_uuid/api-definition',
+    SCHEMA_DEFINITION: '/apis/:api_uuid/schema-definition',
     LIFE_CYCLE: '/apis/:api_uuid/lifecycle',
     LIFE_CYCLE_PRODUCT: '/api-products/:apiprod_uuid/lifecycle',
     CONFIGURATION: '/apis/:api_uuid/configuration',
@@ -1042,8 +1042,8 @@ Details.subPaths = {
     SUBSCRIPTIONS: '/apis/:api_uuid/subscriptions',
     SECURITY: '/apis/:api_uuid/security',
     COMMENTS: '/apis/:api_uuid/comments',
-    BUSINESS_INFO: '/apis/:api_uuid/business info',
-    BUSINESS_INFO_PRODUCT: '/api-products/:apiprod_uuid/business info',
+    BUSINESS_INFO: '/apis/:api_uuid/business-info',
+    BUSINESS_INFO_PRODUCT: '/api-products/:apiprod_uuid/business-info',
     PROPERTIES: '/apis/:api_uuid/properties',
     PROPERTIES_PRODUCT: '/api-products/:apiprod_uuid/properties',
     NEW_VERSION: '/apis/:api_uuid/new_version',
@@ -1054,7 +1054,7 @@ Details.subPaths = {
     TRYOUT_PRODUCT: '/api-products/:apiprod_uuid/test-console',
     QUERYANALYSIS: '/apis/:api_uuid/queryanalysis',
     TOPICS: '/apis/:api_uuid/topics',
-    ASYNCAPI_DEFINITION: '/apis/:api_uuid/asyncApi definition',
+    ASYNCAPI_DEFINITION: '/apis/:api_uuid/asyncApi-definition',
     POLICIES: '/apis/:api_uuid/policies',
 };
 
