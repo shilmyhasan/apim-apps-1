@@ -173,7 +173,6 @@ class CreateNewVersion extends React.Component {
         const isDefaultVersionBool = isDefaultVersion === 'yes';
         const apiClient = new API();
         const { intl } = this.props;
-        // eslint-disable-next-line no-empty
         if (api.apiType === 'APIPRODUCT') {
             apiClient.createNewAPIProductVersion(api.id ,newVersion, isDefaultVersionBool)
                 .then((response) => {
