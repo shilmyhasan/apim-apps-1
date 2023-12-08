@@ -94,6 +94,7 @@ const AppConfig = {
                 },
             },
         },
+        "maxScopeCount": 2000
     },
     /*
     'default' : used when the old/default behaviour is needed.
