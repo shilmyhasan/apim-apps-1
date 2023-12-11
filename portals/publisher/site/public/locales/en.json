@@ -498,13 +498,7 @@
   "Apis.Create.WSDL.ApiCreateWSDL.deprecated.msg": [
     {
       "type": 0,
-      "value": "This feature is deprecated. Please use the WSO2 Integration Studio as an alternative"
-    }
-  ],
-  "Apis.Create.WSDL.ApiCreateWSDL.deprecated.msg.info.link.msg": [
-    {
-      "type": 0,
-      "value": "Integration Studio Documentation:"
+      "value": "APIM supports only a limited set of capabilities with this feature. If you want to process complex WSDL/XML schema, please refer to the following documentation."
     }
   ],
   "Apis.Create.WSDL.ApiCreateWSDL.error.policies.not.available": [
@@ -4481,6 +4475,12 @@
       "value": "Endpoint provided"
     }
   ],
+  "Apis.Details.LifeCycle.CheckboxLabels.mandatory.properties.provided": [
+    {
+      "type": 0,
+      "value": "Mandatory Properties provided"
+    }
+  ],
   "Apis.Details.LifeCycle.LifeCycle.change.not.allowed": [
     {
       "type": 0,
@@ -4643,16 +4643,16 @@
       "value": "See more"
     }
   ],
-  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.title": [
-    {
-      "type": 0,
-      "value": "Deploy API product before publishing"
-    }
-  ],
   "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.message": [
     {
       "type": 0,
       "value": "Deploy the API product before publishing the API"
+    }
+  ],
+  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.title": [
+    {
+      "type": 0,
+      "value": "Deploy API product before publishing"
     }
   ],
   "Apis.Details.LifeCycle.components.confirm.publish.message": [
@@ -4660,7 +4660,7 @@
       "type": 0,
       "value": "The API will not be available for consumption unless it is deployed."
     }
-  ], 
+  ],
   "Apis.Details.LifeCycle.components.confirm.publish.message.advertise.only": [
     {
       "type": 0,
@@ -5523,6 +5523,12 @@
       "value": "Response Flow"
     }
   ],
+  "Apis.Details.Policies.PoliciesSection.info": [
+    {
+      "type": 0,
+      "value": "API level policies will execute before operation level policies"
+    }
+  ],
   "Apis.Details.Policies.PolicyConfigurationEditDrawer.title": [
     {
       "type": 0,
@@ -5919,7 +5925,7 @@
       "value": "Add All"
     }
   ],
-  "Apis.Details.Properties.\n                                                            Properties.editable.show.in.devporal": [
+  "Apis.Details.Properties.\n                                                                Properties.editable.show.in.devporal": [
     {
       "type": 0,
       "value": "Show in devportal"
@@ -5931,10 +5937,16 @@
       "value": "Invalid property name"
     }
   ],
-  "Apis.Details.Properties.Properties.\n                                                                show.add.property.property.name": [
+  "Apis.Details.Properties.Properties.\n                                                                    show.add.property.property.name": [
     {
       "type": 0,
       "value": "Name"
+    }
+  ],
+  "Apis.Details.Properties.Properties.\n                                                    show.add.property.custom.property.name": [
+    {
+      "type": 1,
+      "value": "message"
     }
   ],
   "Apis.Details.Properties.Properties.\n                                property.name.exists": [

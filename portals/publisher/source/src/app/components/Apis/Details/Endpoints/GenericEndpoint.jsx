@@ -210,7 +210,7 @@ function GenericEndpoint(props) {
                                             className={classes.iconButton}
                                             aria-label='Settings'
                                             onClick={() => setAdvancedConfigOpen(index, type, category)}
-                                            disabled={(isRestricted(['apim:api_create'], api))}
+                                            disabled={false}
                                             id={category + '-endpoint-configuration-icon-btn'}
                                         >
                                             <Tooltip
@@ -228,28 +228,31 @@ function GenericEndpoint(props) {
                                                 </Icon>
                                             </Tooltip>
                                         </IconButton>
-                                        <IconButton
-                                            className={classes.iconButton}
-                                            aria-label='Security'
-                                            onClick={() => setESConfigOpen(type, esCategory)}
-                                            disabled={(isRestricted(['apim:api_create'], api))}
-                                            id={category + '-endpoint-security-icon-btn'}
-                                        >
-                                            <Tooltip
-                                                placement='top-start'
-                                                interactive
-                                                title={(
-                                                    <FormattedMessage
-                                                        id='Apis.Details.Endpoints.GenericEndpoint.security.endpoint'
-                                                        defaultMessage='Endpoint security'
-                                                    />
-                                                )}
+                                        {(type === 'load_balance' || type === 'failover') ? (<div />) : (
+                                            <IconButton
+                                                className={classes.iconButton}
+                                                aria-label='Security'
+                                                onClick={() => setESConfigOpen(type, esCategory)}
+                                                disabled={(isRestricted(['apim:api_create'], api))}
+                                                id={category + '-endpoint-security-icon-btn'}
                                             >
-                                                <Icon>
-                                                    security
-                                                </Icon>
-                                            </Tooltip>
-                                        </IconButton>
+                                                <Tooltip
+                                                    placement='top-start'
+                                                    interactive
+                                                    title={(
+                                                        <FormattedMessage
+                                                            id={'Apis.Details.Endpoints.GenericEndpoint'
+                                                            + '.security.endpoint'}
+                                                            defaultMessage='Endpoint security'
+                                                        />
+                                                    )}
+                                                >
+                                                    <Icon>
+                                                        security
+                                                    </Icon>
+                                                </Tooltip>
+                                            </IconButton>
+                                        )}
                                     </>
                                 )}
                             {(index > 0) ? <Divider className={classes.divider} /> : <div />}

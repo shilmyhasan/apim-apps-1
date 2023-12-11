@@ -16,16 +16,14 @@
  * under the License.
  */
 
-import {
-    Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import Alert from 'AppComponents/Shared/Alert';
 import React, { useState, useEffect, useMemo } from 'react';
 import cloneDeep from 'lodash.clonedeep';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import { useAPI } from 'AppComponents/Apis/Details/components/ApiContext';
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { FormattedMessage } from 'react-intl';
 import CONSTS from 'AppData/Constants';
@@ -34,16 +32,19 @@ import { mapAPIOperations } from 'AppComponents/Apis/Details/Resources/operation
 import API from 'AppData/api';
 import { Progress } from 'AppComponents/Shared';
 import { arrayMove } from '@dnd-kit/sortable';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import OperationPolicy from './OperationPolicy';
 import OperationsGroup from './OperationsGroup';
 import PolicyList from './PolicyList';
-import type { ApiPolicy, Policy, PolicySpec } from './Types';
+import type { ApiPolicy, Policy, PolicySpec, ApiLevelPolicy } from './Types';
 import GatewaySelector from './GatewaySelector';
 import { ApiOperationContextProvider } from './ApiOperationContext';
 import { uuidv4 } from './Utils';
 import SaveOperationPolicies from './SaveOperationPolicies';
 import PoliciesExpansion from './PoliciesExpansion';
 import Configurations from '../../../../../../../site/public/conf/settings';
+import PolicyPanel from './components/PolicyPanel';
 
 const useStyles = makeStyles(() => ({
     gridItem: {
@@ -54,12 +55,20 @@ const useStyles = makeStyles(() => ({
         overflowY: 'scroll',
     },
     paper: {
-        padding:'2px'
+        padding: '2px',
     },
     ccTypography: {
-        paddingLeft:'10px', 
-        marginTop:'20px'
-    }
+        paddingLeft: '10px',
+        marginTop: '20px',
+    },
+    flowTabs: {
+        '& button': {
+            minWidth: 50,
+        },
+    },
+    flowTab: {
+        fontSize: 'smaller',
+    },
 }));
 
 /**
@@ -74,12 +83,36 @@ const Policies: React.FC = () => {
     const [allPolicies, setAllPolicies] = useState<PolicySpec[] | null>(null);
     const [expandedResource, setExpandedResource] = useState<string | null>(null);
     const [isChoreoConnectEnabled, setIsChoreoConnectEnabled] = useState(api.gatewayType === 'wso2/choreo-connect');
+    const [selectedTab, setSelectedTab] = useState((api.apiPolicies != null) ? 0 : 1);
+    const [apiPoliciesEnabled, setApiPoliciesEnabled] = useState<boolean>(false);
     const { showMultiVersionPolicies } = Configurations.apis;
 
     // If Choreo Connect radio button is selected in GatewaySelector, it will pass 
     // value as true to render other UI changes specific to the Choreo Connect.
     const setIsChangedToCCGatewayType = (isCCEnabled: boolean) => {
         setIsChoreoConnectEnabled(isCCEnabled);
+    }
+
+    const apiLevelTab = 0;
+    const operationLevelTab = 1;
+
+    const initApiLevelPolicy: ApiLevelPolicy = {
+        request: [],
+        response: [],
+        fault: [],
+    };
+
+    const getInitPolicyState = (policyList: any) => {
+        // Iterating through the policy list of request flow, response flow and fault flow
+        for (const flow in policyList) {
+            if (Object.prototype.hasOwnProperty.call(policyList, flow)) {
+                const policyArray = policyList[flow];
+                policyArray.forEach((policyItem: ApiPolicy) => {
+                    // eslint-disable-next-line no-param-reassign
+                    policyItem.uuid = uuidv4();
+                });
+            }
+        }
     }
 
     /**
@@ -94,28 +127,49 @@ const Policies: React.FC = () => {
         clonedOperations.forEach((operation: any) => {
             if (operation.operationPolicies) {
                 const { operationPolicies } = operation;
-
-                // Iterating through the policy list of request flow, response flow and fault flow
-                for (const flow in operationPolicies) {
-                    if (Object.prototype.hasOwnProperty.call(operationPolicies, flow)) {
-                        const policyArray = operationPolicies[flow];
-                        policyArray.forEach((policyItem: ApiPolicy) => {
-                            // eslint-disable-next-line no-param-reassign
-                            policyItem.uuid = uuidv4();
-                        });
-                    }
-                }
+                getInitPolicyState(operationPolicies);
             }
         });
         return clonedOperations;
     }
 
+    const getInitAPILevelPoliciesState = () => {
+        const clonedAPIPolicies = cloneDeep(api.apiPolicies);
+        if (api.apiPolicies != null) {
+            getInitPolicyState(clonedAPIPolicies);
+        }
+        return clonedAPIPolicies || initApiLevelPolicy;
+    };
+
     const [apiOperations, setApiOperations] = useState<any>(getInitState);
+    const [apiLevelPolicies, setApiLevelPolicies] = useState<any>(getInitAPILevelPoliciesState);
     const [openAPISpec, setOpenAPISpec] = useState<any>(null);
 
     useEffect(() => {
+        // Check if API level policy support feature is enabled
+        const fetchData = async () => {
+            try {
+                const settings: any = await API.getSettings();
+                if (settings.isAPIPoliciesEnabled != null) {
+                    setApiPoliciesEnabled(settings.isAPIPoliciesEnabled);
+                }
+            } catch (error) {
+                // Handle any errors that occurred during the API call
+                console.error(error);
+                setApiPoliciesEnabled(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        // Handle operation level policies
         const currentOperations = getInitState();
         setApiOperations(currentOperations);
+
+        // Handle API level policies
+        const currentAPIPolicies = getInitAPILevelPoliciesState();
+        setApiLevelPolicies(currentAPIPolicies);
     }, [api]);
 
     /**
@@ -139,11 +193,11 @@ const Policies: React.FC = () => {
             if (showMultiVersionPolicies) {
                 // Get the union of policies depending on the policy display name and version
                 unionByPolicyDisplayName = [...mergedList
-                .reduce((map, obj) => map.set(obj.name + obj.version, obj), new Map()).values()];
+                    .reduce((map, obj) => map.set(obj.name + obj.version, obj), new Map()).values()];
             } else {
                 // Get the union of policies depending on the policy display name
                 unionByPolicyDisplayName = [...mergedList
-                .reduce((map, obj) => map.set(obj.name, obj), new Map()).values()];
+                    .reduce((map, obj) => map.set(obj.name, obj), new Map()).values()];
             }
             unionByPolicyDisplayName.sort(
                 (a: Policy, b: Policy) => a.name.localeCompare(b.name))
@@ -192,19 +246,21 @@ const Policies: React.FC = () => {
                 // Iterating through the policy list of request flow, response flow and fault flow
                 for (const flow in operationPolicies) {
                     if (Object.prototype.hasOwnProperty.call(operationPolicies, flow)) {
-
                         operationPolicies[flow] = [];
-
                     }
                 }
             }
         });
         setApiOperations(newApiOperations);
+        setApiLevelPolicies(initApiLevelPolicy);
     }
 
     useEffect(() => {
         fetchPolicies();
-    }, [isChoreoConnectEnabled])
+        if (isChoreoConnectEnabled) {
+            setSelectedTab(1);
+        }
+    }, [isChoreoConnectEnabled]);
 
     useEffect(() => {
         // Update the Swagger spec object when API object gets changed
@@ -243,32 +299,60 @@ const Policies: React.FC = () => {
      * @param {string} currentFlow depicts which flow needs to be udpated: request, response or fault
      */
     const updateApiOperations = (
-        updatedOperation: any, target: string, verb: string, currentFlow: string,
+        updatedOperation: any,
+        target: string,
+        verb: string,
+        currentFlow: string,
     ) => {
         let operationInAction = null;
         const newApiOperations: any = cloneDeep(apiOperations);
+        const newApiLevelPolicies: any = cloneDeep(apiLevelPolicies);
+        
         if (isChoreoConnectEnabled) {
-            operationInAction = newApiOperations.find((op: any) => op.target === target);
+            operationInAction =
+                selectedTab === operationLevelTab
+                    ? newApiOperations.find((op: any) => op.target === target)
+                    : null;
         } else {
-            operationInAction = newApiOperations.find((op: any) =>
-                op.target === target && op.verb.toLowerCase() === verb.toLowerCase());
+            operationInAction =
+                selectedTab === operationLevelTab
+                    ? newApiOperations.find(
+                        (op: any) => op.target === target && op.verb.toLowerCase() === verb.toLowerCase(),
+                    )
+                    : null;
         }
-        const operationFlowPolicy =
-            operationInAction.operationPolicies[currentFlow].find((p: any) => (p.policyId === updatedOperation.policyId
-                && p.uuid === updatedOperation.uuid));
 
-        if (operationFlowPolicy) {
-            // Edit operation policy
-            operationFlowPolicy.parameters = { ...updatedOperation.parameters };
+        const flowPolicy = (
+            selectedTab === apiLevelTab
+                ? newApiLevelPolicies
+                : operationInAction.operationPolicies
+        )[currentFlow].find(
+            (p: any) =>
+                p.policyId === updatedOperation.policyId &&
+                p.uuid === updatedOperation.uuid,
+        );
+
+        if (flowPolicy) {
+            // Edit policy
+            flowPolicy.parameters = { ...updatedOperation.parameters };
         } else {
-            // Add new operation policy
+            // Add new policy
             const uuid = uuidv4();
-            operationInAction.operationPolicies[currentFlow].push({ ...updatedOperation, uuid });
+            (selectedTab === apiLevelTab
+                ? newApiLevelPolicies
+                : operationInAction.operationPolicies)[currentFlow].push({
+                ...updatedOperation,
+                uuid,
+            });
         }
 
         // Finally update the state
-        setApiOperations(newApiOperations);
-    }
+        if (selectedTab === apiLevelTab) {
+            setApiLevelPolicies(newApiLevelPolicies);
+        } else {
+            setApiOperations(newApiOperations);
+        }
+    };
 
     /**
      * To update all API Operations with the provided policy.
@@ -298,20 +382,27 @@ const Policies: React.FC = () => {
      * @param {string} currentFlow depicts which flow needs to be udpated: request, response or fault
      */
     const deleteApiOperation = (uuid: string, target: string, verb: string, currentFlow: string) => {
-        const newApiOperations: any = cloneDeep(apiOperations);
-        const operationInAction = newApiOperations.find((op: any) =>
-            op.target === target && op.verb.toLowerCase() === verb.toLowerCase());
-        // Find the location of the element using the following logic
-        /*
-        [{a:'1'},{a:'2'},{a:'1'}].map( i => i.a) will output ['1', '2', '1']
-        [{a:'1'},{a:'2'},{a:'1'}].map( i => i.a).indexOf('2') will output the location of '2'
-        */
-        const index = operationInAction.operationPolicies[currentFlow].map((p: any) => p.uuid).indexOf(uuid);
-        // delete the element
-        operationInAction.operationPolicies[currentFlow].splice(index, 1);
+        if (selectedTab === apiLevelTab) {
+            const newApiLevelPolicies: any = cloneDeep(apiLevelPolicies);
+            const index = newApiLevelPolicies[currentFlow].map((p: any) => p.uuid).indexOf(uuid);
+            newApiLevelPolicies[currentFlow].splice(index, 1);
+            setApiLevelPolicies(newApiLevelPolicies);
+        } else {
+            const newApiOperations: any = cloneDeep(apiOperations);
+            const operationInAction = newApiOperations.find((op: any) =>
+                op.target === target && op.verb.toLowerCase() === verb.toLowerCase());
+            // Find the location of the element using the following logic
+            /*
+            [{a:'1'},{a:'2'},{a:'1'}].map( i => i.a) will output ['1', '2', '1']
+            [{a:'1'},{a:'2'},{a:'1'}].map( i => i.a).indexOf('2') will output the location of '2'
+            */
+            const index = operationInAction.operationPolicies[currentFlow].map((p: any) => p.uuid).indexOf(uuid);
+            // delete the element
+            operationInAction.operationPolicies[currentFlow].splice(index, 1);
 
-        // Finally update the state
-        setApiOperations(newApiOperations);
+            // Finally update the state
+            setApiOperations(newApiOperations);
+        }
     }
 
     /**
@@ -325,20 +416,41 @@ const Policies: React.FC = () => {
     const rearrangeApiOperations = (
         oldIndex: number, newIndex: number, target: string, verb: string, currentFlow: string,
     ) => {
-        const newApiOperations: any = cloneDeep(apiOperations);
-        let operationInAction = null;
-
-        if (!isChoreoConnectEnabled) {
-            operationInAction = newApiOperations.find((op: any) =>
-                op.target === target && op.verb.toLowerCase() === verb.toLowerCase());
+        if (selectedTab === apiLevelTab) {
+            const newAPIPolicies: any = cloneDeep(apiLevelPolicies);
+            const policyArray = newAPIPolicies[currentFlow];
+            newAPIPolicies[currentFlow] = arrayMove(policyArray, oldIndex, newIndex);
+            setApiLevelPolicies(newAPIPolicies);
         } else {
-            operationInAction = newApiOperations.find((op: any) => op.target === target);
+            let operationInAction = null;
+            const newApiOperations: any = cloneDeep(apiOperations);
+
+            if (!isChoreoConnectEnabled) {
+                operationInAction = newApiOperations.find((op: any) =>
+                    op.target === target && op.verb.toLowerCase() === verb.toLowerCase());
+            } else {
+                operationInAction = newApiOperations.find((op: any) => op.target === target);
+            }
+
+            const policyArray = operationInAction.operationPolicies[currentFlow];
+            operationInAction.operationPolicies[currentFlow] = arrayMove(policyArray, oldIndex, newIndex);
+            setApiOperations(newApiOperations);
         }
-        const policyArray = operationInAction.operationPolicies[currentFlow];
-        operationInAction.operationPolicies[currentFlow] = arrayMove(policyArray, oldIndex, newIndex);
-        
-        // Finally update the state
-        setApiOperations(newApiOperations);
+    };
+
+    const deletePolicyUuid = (operationPolicies: any) => {
+        // Iterating through the policy list of request flow, response flow and fault flow
+        for (const flow in operationPolicies) {
+            if (Object.prototype.hasOwnProperty.call(operationPolicies, flow)) {
+                const policyArray = operationPolicies[flow];
+                policyArray.forEach((policyItem: ApiPolicy) => {
+                    if (policyItem.uuid) {
+                        // eslint-disable-next-line no-param-reassign
+                        delete policyItem.uuid;
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -347,6 +459,7 @@ const Policies: React.FC = () => {
     const saveApi = () => {
         setUpdating(true);
         const newApiOperations: any = cloneDeep(apiOperations);
+        const newApiLevelPolicies: any = cloneDeep(apiLevelPolicies);
         let getewayTypeForPolicies = "wso2/synapse";
         const getewayVendorForPolicies = "wso2";
         // holds previous target name to handle resource level policies for CC
@@ -354,6 +467,7 @@ const Policies: React.FC = () => {
         // holds previous policies common to a given resource
         let previousPoliciesForCC: any; 
 
+        deletePolicyUuid(newApiLevelPolicies);
         // Set operation policies to the API object
         newApiOperations.forEach((operation: any, index: any, array: any) => {
 
@@ -364,19 +478,7 @@ const Policies: React.FC = () => {
 
             if (operation.operationPolicies) {
                 const { operationPolicies } = operation;
-
-                // Iterating through the policy list of request flow, response flow and fault flow
-                for (const flow in operationPolicies) {
-                    if (Object.prototype.hasOwnProperty.call(operationPolicies, flow)) {
-                        const policyArray = operationPolicies[flow];
-                        policyArray.forEach((policyItem: ApiPolicy) => {
-                            if (policyItem.uuid) {
-                                // eslint-disable-next-line no-param-reassign
-                                delete policyItem.uuid;
-                            }
-                        });
-                    }
-                }
+                deletePolicyUuid(operationPolicies);
                 previousPoliciesForCC = operationPolicies;
             }
             previousPolicyTargetForCC = operation.target;
@@ -387,15 +489,21 @@ const Policies: React.FC = () => {
             getewayTypeForPolicies = "wso2/choreo-connect";
         }
 
-        const updatePromise = updateAPI({ 
-            operations: newApiOperations, 
-            gatewayVendor: getewayVendorForPolicies, 
-            gatewayType: getewayTypeForPolicies});
+        const updatePromise = updateAPI({
+            operations: newApiOperations,
+            apiPolicies: newApiLevelPolicies,
+            gatewayVendor: getewayVendorForPolicies,
+            gatewayType: getewayTypeForPolicies
+        });
         updatePromise
             .finally(() => {
                 setUpdating(false);
             });
     }
+
+    const handleTabChange = (tab: number) => {
+        setSelectedTab(tab);
+    };
 
     // handles operations (verbs) for CC policy expansion.
     const handleVerbsForCC = (verbObject: any) => {
@@ -410,13 +518,24 @@ const Policies: React.FC = () => {
     /**
      * To memoize the value passed into ApiOperationContextProvider
      */
-    const providerValue = useMemo(() => ({
-        apiOperations,
-        updateApiOperations,
-        updateAllApiOperations,
-        deleteApiOperation,
-        rearrangeApiOperations,
-    }), [apiOperations, updateApiOperations, updateAllApiOperations, deleteApiOperation, rearrangeApiOperations])
+    const providerValue = useMemo(
+        () => ({
+            apiOperations,
+            apiLevelPolicies,
+            updateApiOperations,
+            updateAllApiOperations,
+            deleteApiOperation,
+            rearrangeApiOperations,
+        }),
+        [
+            apiOperations,
+            apiLevelPolicies,
+            updateApiOperations,
+            updateAllApiOperations,
+            deleteApiOperation,
+            rearrangeApiOperations,
+        ],
+    );
 
     if (!policies || !openAPISpec || updating) {
         return <Progress per={90} message='Loading Policies ...' />
@@ -482,6 +601,7 @@ const Policies: React.FC = () => {
                                                     allPolicies={allPolicies}
                                                     isChoreoConnectEnabled={isChoreoConnectEnabled}
                                                     policyList={policies}
+                                                    isAPILevelPolicy={false}
                                                 />
                                             </Grid>
                                         </OperationsGroup>
@@ -501,48 +621,116 @@ const Policies: React.FC = () => {
                     <Box display='flex' flexDirection='row'>
                         <Box width='65%' p={1} height='115vh' className={classes.operationListingBox}>
                             <Paper className={classes.paper}>
-                                {Object.entries(openAPISpec.paths).map(([target, verbObject]: [string, any]) => (
-
-                                    <Grid key={target} item xs={12}>
-                                        <OperationsGroup
-                                            openAPI={openAPISpec}
-                                            tag={target}
-                                            isChoreoConnectEnabled={isChoreoConnectEnabled}
-                                            verbObject={null}
+                                {apiPoliciesEnabled && (
+                                    <Box p={1}>
+                                        <Tabs
+                                            value={selectedTab}
+                                            onChange={(event, tab) =>
+                                                handleTabChange(tab)
+                                            }
+                                            indicatorColor='primary'
+                                            textColor='primary'
+                                            variant='fullWidth'
+                                            aria-label='Policies local to API'
+                                            className={classes.flowTabs}
                                         >
-                                            <Grid
-                                                container
-                                                direction='column'
-                                                justify='flex-start'
-                                                spacing={1}
-                                                alignItems='stretch'
+                                            <Tab
+                                                label={
+                                                    <span className={classes.flowTab}>
+                                                        API Level Policies
+                                                    </span>
+                                                }
+                                                id='api-level-policies-tab'
+                                                aria-controls='api-level-policies-tabpanel'
+                                                disabled={isChoreoConnectEnabled}
+                                            />
+                                            <Tab
+                                                label={
+                                                    <span className={classes.flowTab}>
+                                                        Operation Level Policies
+                                                    </span>
+                                                }
+                                                id='operation-level-policies-tab'
+                                                aria-controls='operation-level-policies-tabpanel'
+                                            />
+                                        </Tabs>
+                                        <Box pt={1} overflow='scroll'>
+                                            <PolicyPanel
+                                                index={apiLevelTab}
+                                                selectedTab={selectedTab}
+                                                openAPISpec={openAPISpec}
+                                                isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                                isAPILevelTabSelected
+                                                allPolicies={allPolicies}
+                                                policyList={policies}
+                                                api={localAPI}
+                                                expandedResource={expandedResource}
+                                                setExpandedResource={
+                                                    setExpandedResource
+                                                }
+                                            />
+                                            <PolicyPanel
+                                                index={operationLevelTab}
+                                                selectedTab={selectedTab}
+                                                openAPISpec={openAPISpec}
+                                                isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                                isAPILevelTabSelected={false}
+                                                allPolicies={allPolicies}
+                                                policyList={policies}
+                                                api={localAPI}
+                                                expandedResource={expandedResource}
+                                                setExpandedResource={
+                                                    setExpandedResource
+                                                }
+                                            />
+                                        </Box>
+                                    </Box>
+                                )}
+                                {!apiPoliciesEnabled && Object.entries(openAPISpec.paths).map(
+                                    ([target, verbObject]: [string, any]) => (
+                                        <Grid key={target} item xs={12}>
+                                            <OperationsGroup
+                                                openAPI={openAPISpec}
+                                                tag={target}
+                                                isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                                verbObject={null}
                                             >
-                                                {Object.entries(verbObject).map(([verb, operation]) => {
-                                                    return CONSTS.HTTP_METHODS.includes(verb) ? (
-                                                        <Grid
-                                                            key={`${target}/${verb}`}
-                                                            item className={classes.gridItem}
-                                                        >
-                                                            <OperationPolicy
-                                                                target={target}
-                                                                verb={verb}
-                                                                highlight
-                                                                operation={operation}
-                                                                api={localAPI}
-                                                                disableUpdate={isRestricted(['apim:api_create'], api)}
-                                                                expandedResource={expandedResource}
-                                                                setExpandedResource={setExpandedResource}
-                                                                policyList={policies}
-                                                                allPolicies={allPolicies}
-                                                                isChoreoConnectEnabled={isChoreoConnectEnabled}
-                                                            />
-                                                        </Grid>
-                                                    ) : null;
-                                                })}
-                                            </Grid>
-                                        </OperationsGroup>
-                                    </Grid>
-                                ))}
+                                                <Grid
+                                                    container
+                                                    direction='column'
+                                                    justify='flex-start'
+                                                    spacing={1}
+                                                    alignItems='stretch'
+                                                >
+                                                    {Object.entries(verbObject).map(([verb, operation]) => {
+                                                        return CONSTS.HTTP_METHODS.includes(verb) ? (
+                                                            <Grid
+                                                                key={`${target}/${verb}`}
+                                                                item className={classes.gridItem}
+                                                            >
+                                                                <OperationPolicy
+                                                                    target={target}
+                                                                    verb={verb}
+                                                                    highlight
+                                                                    operation={operation}
+                                                                    api={localAPI}
+                                                                    disableUpdate={
+                                                                        isRestricted(['apim:api_create'],api)
+                                                                    }
+                                                                    expandedResource={expandedResource}
+                                                                    setExpandedResource={setExpandedResource}
+                                                                    policyList={policies}
+                                                                    allPolicies={allPolicies}
+                                                                    isChoreoConnectEnabled={isChoreoConnectEnabled}
+                                                                />
+                                                            </Grid>
+                                                        ) : null;
+                                                    })}
+                                                </Grid>
+                                            </OperationsGroup>
+                                        </Grid>
+                                    )
+                                )}
                             </Paper>
                         </Box>
                         <Box width='35%' p={1}>

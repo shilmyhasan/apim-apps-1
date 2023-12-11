@@ -216,10 +216,7 @@
     "defaultMessage": "Create an API by providing a Name, a Version and a Context"
   },
   "Apis.Create.WSDL.ApiCreateWSDL.deprecated.msg": {
-    "defaultMessage": "This feature is deprecated. Please use the WSO2 Integration Studio as an alternative"
-  },
-  "Apis.Create.WSDL.ApiCreateWSDL.deprecated.msg.info.link.msg": {
-    "defaultMessage": "Integration Studio Documentation:"
+    "defaultMessage": "APIM supports only a limited set of capabilities with this feature. If you want to process complex WSDL/XML schema, please refer to the following documentation."
   },
   "Apis.Create.WSDL.ApiCreateWSDL.error.policies.not.available": {
     "defaultMessage": "Throttling policies not available. Contact your administrator"
@@ -2115,6 +2112,9 @@
   "Apis.Details.LifeCycle.CheckboxLabels.endpoints.provided": {
     "defaultMessage": "Endpoint provided"
   },
+  "Apis.Details.LifeCycle.CheckboxLabels.mandatory.properties.provided": {
+    "defaultMessage": "Mandatory Properties provided"
+  },
   "Apis.Details.LifeCycle.LifeCycle.change.not.allowed": {
     "defaultMessage": "* You are not authorized to change the life cycle state of the API due to insufficient permissions"
   },
@@ -2190,15 +2190,15 @@
   "Apis.Details.LifeCycle.PublishWithoutDeploy.see.more": {
     "defaultMessage": "See more"
   },
-  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.title": {
+  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.message": {
     "defaultMessage": "Deploy the API product before publishing the API"
   },
-  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.message": {
-    "defaultMessage": "The API will not be available for consumption unless it is deployed."
+  "Apis.Details.LifeCycle.components.confirm.publish.apiProducts.title": {
+    "defaultMessage": "Deploy API product before publishing"
   },
   "Apis.Details.LifeCycle.components.confirm.publish.message": {
     "defaultMessage": "The API will not be available for consumption unless it is deployed."
-  },  
+  },
   "Apis.Details.LifeCycle.components.confirm.publish.message.advertise.only": {
     "defaultMessage": "If you want to publish as a third party API, please provide the external endpoint and press \"Publish\"."
   },
@@ -2622,6 +2622,9 @@
   "Apis.Details.Policies.PoliciesExpansion.response.flow.title": {
     "defaultMessage": "Response Flow"
   },
+  "Apis.Details.Policies.PoliciesSection.info": {
+    "defaultMessage": "API level policies will execute before operation level policies"
+  },
   "Apis.Details.Policies.PolicyConfigurationEditDrawer.title": {
     "defaultMessage": "Configure {policy}"
   },
@@ -2814,14 +2817,17 @@
   "Apis.Details.ProductResources.ProductResourcesWorkspace.toolbar.\n                                                add.all": {
     "defaultMessage": "Add All"
   },
-  "Apis.Details.Properties.\n                                                            Properties.editable.show.in.devporal": {
+  "Apis.Details.Properties.\n                                                                Properties.editable.show.in.devporal": {
     "defaultMessage": "Show in devportal"
   },
   "Apis.Details.Properties.Properties.\n                                                                    show.add.property.invalid.error": {
     "defaultMessage": "Invalid property name"
   },
-  "Apis.Details.Properties.Properties.\n                                                                show.add.property.property.name": {
+  "Apis.Details.Properties.Properties.\n                                                                    show.add.property.property.name": {
     "defaultMessage": "Name"
+  },
+  "Apis.Details.Properties.Properties.\n                                                    show.add.property.custom.property.name": {
+    "defaultMessage": "{message}"
   },
   "Apis.Details.Properties.Properties.\n                                property.name.exists": {
     "defaultMessage": "Property name already exists"

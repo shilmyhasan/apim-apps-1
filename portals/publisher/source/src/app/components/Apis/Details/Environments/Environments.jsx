@@ -1687,7 +1687,7 @@ export default function Environments() {
                                                                             </Typography>
                                                                         </>
                                                                     )}
-                                                                    placement='bottom'
+                                                                    placement='right'
                                                                 >
                                                                     <TextField
                                                                         id='vhost-selector'
