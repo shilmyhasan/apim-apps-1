@@ -101,7 +101,17 @@ var getServiceProviderTenantDomain = function () {
         return "carbon.super";
     }
 };
-/* 
+
+var isEnableEmailUserName = function() {
+    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+    var carbonUtils = new CarbonUtils();
+    var isEnableEmailUserName = carbonUtils.getServerConfiguration().getFirstProperty("EnableEmailUserName");
+    if (isEnableEmailUserName != null)
+        return isEnableEmailUserName;
+    else
+        return false;
+};
+/*
 Deciding what to process as app context.
 If the setting.js has the following definition
 ( case 1 ) - appContext is '/publisher'
