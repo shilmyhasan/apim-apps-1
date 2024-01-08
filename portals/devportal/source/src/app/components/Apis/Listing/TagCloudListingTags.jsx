@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
     },
     mainPageList: {
         display: 'flex',
+        flexWrap: 'wrap',
     },
     mainPageAllApis: {
         width: '100%',
@@ -116,7 +117,7 @@ function TagCloudListingTags(props) {
             <List
                 component='nav'
                 aria-label='main mailbox folders'
-                className={classNames({ [classes.mainPageAllApis]: mainPage },
+                className={classNames({ [classes.mainPageList]: mainPage },
                     'tag-cloud-listing-wrapper')}
             >
                 {Object.keys(apisTagCloudGroup).map((keyInner) => {
