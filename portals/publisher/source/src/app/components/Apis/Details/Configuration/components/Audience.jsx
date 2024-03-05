@@ -27,15 +27,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
-    expansionPanel: {
-        marginBottom: theme.spacing(3),
-    },
-    expansionPanelDetails: {
-        flexDirection: 'column',
-    },
-    iconSpace: {
-        marginLeft: theme.spacing(0.5),
-    },
     actionSpace: {
         marginLeft: theme.spacing(20),
         marginTop: '-7px',
@@ -47,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
         margin: 0,
         display: 'inline-flex',
         lineHeight: 1.5,
+    },
+    container: {
+        marginBottom: 8,
     },
 }));
 
@@ -67,101 +61,103 @@ export default function Audience(props) {
     const classes = useStyles();
     return (
         <>
-            <Grid container alignItems='center'>
-                <Grid item>
-                    <Typography className={classes.subHeading} variant='h6' component='h4'>
-                        <FormattedMessage
-                            id='Apis.Details.Configuration.components.Audience.Validation.Title'
-                            defaultMessage='Audience Validation'
-                        />
-                    </Typography>
-                </Grid>
-                <Grid item>
-                    <FormControlLabel
-                        className={classes.actionSpace}
-                        control={(
-                            <Switch
-                                checked={isAudValidationEnabled}
-                                onChange={({ target: { checked } }) => {
-                                    setAudValidationEnabled(checked);
-                                    configDispatcher({
-                                        action: 'audienceValidationEnabled',
-                                        value: checked,
-                                    });
-                                    if (checked){
-                                        configDispatcher({
-                                            action: 'audienceAllowed',
-                                            value: [...audienceValues],
-                                        });
-                                    }
-                                }}
-                                color='primary'
-                                inputProps={{
-                                    'aria-label': 'AudienceValidation',
-                                }}
+            <Grid className={classes.container}>
+                <Grid container className={classes.container} alignItems='center'>
+                    <Grid item>
+                        <Typography className={classes.subHeading} variant='h6' component='h4'>
+                            <FormattedMessage
+                                id='Apis.Details.Configuration.components.Audience.Validation.Title'
+                                defaultMessage='Audience Validation'
                             />
-                        )}
-                    />
-                </Grid>
-            </Grid>
-            { isAudValidationEnabled && 
-                <Grid container>
-                    <Grid item md={12}>
-                        <Grid container>
-                            <Grid item md={12}>
-                                <Typography variant='subtitle1'>
-                                    <FormattedMessage
-                                        id='Apis.Details.Configuration.components.Audience.Validation.values'
-                                        defaultMessage='Allowed Audience'
-                                    />
-                                </Typography>
-                            </Grid>
-                            <Grid item md={12}>
-                                <ChipInput
-                                    style={{ marginBottom: 40, display: 'flex' }}
-                                    value={audienceValues}
-                                    helperText={(
-                                        <FormattedMessage
-                                            id={
-                                                'Apis.Details.Configuration.components'
-                                                + '.Audience.Validation.helper'
-                                            }
-                                            defaultMessage={
-                                                'Press `Enter` after typing the audience value,'
-                                                + ' to add a new audience'
-                                            }
-                                        />
-                                    )}
-                                    onAdd={(newValue) => {
-                                        let audValue = [...audienceValues,
-                                            newValue];
-                                        if (
-                                            audienceValues
-                                                .find((aud) => aud === newValue)
-                                        ) {
-                                            audValue = [...audienceValues];
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <FormControlLabel
+                            className={classes.actionSpace}
+                            control={(
+                                <Switch
+                                    checked={isAudValidationEnabled}
+                                    onChange={({ target: { checked } }) => {
+                                        setAudValidationEnabled(checked);
+                                        configDispatcher({
+                                            action: 'audienceValidationEnabled',
+                                            value: checked,
+                                        });
+                                        if (checked){
+                                            configDispatcher({
+                                                action: 'audienceAllowed',
+                                                value: [...audienceValues],
+                                            });
                                         }
-                                        setAudienceValues(audValue);
-                                        configDispatcher({
-                                            action: 'audienceAllowed',
-                                            value: audValue,
-                                        });
                                     }}
-                                    onDelete={(deletedValue) => {
-                                        const audValue = audienceValues
-                                            .filter((value) => value !== deletedValue);
-                                        setAudienceValues(audValue);
-                                        configDispatcher({
-                                            action: 'audienceAllowed',
-                                            value: audValue,
-                                        });
+                                    color='primary'
+                                    inputProps={{
+                                        'aria-label': 'AudienceValidation',
                                     }}
                                 />
+                            )}
+                        />
+                    </Grid>
+                </Grid>
+                { isAudValidationEnabled && 
+                    <Grid container>
+                        <Grid item md={12}>
+                            <Grid container>
+                                <Grid item md={12}>
+                                    <Typography variant='subtitle1'>
+                                        <FormattedMessage
+                                            id='Apis.Details.Configuration.components.Audience.Validation.values'
+                                            defaultMessage='Allowed Audience'
+                                        />
+                                    </Typography>
+                                </Grid>
+                                <Grid item md={12}>
+                                    <ChipInput
+                                        style={{ marginBottom: 40, display: 'flex' }}
+                                        value={audienceValues}
+                                        helperText={(
+                                            <FormattedMessage
+                                                id={
+                                                    'Apis.Details.Configuration.components'
+                                                    + '.Audience.Validation.helper'
+                                                }
+                                                defaultMessage={
+                                                    'Press `Enter` after typing the audience value,'
+                                                    + ' to add a new audience'
+                                                }
+                                            />
+                                        )}
+                                        onAdd={(newValue) => {
+                                            let audValue = [...audienceValues,
+                                                newValue];
+                                            if (
+                                                audienceValues
+                                                    .find((aud) => aud === newValue)
+                                            ) {
+                                                audValue = [...audienceValues];
+                                            }
+                                            setAudienceValues(audValue);
+                                            configDispatcher({
+                                                action: 'audienceAllowed',
+                                                value: audValue,
+                                            });
+                                        }}
+                                        onDelete={(deletedValue) => {
+                                            const audValue = audienceValues
+                                                .filter((value) => value !== deletedValue);
+                                            setAudienceValues(audValue);
+                                            configDispatcher({
+                                                action: 'audienceAllowed',
+                                                value: audValue,
+                                            });
+                                        }}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-            }
+                }
+            </Grid>
         </>
     );
 }
