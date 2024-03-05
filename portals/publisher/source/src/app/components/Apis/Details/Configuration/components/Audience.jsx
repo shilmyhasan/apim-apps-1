@@ -16,22 +16,15 @@
  * under the License.
  */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Box from '@material-ui/core/Box';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
+import ChipInput from 'material-ui-chip-input';
+import Grid from '@material-ui/core/Grid';
 import { FormattedMessage } from 'react-intl';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import API from 'AppData/api';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import { isRestricted } from 'AppData/AuthManager';
-import { APIContext } from 'AppComponents/Apis/Details/components/ApiContext';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
     expansionPanel: {
@@ -44,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(0.5),
     },
     actionSpace: {
-        margin: '-7px auto',
+        marginLeft: theme.spacing(20),
+        marginTop: '-7px',
+        marginBottom: '-7px',
     },
     subHeading: {
         fontSize: '1rem',
@@ -53,139 +48,120 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline-flex',
         lineHeight: 1.5,
     },
-    keyManagerSelect: {
-        minWidth: 180,
-    },
 }));
 
 /**
  *
- * Audience Validation
+ * Api Audience Validation
+ * @export
  * @param {*} props
  * @returns
  */
 export default function Audience(props) {
-    const [keyManagersConfigured, setKeyManagersConfigured] = useState([]);
     const {
         configDispatcher,
-        api: { keyManagers, securityScheme },
+        api: { audience },
     } = props;
+    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audience.length !== 0);
+    const [audienceValues, setAudienceValues] = useState(Array.isArray(audience) ? [...audience] : []);
     const classes = useStyles();
-    const handleChange = (event) => {
-        const newKeyManagers = [...keyManagers];
-        const { target: { checked, name } } = event;
-        if (newKeyManagers.indexOf(name) === -1 && checked) {
-            newKeyManagers.push(name);
-        } else if (newKeyManagers.indexOf(name) !== -1 && !checked) {
-            newKeyManagers.splice(newKeyManagers.indexOf(name), 1);
-        }
-        configDispatcher({
-            action: 'keymanagers',
-            value: newKeyManagers,
-        });
-    };
-    const { api } = useContext(APIContext);
-    useEffect(() => {
-        if (!isRestricted(['apim:api_create'], api)) {
-            API.keyManagers().then((response) => setKeyManagersConfigured(response.body.list));
-        }
-    }, []);
-    if (!securityScheme.includes('oauth2')) {
-        return (
-            <>
-                <Typography className={classes.subHeading} variant='subtitle2' component='h5'>
-                    <FormattedMessage
-                        id='Apis.Details.Configuration.components.KeyManager.configuration'
-                        defaultMessage='Key Manager Configuration'
-                    />
-                </Typography>
-                <Box ml={1} mb={2}>
-                    <Typography variant='caption'>
-                        <FormattedMessage
-                            id='Apis.Details.Configuration.components.oauth.disabled'
-                            defaultMessage='Key Manager configuration only valid when OAuth2 security is enabled.'
-                        />
-                    </Typography>
-                </Box>
-            </>
-        );
-    }
     return (
         <>
-            <h1>Hello</h1>
-            <Typography className={classes.subHeading} variant='subtitle2' component='h5'>
-                <FormattedMessage
-                    id='Apis.Details.Configuration.components.KeyManager.configuration'
-                    defaultMessage='Key Manager Configuration'
-                />
-            </Typography>
-            <Box ml={1}>
-                <RadioGroup
-                    value={keyManagers.includes('all') ? 'all' : 'selected'}
-                    onChange={({ target: { value } }) => configDispatcher({
-                        action: 'allKeyManagersEnabled',
-                        value: value === 'all',
-                    })}
-                    style={{ flexDirection: 'row' }}
-                >
+            <Grid container alignItems='center'>
+                <Grid item>
+                    <Typography className={classes.subHeading} variant='h6' component='h4'>
+                        <FormattedMessage
+                            id='Apis.Details.Configuration.components.Audience.Validation.Title'
+                            defaultMessage='Audience Validation'
+                        />
+                    </Typography>
+                </Grid>
+                <Grid item>
                     <FormControlLabel
-                        value='all'
-                        control={<Radio disabled={isRestricted(['apim:api_create'], api)} />}
-                        label={(
-                            <FormattedMessage
-                                id='Apis.Details.Configuration.components.KeyManager.allow.all'
-                                defaultMessage='Allow all'
+                        className={classes.actionSpace}
+                        control={(
+                            <Switch
+                                checked={isAudValidationEnabled}
+                                onChange={({ target: { checked } }) => {
+                                    setAudValidationEnabled(checked);
+                                    configDispatcher({
+                                        action: 'audienceValidationEnabled',
+                                        value: checked,
+                                    });
+                                    if (checked){
+                                        configDispatcher({
+                                            action: 'audienceAllowed',
+                                            value: [...audienceValues],
+                                        });
+                                    }
+                                }}
+                                color='primary'
+                                inputProps={{
+                                    'aria-label': 'AudienceValidation',
+                                }}
                             />
                         )}
                     />
-                    <FormControlLabel
-                        value='selected'
-                        control={<Radio disabled={isRestricted(['apim:api_create'], api)} />}
-                        label={(
-                            <FormattedMessage
-                                id='Apis.Details.Configuration.components.KeyManager.allow.selected'
-                                defaultMessage='Allow selected'
-                            />
-                        )}
-                    />
-                </RadioGroup>
-                {!keyManagers.includes('all') && (
-                    <Box display='flex' flexDirection='column' m={2}>
-                        <FormControl
-                            required
-                            error={!keyManagers || (keyManagers && keyManagers.length === 0)}
-                            component='fieldset'
-                            className={classes.formControl}
-                        >
-                            <FormLabel component='legend'>
-                                <FormattedMessage
-                                    id='Apis.Details.Configuration.components.KeyManager.more.than.one.info'
-                                    defaultMessage='Select one or more Key Managers'
-                                />
-                            </FormLabel>
-                            <FormGroup
-                                style={{ flexDirection: 'row' }}
-
-                            >
-                                {keyManagersConfigured.map((key) => (
-                                    <FormControlLabel
-                                        control={(
-                                            <Checkbox
-                                                color='primary'
-                                                checked={keyManagers.includes(key.name)}
-                                                disabled={!key.enabled}
-                                                onChange={handleChange}
-                                                name={key.name}
-                                            />
-                                        )}
-                                        label={key.displayName || key.name}
+                </Grid>
+            </Grid>
+            { isAudValidationEnabled && 
+                <Grid container>
+                    <Grid item md={12}>
+                        <Grid container>
+                            <Grid item md={12}>
+                                <Typography variant='subtitle1'>
+                                    <FormattedMessage
+                                        id='Apis.Details.Configuration.components.Audience.Validation.values'
+                                        defaultMessage='Allowed Audience'
                                     />
-                                ))}
-                            </FormGroup>
-                        </FormControl>
-                    </Box>
-                )}
-            </Box>
+                                </Typography>
+                            </Grid>
+                            <Grid item md={12}>
+                                <ChipInput
+                                    style={{ marginBottom: 40, display: 'flex' }}
+                                    value={audienceValues}
+                                    helperText={(
+                                        <FormattedMessage
+                                            id={
+                                                'Apis.Details.Configuration.components'
+                                                + '.Audience.Validation.helper'
+                                            }
+                                            defaultMessage={
+                                                'Press `Enter` after typing the audience value,'
+                                                + ' to add a new audience'
+                                            }
+                                        />
+                                    )}
+                                    onAdd={(newValue) => {
+                                        let audValue = [...audienceValues,
+                                            newValue];
+                                        if (
+                                            audienceValues
+                                                .find((aud) => aud === newValue)
+                                        ) {
+                                            audValue = [...audienceValues];
+                                        }
+                                        setAudienceValues(audValue);
+                                        configDispatcher({
+                                            action: 'audienceAllowed',
+                                            value: audValue,
+                                        });
+                                    }}
+                                    onDelete={(deletedValue) => {
+                                        const audValue = audienceValues
+                                            .filter((value) => value !== deletedValue);
+                                        setAudienceValues(audValue);
+                                        configDispatcher({
+                                            action: 'audienceAllowed',
+                                            value: audValue,
+                                        });
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            }
         </>
     );
 }
