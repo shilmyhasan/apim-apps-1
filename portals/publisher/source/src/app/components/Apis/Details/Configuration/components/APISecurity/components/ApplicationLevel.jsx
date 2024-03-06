@@ -39,6 +39,7 @@ import { FormattedMessage } from 'react-intl';
 import { isRestricted } from 'AppData/AuthManager';
 import { useAPI } from 'AppComponents/Apis/Details/components/ApiContext';
 import KeyManager from 'AppComponents/Apis/Details/Configuration/components/KeyManager';
+import Audience from 'AppComponents/Apis/Details/Configuration/components/Audience';
 import API from 'AppData/api';
 
 import {
@@ -238,6 +239,10 @@ export default function ApplicationLevel(props) {
                                 />
                             </FormHelperText>
                         </FormControl>
+                        <Audience
+                            api={api}
+                            configDispatcher={configDispatcher}
+                        />
                         {(apiFromContext.apiType === API.CONSTS.API) && (
                             <KeyManager
                                 api={api}
