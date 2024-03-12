@@ -93,6 +93,7 @@ const styles = (theme) => {
             position: 'relative',
             minHeight: theme.custom.banner.active ? `calc(100vh - ${64 + footerHeight}px)` : `calc(100vh - ${footerHeight}px)`,
             marginLeft: -4,
+            marginTop: theme.custom.banner.active ? 0 : '64px',
         },
         push: {
             height: 50,
@@ -151,7 +152,7 @@ const styles = (theme) => {
             position: 'fixed',
             width: '100%',
             boxSizing: 'border-box',
-            zIndex: 1,
+            zIndex: 1000,
         },
         listRoot: {
             padding: 0,
@@ -460,7 +461,7 @@ class Layout extends React.Component {
                             position='fixed'
                             className={classes.appBar}
                             id='appBar'
-                            style={{ top: active ? this.state.bannerHeight + 'px' : 'unset' }}
+                            style={{ top: active ? this.state.bannerHeight + 'px' : 0 }}
                         >
                             <Toolbar className={classes.toolbar} id='toolBar'>
                                 <Hidden mdUp>
@@ -645,7 +646,7 @@ class Layout extends React.Component {
                             </Toolbar>
                         </AppBar>
                         <main>
-                            <div className={classes.contentWrapper} style={{ paddingTop: active ? 'unset' : '64px' }}>{children}</div>
+                            <div className={classes.contentWrapper}>{children}</div>
                         </main>
                         {footerActive && <div className={classes.push} />}
                     </div>
