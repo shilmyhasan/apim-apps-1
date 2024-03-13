@@ -57,7 +57,7 @@ export default function Audience(props) {
         configDispatcher,
         api: { audiences },
     } = props;
-    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audiences.length !== 0 &&
+    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audiences !== null && audiences.length !== 0 &&
         !(audiences.includes(ALL_AUDIENCES_ALLOWED)));
     const [audienceValues, setAudienceValues] = useState(Array.isArray(audiences) ?
         audiences.filter(value => value !== ALL_AUDIENCES_ALLOWED) : []);

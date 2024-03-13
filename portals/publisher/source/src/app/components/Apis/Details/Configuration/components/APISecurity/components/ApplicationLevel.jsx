@@ -249,7 +249,7 @@ export default function ApplicationLevel(props) {
                                 configDispatcher={configDispatcher}
                             />
                         )}
-                        {(apiFromContext.apiType === API.CONSTS.API) && oauth2Enabled &&(
+                        {(apiFromContext.apiType === API.CONSTS.API) && oauth2Enabled && (
                             <KeyManager
                                 api={api}
                                 configDispatcher={configDispatcher}
