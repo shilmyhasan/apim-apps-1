@@ -150,7 +150,7 @@ function copyAPIConfig(api) {
             accessControlAllowHeaders: [...api.corsConfiguration.accessControlAllowHeaders],
             accessControlAllowMethods: [...api.corsConfiguration.accessControlAllowMethods],
         },
-        audience: [...(api.audience || [ALL_AUDIENCES_ALLOWED])],
+        audiences: [...(api.audiences || [ALL_AUDIENCES_ALLOWED])],
     };
     if (api.advertiseInfo) {
         apiConfigJson.advertiseInfo = {
@@ -284,11 +284,11 @@ export default function RuntimeConfiguration() {
                 return nextState;
             case 'audienceValidationEnabled':
                 if (value === false) {
-                    nextState.audience = [ALL_AUDIENCES_ALLOWED];
+                    nextState.audiences = [ALL_AUDIENCES_ALLOWED];
                 } 
                 return nextState;
             case 'audienceAllowed':
-                nextState.audience = value;
+                nextState.audiences = value;
                 return nextState;
             case 'keymanagers':
                 nextState.keyManagers = value;

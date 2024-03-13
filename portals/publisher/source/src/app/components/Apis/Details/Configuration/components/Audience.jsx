@@ -55,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Audience(props) {
     const {
         configDispatcher,
-        api: { audience },
+        api: { audiences },
     } = props;
-    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audience.length !== 0 &&
-        !(audience.includes(ALL_AUDIENCES_ALLOWED)));
-    const [audienceValues, setAudienceValues] = useState(Array.isArray(audience) ?
-        audience.filter(value => value !== ALL_AUDIENCES_ALLOWED) : []);
+    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audiences.length !== 0 &&
+        !(audiences.includes(ALL_AUDIENCES_ALLOWED)));
+    const [audienceValues, setAudienceValues] = useState(Array.isArray(audiences) ?
+        audiences.filter(value => value !== ALL_AUDIENCES_ALLOWED) : []);
     const classes = useStyles();
     return (
         <>
