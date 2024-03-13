@@ -25,6 +25,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { ALL_AUDIENCES_ALLOWED } from './APISecurity/components/apiSecurityConstants';
 
 const useStyles = makeStyles((theme) => ({
     actionSpace: {
@@ -56,8 +57,10 @@ export default function Audience(props) {
         configDispatcher,
         api: { audience },
     } = props;
-    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audience.length !== 0);
-    const [audienceValues, setAudienceValues] = useState(Array.isArray(audience) ? [...audience] : []);
+    const [isAudValidationEnabled, setAudValidationEnabled] = useState(audience.length !== 0 &&
+        !(audience.includes(ALL_AUDIENCES_ALLOWED)));
+    const [audienceValues, setAudienceValues] = useState(Array.isArray(audience) ?
+        audience.filter(value => value !== ALL_AUDIENCES_ALLOWED) : []);
     const classes = useStyles();
     return (
         <>

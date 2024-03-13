@@ -48,6 +48,7 @@ import {
     API_SECURITY_OAUTH_BASIC_AUTH_API_KEY_MANDATORY,
     API_SECURITY_MUTUAL_SSL_MANDATORY,
     API_SECURITY_MUTUAL_SSL,
+    ALL_AUDIENCES_ALLOWED,
 } from './components/APISecurity/components/apiSecurityConstants';
 
 const useStyles = makeStyles((theme) => ({
@@ -149,7 +150,7 @@ function copyAPIConfig(api) {
             accessControlAllowHeaders: [...api.corsConfiguration.accessControlAllowHeaders],
             accessControlAllowMethods: [...api.corsConfiguration.accessControlAllowMethods],
         },
-        audience: [...(api.audience || [])],
+        audience: [...(api.audience || [ALL_AUDIENCES_ALLOWED])],
     };
     if (api.advertiseInfo) {
         apiConfigJson.advertiseInfo = {
@@ -283,7 +284,7 @@ export default function RuntimeConfiguration() {
                 return nextState;
             case 'audienceValidationEnabled':
                 if (value === false) {
-                    nextState.audience = [];
+                    nextState.audience = [ALL_AUDIENCES_ALLOWED];
                 } 
                 return nextState;
             case 'audienceAllowed':
