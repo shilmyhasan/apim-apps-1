@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -39,6 +39,7 @@ import { FormattedMessage } from 'react-intl';
 import { isRestricted } from 'AppData/AuthManager';
 import { useAPI } from 'AppComponents/Apis/Details/components/ApiContext';
 import KeyManager from 'AppComponents/Apis/Details/Configuration/components/KeyManager';
+import Audience from 'AppComponents/Apis/Details/Configuration/components/Audience';
 import API from 'AppData/api';
 
 import {
@@ -84,6 +85,7 @@ export default function ApplicationLevel(props) {
     } = props;
     const [apiFromContext] = useAPI();
     const classes = useStyles();
+    const [oauth2Enabled, setOauth2Enabled] = useState(securityScheme.includes(DEFAULT_API_SECURITY_OAUTH2));
     let mandatoryValue = null;
     let hasResourceWithSecurity;
     if (apiFromContext.apiType === API.CONSTS.APIProduct) {
@@ -152,10 +154,13 @@ export default function ApplicationLevel(props) {
                                     <Checkbox
                                         disabled={isRestricted(['apim:api_create'], apiFromContext)}
                                         checked={securityScheme.includes(DEFAULT_API_SECURITY_OAUTH2)}
-                                        onChange={({ target: { checked, value } }) => configDispatcher({
-                                            action: 'securityScheme',
-                                            event: { checked, value },
-                                        })}
+                                        onChange={({ target: { checked, value } }) => {
+                                            setOauth2Enabled(checked);
+                                            configDispatcher({
+                                                action: 'securityScheme',
+                                                event: { checked, value },
+                                            });
+                                        }}
                                         value={DEFAULT_API_SECURITY_OAUTH2}
                                         color='primary'
                                     />
@@ -238,7 +243,13 @@ export default function ApplicationLevel(props) {
                                 />
                             </FormHelperText>
                         </FormControl>
-                        {(apiFromContext.apiType === API.CONSTS.API) && (
+                        {oauth2Enabled && (
+                            <Audience
+                                api={api}
+                                configDispatcher={configDispatcher}
+                            />
+                        )}
+                        {(apiFromContext.apiType === API.CONSTS.API) && oauth2Enabled && (
                             <KeyManager
                                 api={api}
                                 configDispatcher={configDispatcher}
