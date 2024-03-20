@@ -432,7 +432,7 @@ function Endpoints(props) {
             }
         } else {
             let isValidEndpoint = false;
-            if (endpointConfig.implementation_status === 'prototyped') {
+            if (endpointConfig.implementation_status === 'prototyped' && api.lifeCycleStatus === 'PROTOTYPED') {
                 if (implementationType === 'ENDPOINT') {
                     if (endpointConfig.production_endpoints && endpointConfig.production_endpoints.url === '') {
                         return {

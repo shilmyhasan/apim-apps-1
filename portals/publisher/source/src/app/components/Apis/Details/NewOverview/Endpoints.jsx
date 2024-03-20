@@ -53,7 +53,8 @@ const showEndpoint = (api, type) => {
 function Endpoints(props) {
     const { parentClasses, api } = props;
     const isPrototypedAvailable = api.endpointConfig !== null
-        && api.endpointConfig.implementation_status === 'prototyped';
+        && api.endpointConfig.implementation_status === 'prototyped'
+        && api.lifeCycleStatus === 'PROTOTYPED';
 
     return (
         <>
