@@ -284,8 +284,8 @@ class CreateScope extends React.Component {
             valid[id].error = 'Scope name cannot have spaces';
         }
 
-        const exist = scopes.find((scope) => {
-            return scope.scope.name === value;
+        const exist = scopes.find((scopeEntry) => {
+            return scopeEntry.scope.name === value;
         });
         if (!valid[id].invalid && exist) {
             valid[id].invalid = true;
