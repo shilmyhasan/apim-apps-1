@@ -82,7 +82,7 @@ export default function CheckboxLabels(props) {
         api, isMutualSSLEnabled, isCertAvailable, isAppLayerSecurityMandatory, isBusinessPlanAvailable, isAPIProduct,
     } = props;
     const isEndpointAvailable = !isAPIProduct
-        ? api.endpointConfig !== null && !api.endpointConfig.implementation_status
+        ? api.endpointConfig !== null
         : false;
     const lcState = isAPIProduct ? api.state : api.lifeCycleStatus;
 
