@@ -252,7 +252,6 @@ const useStyles = makeStyles((theme) => ({
     },
     dialogPaper: {
         width: '800px',
-        maxHeight: '800px',
     },
     createRevisionDialogStyle: {
         width: '800px',
