@@ -68,7 +68,7 @@ export default function APISecurity(props) {
         isEndpointAvailable = apiContext.api.endpointConfig !== null;
         isPrototyped = apiContext.api.endpointConfig !== null
              && apiContext.api.endpointConfig.implementation_status === 'prototyped'
-             && apiContext.api.lifeCycleStatus === 'PROTOTYPED';;
+             && apiContext.api.lifeCycleStatus === 'PROTOTYPED';
     }
 
     const haveMultiLevelSecurity = securityScheme.includes(API_SECURITY_MUTUAL_SSL)
