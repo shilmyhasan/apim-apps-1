@@ -253,14 +253,8 @@ const subscribeToApi = (props) => {
                         <FormHelperText id='policies-helper-text'>
                             <FormattedMessage
                                 id='Shared.AppsAndKeys.SubscribeToApi.available.policies'
-                                defaultMessage='Available Policies -'
-                            />{' '}
-                            {throttlingPolicyList.map((policy, index) => (
-                                <span key={policy.tierName}>
-                                    {policy.tierName}
-                                    {index !== throttlingPolicyList.length - 1 && <span>,</span>}
-                                </span>
-                            ))}
+                                defaultMessage='Select a Business Plan'
+                            />
                         </FormHelperText>
                     </FormControl>
                 )}

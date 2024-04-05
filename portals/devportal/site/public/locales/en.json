@@ -534,7 +534,7 @@
   "Shared.AppsAndKeys.KeyConfiguration.url.to.webapp": "http://url-to-webapp",
   "Shared.AppsAndKeys.KeyConfiguration.userinfo.endpoint.label": "User Info Endpoint",
   "Shared.AppsAndKeys.SubscribeToApi.application": "Application",
-  "Shared.AppsAndKeys.SubscribeToApi.available.policies": "Available Policies -",
+  "Shared.AppsAndKeys.SubscribeToApi.available.policies": "Select a Business Plan",
   "Shared.AppsAndKeys.SubscribeToApi.business.plan": "Business Plan",
   "Shared.AppsAndKeys.SubscribeToApi.select.an.application.to.subscribe": "Select an Application to subscribe",
   "Shared.AppsAndKeys.TokenExchangeKeyConfiguration.copied": "Copied",
