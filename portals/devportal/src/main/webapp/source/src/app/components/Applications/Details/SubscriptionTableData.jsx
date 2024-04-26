@@ -221,7 +221,8 @@ class SubscriptionTableData extends React.Component {
         const {
             subscription: {
                 apiInfo, status, throttlingPolicy, subscriptionId, apiId, requestedThrottlingPolicy,
-            },
+                apiProviderTenantDomain,
+            }, isCrossTenantSubscriptionEnabled,
         } = this.props;
         const {
             openMenu, isMonetizedAPI, isDynamicUsagePolicy, openMenuEdit, selectedTier, tiers,
@@ -241,6 +242,7 @@ class SubscriptionTableData extends React.Component {
                 <TableCell>
                     { link }
                 </TableCell>
+                {isCrossTenantSubscriptionEnabled && (<TableCell>{apiProviderTenantDomain}</TableCell>)}
                 <TableCell>{apiInfo.lifeCycleStatus}</TableCell>
                 <TableCell>{throttlingPolicy}</TableCell>
                 <TableCell>{status}</TableCell>
@@ -458,10 +460,12 @@ SubscriptionTableData.propTypes = {
         throttlingPolicy: PropTypes.string.isRequired,
         subscriptionId: PropTypes.string.isRequired,
         apiId: PropTypes.string.isRequired,
+        apiProviderTenantDomain: PropTypes.string.isRequired,
         status: PropTypes.string.isRequired,
         requestedThrottlingPolicy: PropTypes.string.isRequired,
     }).isRequired,
     handleSubscriptionDelete: PropTypes.func.isRequired,
     handleSubscriptionUpdate: PropTypes.func.isRequired,
+    isCrossTenantSubscriptionEnabled: PropTypes.bool.isRequired,
 };
 export default SubscriptionTableData;
