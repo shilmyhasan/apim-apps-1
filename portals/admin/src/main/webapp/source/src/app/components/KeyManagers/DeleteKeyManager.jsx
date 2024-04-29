@@ -31,7 +31,7 @@ import { useAppContext } from 'AppComponents/Shared/AppContext';
  * @param {JSON} props component props.
  * @returns {JSX} Loading animation.
  */
-function Delete({ updateList, dataRow }) {
+function Delete({ updateList, dataRow, isDisabled }) {
     const [deletaData, setDeleteData] = React.useState(true);
     const { id, type, isGlobal } = dataRow;
     const { isSuperTenant, user: { _scopes } } = useAppContext();
@@ -86,7 +86,7 @@ function Delete({ updateList, dataRow }) {
             triggerIconProps={{
                 color: 'primary',
                 component: 'span',
-                disabled: type === 'default' || deletaData || (isGlobal && !isSuperAdmin),
+                disabled: type === 'default' || (isGlobal && !isSuperAdmin) || isDisabled,
             }}
         >
             <DialogContentText>

@@ -27,7 +27,8 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import {
-    Chip, ButtonGroup, ClickAwayListener, MenuItem, MenuList, Popper, Paper,
+    Chip, ButtonGroup, ClickAwayListener, MenuItem, MenuList,
+    Popper, Paper, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@material-ui/core';
 import { useAppContext } from 'AppComponents/Shared/AppContext';
 import ContentBase from 'AppComponents/AdminPages/Addons/ContentBase';
@@ -47,6 +48,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ListKeyManagerUsages from './ListKeyManagerUsages';
 
 const useStyles = makeStyles((theme) => ({
     searchBar: {
@@ -107,7 +109,25 @@ function globalAPICall() {
     return new API()
         .getGlobalKeyManagersList()
         .then((result) => {
-            return result.body.list;
+            const resultList = result.body.list;
+            resultList.forEach((item) => {
+                if (item.tokenType === 'DIRECT') {
+                    // eslint-disable-next-line no-param-reassign
+                    item.tokenType = <Chip variant='outlined' color='primary' size='small' label='Direct' />;
+                } else if (item.tokenType === 'BOTH') {
+                    // eslint-disable-next-line no-param-reassign
+                    item.tokenType = (
+                        <div>
+                            <Chip variant='outlined' color='primary' size='small' label='Direct' />
+                            <Chip variant='outlined' color='primary' size='small' label='Exchange' />
+                        </div>
+                    );
+                } else {
+                    // eslint-disable-next-line no-param-reassign
+                    item.tokenType = <Chip variant='outlined' color='primary' size='small' label='Exchange' />;
+                }
+            });
+            return resultList;
         })
         .catch((error) => {
             throw error;
@@ -135,6 +155,9 @@ export default function ListKeyManagers() {
     const [open, setOpen] = useState(false);
     const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedArtifactId, setSelectedArtifactId] = useState(null);
+    const [selectedKMName, setSelectedKMName] = useState(null);
 
     const setKeyManagerState = (localKmList, globalKmList) => {
         const localKMArray = localKmList || [];
@@ -229,7 +252,7 @@ export default function ListKeyManagers() {
             const kmEnabled = rowData[5];
             return (
                 <Switch
-                    disabled={rowData[5] ? !isSuperAdmin : false}
+                    disabled={rowData[7] ? !isSuperAdmin : false}
                     checked={kmEnabled}
                     onChange={updateSomething}
                     color='primary'
@@ -238,6 +261,17 @@ export default function ListKeyManagers() {
             );
         },
     ];
+
+    const openDialog = (artifactId, kmName) => {
+        setSelectedArtifactId(artifactId);
+        setSelectedKMName(kmName);
+        setDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setSelectedArtifactId(null);
+        setDialogOpen(false);
+    };
 
     const columns = [
         {
@@ -314,11 +348,16 @@ export default function ListKeyManagers() {
             options: {
                 customBodyRender: (value, tableMeta) => {
                     if (typeof tableMeta.rowData === 'object') {
-                        const artifactId = tableMeta.rowData[tableMeta.rowData.length - 3];
+                        const artifactId = tableMeta.rowData[6];
+                        const kmName = tableMeta.rowData[0];
+                        const isGlobal = tableMeta.rowData[7];
                         return (
-                            <RouterLink to={`/settings/key-managers/usages/${artifactId}`}>
-                                <FormatListBulletedIcon aria-label='key-manager-delete-icon' />
-                            </RouterLink>
+                            <IconButton
+                                disabled={isGlobal && !isSuperAdmin}
+                                onClick={() => openDialog(artifactId, kmName)}
+                            >
+                                <FormatListBulletedIcon aria-label='key-manager-usage-icon' />
+                            </IconButton>
                         );
                     } else {
                         return <div />;
@@ -340,7 +379,13 @@ export default function ListKeyManagers() {
                     const itemName = (typeof tableMeta.rowData === 'object') ? tableMeta.rowData[0] : '';
                     if (editComponentProps && editComponentProps.routeTo) {
                         if (typeof tableMeta.rowData === 'object') {
-                            const artifactId = tableMeta.rowData[tableMeta.rowData.length - 3];
+                            const artifactId = tableMeta.rowData[6];
+                            let tooltipTitle = '';
+                            if (dataRow.isGlobal && !isSuperAdmin) {
+                                tooltipTitle = 'Global Key Manager only can be deleted by the super admin user';
+                            } else if (dataRow.isUsed) {
+                                tooltipTitle = 'Key manager is used by an API or an Application';
+                            }
                             return (
                                 <div data-testid={`${itemName}-actions`}>
                                     <RouterLink to={editComponentProps.routeTo + artifactId}>
@@ -348,11 +393,17 @@ export default function ListKeyManagers() {
                                             <EditIcon />
                                         </IconButton>
                                     </RouterLink>
-                                    <Delete
-                                        dataRow={dataRow}
-                                        updateList={fetchData}
-                                        isDisabled={dataRow.isGlobal && !isSuperAdmin}
-                                    />
+                                    <Tooltip
+                                        title={tooltipTitle}
+                                    >
+                                        <span>
+                                            <Delete
+                                                dataRow={dataRow}
+                                                updateList={fetchData}
+                                                isDisabled={(dataRow.isGlobal && !isSuperAdmin) || dataRow.isUsed}
+                                            />
+                                        </span>
+                                    </Tooltip>
                                     {addedActions && addedActions.map((action) => {
                                         const AddedComponent = action;
                                         return (
@@ -365,13 +416,25 @@ export default function ListKeyManagers() {
                             return (<div />);
                         }
                     }
+                    let tooltipTitle = '';
+                    if (dataRow.isGlobal && !isSuperAdmin) {
+                        tooltipTitle = 'Global Key Manager only can be deleted by the super admin user';
+                    } else if (dataRow.isUsed) {
+                        tooltipTitle = 'Key manager is used by an API or an Application';
+                    }
                     return (
                         <div data-testid={`${itemName}-actions`}>
-                            <Delete
-                                dataRow={dataRow}
-                                updateList={fetchData}
-                                isDisabled={dataRow.isGlobal && !isSuperAdmin}
-                            />
+                            <Tooltip
+                                title={tooltipTitle}
+                            >
+                                <span>
+                                    <Delete
+                                        dataRow={dataRow}
+                                        updateList={fetchData}
+                                        isDisabled={(dataRow.isGlobal && !isSuperAdmin) || dataRow.isUsed}
+                                    />
+                                </span>
+                            </Tooltip>
                             {addedActions && addedActions.map((action) => {
                                 const AddedComponent = action;
                                 return (
@@ -654,6 +717,24 @@ export default function ListKeyManagers() {
                             </Typography>
                         </div>
                     )}
+                    <Dialog
+                        open={dialogOpen}
+                        onClose={closeDialog}
+                        maxWidth='md'
+                        fullWidth
+                    >
+                        <DialogTitle>
+                            Key Manager Usages -
+                            {' '}
+                            {selectedKMName}
+                        </DialogTitle>
+                        <DialogContent>
+                            <ListKeyManagerUsages id={selectedArtifactId} />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={closeDialog}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </ContentBase>
         </>

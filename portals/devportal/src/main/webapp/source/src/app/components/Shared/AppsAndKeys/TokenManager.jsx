@@ -54,7 +54,7 @@ import WaitingForApproval from './WaitingForApproval';
 import { ScopeValidation, resourceMethods, resourcePaths } from '../ScopeValidation';
 import TokenMangerSummary from './TokenManagerSummary';
 import Progress from '../Progress';
-import RemmoveKeys from './RemoveKeys';
+import RemoveKeys from './RemoveKeys';
 import CleanKeys from './CleanKeys';
 
 const styles = (theme) => ({
@@ -157,44 +157,6 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
-const StyledTabs = withStyles({
-    indicator: {
-        display: 'flex',
-        justifyContent: 'center',
-        backgroundColor: 'transparent',
-        '& > span': {
-            width: '98%',
-            backgroundColor: '#ffffff',
-        },
-        transition: 'none',
-    },
-    flexContainer: {
-        borderBottom: 'solid 1px #666',
-        backgroundColor: '#efefef',
-        '& button:first-child': {
-            borderLeft: 'none',
-        },
-    },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
-
-const StyledTab = withStyles((theme) => ({
-    root: {
-        textTransform: 'none',
-        color: '#666',
-        fontWeight: theme.typography.fontWeightRegular,
-        fontSize: theme.typography.pxToRem(15),
-        marginRight: theme.spacing(1),
-        '&:focus': {
-            opacity: 1,
-        },
-    },
-    selected: {
-        backgroundColor: '#fff',
-        borderLeft: 'solid 1px #666',
-        borderRight: 'solid 1px #666',
-    },
-}))((props) => <Tab disableRipple {...props} />);
-
 /**
  *  @param {event} event event
  *  @param {String} value description
@@ -234,7 +196,6 @@ class TokenManager extends React.Component {
             importDisabled: false,
             mode: null,
             tokenType: 'DIRECT',
-            isExchangeTokenError: false,
         };
         this.keyStates = {
             COMPLETED: 'COMPLETED',
@@ -855,7 +816,8 @@ class TokenManager extends React.Component {
                                     disabled={!keymanager.enabled || (isKeyManagerAllowed
                                     && !isKeyManagerAllowed(keymanager.name)
                                     && ((keymanager.name !== 'Resident Key Manager')
-                                    || (!this.isTokenExchangeEnabled() && keymanager.name === 'Resident Key Manager')))}
+                                    || (!this.isTokenExchangeEnabled()
+                                    && keymanager.name === 'Resident Key Manager')))}
                                     id={keymanager.name.replace(/\s/g, '')}
                                 />
                             ))}
@@ -901,7 +863,7 @@ class TokenManager extends React.Component {
                                                 mode !== 'MAPPED'
                                                     ? (
                                                         <Box ml={2}>
-                                                            <RemmoveKeys
+                                                            <RemoveKeys
                                                                 keys={keys}
                                                                 selectedTab={selectedTab}
                                                                 keyMappingId={keyMappingId}
@@ -991,7 +953,8 @@ class TokenManager extends React.Component {
                                                                 || (isKeyManagerAllowed
                                                                     && !isKeyManagerAllowed(keymanager.name)
                                                                     && ((keymanager.name !== 'Resident Key Manager')
-                                                                    || (!this.isTokenExchangeEnabled() && keymanager.name === 'Resident Key Manager')))}
+                                                                    || (!this.isTokenExchangeEnabled()
+                                                                    && keymanager.name === 'Resident Key Manager')))}
                                                         >
                                                             {key
                                                                 ? this.props.intl.formatMessage({
@@ -1019,11 +982,13 @@ class TokenManager extends React.Component {
                                                             color='primary'
                                                             className={classes.button}
                                                             onClick={key ? this.updateKeys : this.generateKeys}
-                                                            disabled={hasError || (isLoading || !keymanager.enableOAuthAppCreation) || (mode && mode === 'MAPPED')
+                                                            disabled={hasError || (isLoading || !keymanager.enableOAuthAppCreation)
+                                                                || (mode && mode === 'MAPPED')
                                                             || (isKeyManagerAllowed
                                                                 && !isKeyManagerAllowed(keymanager.name)
                                                                 && ((keymanager.name !== 'Resident Key Manager')
-                                                                || (!this.isTokenExchangeEnabled() && keymanager.name === 'Resident Key Manager')))}
+                                                                || (!this.isTokenExchangeEnabled()
+                                                                && keymanager.name === 'Resident Key Manager')))}
                                                         >
                                                             {key
                                                                 ? this.props.intl.formatMessage({
@@ -1068,10 +1033,14 @@ class TokenManager extends React.Component {
                                         {/*
                                         Token exchange grant flow enable/disable logic
                                         Given that in the key manager selected has the tokenType='EXCHANGE'
-                                            If 'Resident Key Manager' disabled we can't proceed with token exchange. So need to show a banner
-                                            If 'Resident Key Manager' enabled, we need to check if the resident key manager 'exchange grant' is selected.
-                                            So we need to ask the user to select 'exchange grant' for the 'Resident Key Manager'.
-                                            If 'Resident Key Manager' enabled and 'exchange grant' is enabled the token exchange is possible
+                                            If 'Resident Key Manager' disabled we can't proceed with token exchange.
+                                            So need to show a banner
+                                            If 'Resident Key Manager' enabled,
+                                            we need to check if the resident key manager 'exchange grant' is selected.
+                                            So we need to ask the user to select 'exchange grant' for the
+                                            'Resident Key Manager'.
+                                            If 'Resident Key Manager' enabled and 'exchange grant' is enabled the token
+                                            exchange is possible
                                         */}
                                         <TokenExchangeKeyConfiguration
                                             keys={keys}
@@ -1209,7 +1178,6 @@ class TokenManager extends React.Component {
                                                         callbackError={hasError}
                                                         setValidating={this.setValidating}
                                                         defaultTokenEndpoint={defaultTokenEndpoint}
-                                                        selectedApp={selectedApp}
                                                     />
                                                     <div className={classes.generateWrapper}>
                                                         <ScopeValidation
@@ -1295,7 +1263,6 @@ class TokenManager extends React.Component {
                                                         callbackError={hasError}
                                                         setValidating={this.setValidating}
                                                         defaultTokenEndpoint={defaultTokenEndpoint}
-                                                        selectedApp={selectedApp}
                                                     />
                                                 </Box>
                                             </TabPanel>
@@ -1327,8 +1294,10 @@ class TokenManager extends React.Component {
                                                 <Typography>
                                                     <FormattedMessage
                                                         id='Shared.AppsAndKeys.ViewCurl.error'
-                                                        defaultMessage='Please generate the Consumer Key and Secret for Residence Key Manager with selecting the urn:ietf:params:oauth:grant-type:token-exchange grant type in
-                                                                            order to use the token Exchange Approach. '
+                                                        defaultMessage='Please generate the Consumer Key and Secret for
+                                                            Residence Key Manager with selecting the
+                                                            urn:ietf:params:oauth:grant-type:token-exchange grant type
+                                                            in order to use the token Exchange Approach. '
                                                     />
                                                 </Typography>
                                             </>
