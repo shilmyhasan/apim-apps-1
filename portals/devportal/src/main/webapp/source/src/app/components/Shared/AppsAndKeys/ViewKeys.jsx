@@ -16,7 +16,6 @@
  * under the License.
  */
 import React from 'react';
-import API from 'AppData/api';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -380,6 +379,11 @@ class ViewKeys extends React.Component {
                                                 <IconButton
                                                     aria-label='Copy to clipboard'
                                                     classes={{ root: classes.iconButton }}
+                                                    size='large'
+                                                    onClick={() => {
+                                                        navigator.clipboard.writeText(consumerKey)
+                                                            .then(() => this.onCopy('keyCopied'));
+                                                    }}
                                                 >
                                                     <Icon color='secondary'>
                                                         file_copy
@@ -426,6 +430,7 @@ class ViewKeys extends React.Component {
                                                 onClick={() => this.handleShowHidden('showCS')}
                                                 onMouseDown={this.handleMouseDownGeneric}
                                                 id='visibility-toggle-btn'
+                                                size='large'
                                             >
                                                 {showCS ? <Icon>visibility_off</Icon> : <Icon>visibility</Icon>}
                                             </IconButton>
@@ -448,7 +453,15 @@ class ViewKeys extends React.Component {
                                                     onCopy={() => this.onCopy('secretCopied')}
                                                     classes={{ root: classes.iconButton }}
                                                 >
-                                                    <IconButton aria-label='Copy to clipboard' classes={{ root: classes.iconButton }}>
+                                                    <IconButton
+                                                        aria-label='Copy to clipboard'
+                                                        classes={{ root: classes.iconButton }}
+                                                        size='large'
+                                                        onClick={() => {
+                                                            navigator.clipboard
+                                                                .writeText(consumerSecret).then(() => this.onCopy('secretCopied'));
+                                                        }}
+                                                    >
                                                         <Icon color='secondary'>file_copy</Icon>
                                                     </IconButton>
                                                 </CopyToClipboard>

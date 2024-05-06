@@ -24,15 +24,18 @@ import { FormattedMessage } from 'react-intl';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormDialogBase from 'AppComponents/AdminPages/Addons/FormDialogBase';
+import { useAppContext } from 'AppComponents/Shared/AppContext';
 
 /**
  * Render delete dialog box.
  * @param {JSON} props component props.
  * @returns {JSX} Loading animation.
  */
-function Delete({ updateList, dataRow }) {
+function Delete({ updateList, dataRow, isDisabled }) {
     const [deletaData, setDeleteData] = React.useState(true);
-    const { id, type } = dataRow;
+    const { id, type, isGlobal } = dataRow;
+    const { isSuperTenant, user: { _scopes } } = useAppContext();
+    const isSuperAdmin = isSuperTenant && _scopes.includes('apim:admin_settings');
     const fetchData = () => {
         const restApi = new API();
         restApi.getKeyManagerUsages(id)
@@ -54,8 +57,8 @@ function Delete({ updateList, dataRow }) {
         // todo: don't create a new promise
         const promiseAPICall = new Promise((resolve, reject) => {
             const restApi = new API();
-            restApi
-                .deleteKeyManager(id)
+            const api = isGlobal ? restApi.deleteGlobalKeyManager(id) : restApi.deleteKeyManager(id);
+            api
                 .then(() => {
                     resolve(
                         <FormattedMessage
@@ -83,7 +86,7 @@ function Delete({ updateList, dataRow }) {
             triggerIconProps={{
                 color: 'primary',
                 component: 'span',
-                disabled: type === 'default' || deletaData,
+                disabled: type === 'default' || (isGlobal && !isSuperAdmin) || isDisabled,
             }}
         >
             <DialogContentText>

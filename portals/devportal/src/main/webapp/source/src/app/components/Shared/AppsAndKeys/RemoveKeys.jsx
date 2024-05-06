@@ -25,7 +25,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-function RemmoveKeys(props) {
+function RemoveKeys(props) {
     const [open, setOpen] = React.useState(false);
     const {
         keyMappingId, keys, selectedTab, handleClickRemove,
@@ -97,4 +97,4 @@ function RemmoveKeys(props) {
     );
 }
 
-export default RemmoveKeys;
+export default RemoveKeys;
