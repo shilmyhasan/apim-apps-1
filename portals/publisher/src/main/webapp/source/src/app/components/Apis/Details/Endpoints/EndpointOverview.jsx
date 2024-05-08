@@ -1286,7 +1286,7 @@ function EndpointOverview(props) {
                         <EndpointSecurity
                             securityInfo={endpointSecurityInfo
                                 && (endpointSecurityInfo.sandbox
-                                    ? endpointSecurityInfo.sandbox : endpointSecurityInfo)}
+                                    ? endpointSecurityInfo.sandbox : null)}
                             onChangeEndpointAuth={handleEndpointSecurityChange}
                             saveEndpointSecurityConfig={saveEndpointSecurityConfig}
                             closeEndpointSecurityConfig={closeEndpointSecurityConfig}
