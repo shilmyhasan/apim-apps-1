@@ -104,11 +104,7 @@ class Avatar extends Component {
      */
     render() {
         const { classes, user } = this.props;
-        let username = user.name;
-        const count = (username.match(/@/g) || []).length;
-        if (user.name.endsWith('@carbon.super') && count <= 1) {
-            username = user.name.replace('@carbon.super', '');
-        }
+        let username = user.name.replace('@carbon.super', '');
         const readOnlyUser = AuthManager.isReadOnlyUser();
         const { anchorEl } = this.state;
         return (
