@@ -104,18 +104,8 @@ class Avatar extends Component {
      */
     render() {
         const { classes, user } = this.props;
-        let username = user.name;
-        const count = (username.match(/@/g) || []).length;
-        if (user.name.endsWith('@carbon.super') && count <= 1) {
-            username = user.name.replace('@carbon.super', '');
-        }
-        let usr;
+        let username = user.name.replace('@carbon.super', '');
         const readOnlyUser = AuthManager.isReadOnlyUser();
-        if (readOnlyUser) {
-            usr = username;
-        } else {
-            usr = username;
-        }
         const { anchorEl } = this.state;
         return (
             <>
@@ -131,7 +121,7 @@ class Avatar extends Component {
                 >
                     <AccountCircle className={classes.accountIcon} />
                     {' '}
-                    {usr}
+                    {username}
                     <Icon style={{ fontSize: '22px', marginLeft: '1px' }}>
                         keyboard_arrow_down
                     </Icon>
