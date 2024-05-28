@@ -100,7 +100,8 @@ const apiSchema = Joi.extend((joi) => ({
                 const composeQueryJSON = queryString.parse(composeQuery);
                 composeQueryJSON.limit = 10;
                 composeQueryJSON.offset = 0;
-                return API.validateAPIParameter(composeQueryJSON);
+                const api = new API();
+                return api.validateAPIParameter(composeQueryJSON);
             },
         },
     ],
