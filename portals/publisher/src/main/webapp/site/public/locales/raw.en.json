@@ -972,6 +972,15 @@
   "Apis.Details.Configuration.components.AdvertiseInfo.tooltip": {
     "defaultMessage": "Indicates if an API is a third party API. You can use third party APIs to expose an externally published API through API Manager."
   },
+  "Apis.Details.Configuration.components.Audience.Validation.Title": {
+    "defaultMessage": "Audience Validation"
+  },
+  "Apis.Details.Configuration.components.Audience.Validation.helper": {
+    "defaultMessage": "Press `Enter` after typing the audience value, to add a new audience"
+  },
+  "Apis.Details.Configuration.components.Audience.Validation.values": {
+    "defaultMessage": "Allowed Audience"
+  },
   "Apis.Details.Configuration.components.CORSConfiguration.allow.\n                                                    headers": {
     "defaultMessage": "Access Control Allow Headers"
   },
@@ -2258,6 +2267,9 @@
   },
   "Apis.Details.LifeCycle.LifeCycleUpdate.LifecyclePending.success": {
     "defaultMessage": "Lifecycle task deleted successfully"
+  },
+  "Apis.Details.LifeCycle.LifeCycleUpdate.approve.approveStatus": {
+    "defaultMessage": "Lifecycle state change action approved successfully"
   },
   "Apis.Details.LifeCycle.LifeCycleUpdate.error.certs": {
     "defaultMessage": "Error while retrieving certificates"
@@ -3938,6 +3950,9 @@
   },
   "Apis.Listing.components.ImageGenerator.ThumbnailView.saving.btn": {
     "defaultMessage": "Saving"
+  },
+  "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.remove.success": {
+    "defaultMessage": "Thumbnail removed successfully"
   },
   "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.upload.error": {
     "defaultMessage": "Error occurred while uploading new thumbnail. Please try again."
