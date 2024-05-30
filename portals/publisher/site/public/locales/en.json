@@ -1969,6 +1969,24 @@
       "value": "Indicates if an API is a third party API. You can use third party APIs to expose an externally published API through API Manager."
     }
   ],
+  "Apis.Details.Configuration.components.Audience.Validation.Title": [
+    {
+      "type": 0,
+      "value": "Audience Validation"
+    }
+  ],
+  "Apis.Details.Configuration.components.Audience.Validation.helper": [
+    {
+      "type": 0,
+      "value": "Press `Enter` after typing the audience value, to add a new audience"
+    }
+  ],
+  "Apis.Details.Configuration.components.Audience.Validation.values": [
+    {
+      "type": 0,
+      "value": "Allowed Audience"
+    }
+  ],
   "Apis.Details.Configuration.components.CORSConfiguration.allow.\n                                                    headers": [
     {
       "type": 0,
@@ -8029,6 +8047,12 @@
     {
       "type": 0,
       "value": "Saving"
+    }
+  ],
+  "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.remove.success": [
+    {
+      "type": 0,
+      "value": "Thumbnail removed successfully"
     }
   ],
   "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.upload.error": [
