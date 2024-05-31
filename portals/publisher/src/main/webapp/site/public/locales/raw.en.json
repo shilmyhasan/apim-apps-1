@@ -714,6 +714,12 @@
   "Apis.Details.Configuration.AuthHeader.helper.text": {
     "defaultMessage": "Authorization header name cannot contain spaces or special characters"
   },
+  "Apis.Details.Configuration.Components.APISecurity.Components.\n                                            ApplicationLevel.Client.Websocket": {
+    "defaultMessage": "Client Websocket"
+  },
+  "Apis.Details.Configuration.Components.APISecurity.Components.\n                                            ApplicationLevel.Websocket": {
+    "defaultMessage": "Application Level Security"
+  },
   "Apis.Details.Configuration.Components.APISecurity.Components.\n                                    ApplicationLevel.http": {
     "defaultMessage": "Application Level Security"
   },
@@ -809,9 +815,6 @@
   },
   "Apis.Details.Configuration.RuntimeConfigurationWebSocket.section.backend.websocket": {
     "defaultMessage": "Backend Websocket"
-  },
-  "Apis.Details.Configuration.RuntimeConfigurationWebSocket.section.client.websocket": {
-    "defaultMessage": "Client Websocket"
   },
   "Apis.Details.Configuration.RuntimeConfigurationWebSocket.topic.header": {
     "defaultMessage": "Runtime Configurations"
@@ -3932,6 +3935,9 @@
   },
   "Apis.Listing.components.ImageGenerator.ThumbnailView.saving.btn": {
     "defaultMessage": "Saving"
+  },
+  "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.remove.success": {
+    "defaultMessage": "Thumbnail removed successfully"
   },
   "Apis.Listing.components.ImageGenerator.ThumbnailView.thumbnail.upload.error": {
     "defaultMessage": "Error occurred while uploading new thumbnail. Please try again."
