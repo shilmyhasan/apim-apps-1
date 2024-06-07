@@ -28,7 +28,6 @@ import { FormattedMessage } from 'react-intl';
 import green from '@material-ui/core/colors/green';
 import APIValidation from 'AppData/APIValidation';
 import API from 'AppData/api';
-import AuthManager from 'AppData/AuthManager';
 
 const useStyles = makeStyles((theme) => ({
     mandatoryStar: {
@@ -94,34 +93,6 @@ function actualContext({ context, version }, isWebSocket) {
 }
 
 /**
- * This method used to  compare the context values
- * @param {*} value  input value
- * @param {*} result resulted value
- * @returns {Boolean} true or false
- */
-function checkContext(value, result) {
-    let tenant;
-    const user = AuthManager.getUser();
-    if (user.name && user.name.indexOf('@') !== -1) {
-        tenant = user.name.split('@')[user.name.split('@').length - 1];
-    }
-    let contextVal = value.startsWith('/') ? value.toLowerCase() : '/' + value.toLowerCase();
-    if (tenant !== null && tenant !== undefined && tenant !== 'carbon.super') {
-        contextVal = '/t/' + tenant + contextVal.toLowerCase();
-    }
-    if (
-        result.find(
-            (x) =>
-                x.context.toLowerCase() === contextVal.toLowerCase() ||
-                x.contextTemplate.toLowerCase() === contextVal.toLowerCase(),
-        ) !== undefined
-    ) {
-        return true;
-    }
-    return false;
-}
-
-/**
  * Improved API create default form
  *
  * @export
@@ -173,8 +144,7 @@ export default function DefaultAPIForm(props) {
                 const nameValidity = APIValidation.apiName.validate(value, { abortEarly: false }).error;
                 if (nameValidity === null) {
                     APIValidation.apiParameter.validate(field + ':' + value).then((result) => {
-                        if (result.body.list.length > 0 && value.toLowerCase() === result.body.list[0]
-                            .name?.toLowerCase()) {
+                        if (result === true) {
                             updateValidity({
                                 ...validity,
                                 name: { details: [{ message: 'Name ' + value + ' already exists' }] },
@@ -245,17 +215,11 @@ export default function DefaultAPIForm(props) {
 
                     if(contextValidity===null && charCount===0) {
                         APIValidation.apiParameter.validate(field + ':' + apiContext).then((result) => {
-                            const count = result.body.list.length;
-                            if (count > 0 && checkContext(value, result.body.list)) {
+                            if (result === true) {
                                 updateValidity({
                                     ...validity,
                                     // eslint-disable-next-line max-len
                                     context: { details: [{ message:  isWebSocket ? apiContext + ' channel already exists' : apiContext + ' context already exists' }] },
-                                });
-                            } else if (count > 0 && checkContext(value, result.body.list)) {
-                                updateValidity({
-                                    ...validity,
-                                    context: { details: [{ message: apiContext + ' dynamic context already exists' }] },
                                 });
                             } else {
                                 updateValidity({ ...validity, context: contextValidity, version: null });
