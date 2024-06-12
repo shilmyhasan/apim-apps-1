@@ -51,342 +51,374 @@
 	"RESTAPIScopes": {
 		"Scope": [
 			{
-				"Roles": "admin",
-				"Name": "apim:api_workflow_view"
+				"Name": "apim:api_publish",
+				"Roles": "admin,Internal/publisher"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:tenant_theme_manage"
+				"Name": "apim:api_create",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:api_workflow_approve"
+				"Name": "apim:api_generate_key",
+				"Roles": "admin,Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:scope_manage"
+				"Name": "apim:api_view",
+				"Roles": "admin,Internal/publisher,Internal/creator,Internal/analytics,Internal/observer"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:admin_application_view"
+				"Name": "apim:api_delete",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:bl_view"
+				"Name": "apim:api_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:admin_settings"
+				"Name": "apim:subscribe",
+				"Roles": "admin,Internal/subscriber,Internal/devops"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:environment_manage"
+				"Name": "apim:tier_view",
+				"Roles": "admin,Internal/publisher,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:admin_alert_manage"
+				"Name": "apim:tier_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:admin_operations"
+				"Name": "apim:bl_view",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:app_owner_change"
+				"Name": "apim:bl_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:bl_manage"
+				"Name": "apim:subscription_view",
+				"Roles": "admin,Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:role_manage"
+				"Name": "apim:subscription_block",
+				"Roles": "admin,Internal/publisher"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:environment_read"
+				"Name": "apim:subscription_manage",
+				"Roles": "admin,Internal/publisher"
 			},
 			{
-				"Roles": "admin,Internal/publisher",
-				"Name": "apim:monetization_usage_publish"
+				"Name": "apim:mediation_policy_view",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:tenantInfo"
+				"Name": "apim:mediation_policy_create",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:bot_data"
+				"Name": "apim:api_mediation_policy_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:api_manage"
+				"Name": "apim:api_workflow_view",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher,Internal/observer",
-				"Name": "apim:common_operation_policy_view"
+				"Name": "apim:api_workflow_approve",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/publisher",
-				"Name": "apim:subscription_manage"
+				"Name": "apim:admin",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "Internal/integration_dev",
-				"Name": "apim:api_list_view"
+				"Name": "apim:app_owner_change",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:common_operation_policy_manage"
+				"Name": "apim:app_import_export",
+				"Roles": "admin,Internal/devops"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:threat_protection_policy_create"
+				"Name": "apim:api_import_export",
+				"Roles": "admin,Internal/devops"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:mediation_policy_manage"
+				"Name": "apim:api_product_import_export",
+				"Roles": "admin,Internal/devops"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:ep_certificates_update"
+				"Name": "apim:label_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:ep_certificates_view"
+				"Name": "apim:label_read",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/publisher",
-				"Name": "apim:api_publish"
+				"Name": "apim:app_update",
+				"Roles": "admin,Internal/subscriber"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:client_certificates_update"
+				"Name": "apim:app_manage",
+				"Roles": "admin,Internal/subscriber,Internal/devops"
 			},
 			{
-				"Roles": "Internal/integration_dev",
-				"Name": "apim:api_definition_view"
+				"Name": "apim:sub_manage",
+				"Roles": "admin,Internal/subscriber,Internal/devops"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:api_generate_key"
+				"Name": "apim:monetization_usage_publish",
+				"Roles": "admin, Internal/publisher"
 			},
 			{
-				"Roles": "admin,Internal/publisher,Internal/creator,Internal/analytics,Internal/observer",
-				"Name": "apim:api_view"
+				"Name": "apim:document_create",
+				"Roles": "admin, Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:mediation_policy_create"
+				"Name": "apim:ep_certificates_update",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:pub_alert_manage"
+				"Name": "apim:client_certificates_update",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:document_manage"
+				"Name": "apim:client_certificates_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:ep_certificates_manage"
+				"Name": "apim:threat_protection_policy_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:comment_view"
+				"Name": "apim:document_manage",
+				"Roles": "admin, Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:comment_write"
+				"Name": "apim:client_certificates_add",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:tier_manage"
+				"Name": "apim:publisher_settings",
+				"Roles": "admin,Internal/creator,Internal/publisher,Internal/observer"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:comment_manage"
+				"Name": "apim:store_settings",
+				"Roles": "admin,Internal/subscriber"
 			},
 			{
-				"Roles": "admin,Internal/publisher,Internal/creator",
-				"Name": "apim:tier_view"
+				"Name": "apim:admin_settings",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:document_create"
+				"Name": "apim:client_certificates_view",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:threat_protection_policy_manage"
+				"Name": "apim:mediation_policy_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim:subscription_view"
+				"Name": "apim:threat_protection_policy_create",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:api_create"
+				"Name": "apim:ep_certificates_add",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:shared_scope_manage"
+				"Name": "apim:ep_certificates_view",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:client_certificates_add"
+				"Name": "apim:ep_certificates_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/devops",
-				"Name": "apim:api_product_import_export"
+				"Name": "apim:api_key",
+				"Roles": "admin,Internal/subscriber"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:api_delete"
+				"Name": "apim_analytics:admin",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:client_certificates_view"
+				"Name": "apim_analytics:monitoring_dashboard:own",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/devops",
-				"Name": "apim:api_import_export"
+				"Name": "apim_analytics:monitoring_dashboard:edit",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher,Internal/observer",
-				"Name": "apim:publisher_settings"
+				"Name": "apim_analytics:monitoring_dashboard:view",
+				"Roles": "admin,Internal/analytics"
 			},
 			{
-				"Roles": "admin,Internal/publisher",
-				"Name": "apim:subscription_block"
+				"Name": "apim_analytics:business_analytics:own",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:mediation_policy_view"
+				"Name": "apim_analytics:business_analytics:edit",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:client_certificates_manage"
+				"Name": "apim_analytics:business_analytics:view",
+				"Roles": "admin,Internal/analytics"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:ep_certificates_add"
+				"Name": "apim_analytics:api_analytics:own",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "apim:api_mediation_policy_manage"
+				"Name": "apim_analytics:api_analytics:edit",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:admin"
+				"Name": "apim_analytics:api_analytics:view",
+				"Roles": "admin,Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin,Internal/subscriber,Internal/devops",
-				"Name": "apim:app_manage"
+				"Name": "apim_analytics:application_analytics:own",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/subscriber",
-				"Name": "apim:store_settings"
+				"Name": "apim_analytics:application_analytics:edit",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/subscriber",
-				"Name": "apim:sub_alert_manage"
+				"Name": "apim_analytics:application_analytics:view",
+				"Roles": "admin,Internal/subscriber"
 			},
 			{
-				"Roles": "admin,Internal/devops",
-				"Name": "apim:app_import_export"
+				"Name": "apim:pub_alert_manage",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin,Internal/subscriber",
-				"Name": "apim:api_key"
+				"Name": "apim:sub_alert_manage",
+				"Roles": "admin,Internal/subscriber"
 			},
 			{
-				"Roles": "admin,Internal/subscriber,Internal/devops",
-				"Name": "apim:sub_manage"
+				"Name": "apim:tenantInfo",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/subscriber,Internal/devops",
-				"Name": "apim:subscribe"
+				"Name": "apim:tenant_theme_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "service_catalog:service_view"
+				"Name": "apim:admin_operations",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator",
-				"Name": "service_catalog:service_write"
+				"Name": "apim:shared_scope_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:label_manage"
+				"Name": "apim:admin_alert_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim:label_read"
+				"Name": "apim:bot_data",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/subscriber",
-				"Name": "apim:app_update"
+				"Name": "apim:scope_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:admin"
+				"Name": "apim:role_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:monitoring_dashboard:own"
+				"Name": "apim:environment_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:monitoring_dashboard:edit"
+				"Name": "apim:environment_read",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/analytics",
-				"Name": "apim_analytics:monitoring_dashboard:view"
+				"Name": "service_catalog:service_view",
+				"Roles": "admin,Internal/creator,Internal/publisher"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:business_analytics:own"
+				"Name": "service_catalog:service_write",
+				"Roles": "admin,Internal/creator"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:business_analytics:edit"
+				"Name": "apim:keymanagers_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/analytics",
-				"Name": "apim_analytics:business_analytics:view"
+				"Name": "apim:api_category",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:api_analytics:own"
+				"Name": "apim:policies_import_export",
+				"Roles": "admin,Internal/devops"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:api_analytics:edit"
+				"Name": "apim:admin_tier_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/creator,Internal/publisher",
-				"Name": "apim_analytics:api_analytics:view"
+				"Name": "apim:admin_tier_view",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:application_analytics:own"
+				"Name": "apim:api_provider_change",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin",
-				"Name": "apim_analytics:application_analytics:edit"
+				"Name": "apim:gateway_policy_manage",
+				"Roles": "admin"
 			},
 			{
-				"Roles": "admin,Internal/subscriber",
-				"Name": "apim_analytics:application_analytics:view"
+				"Name": "apim:gateway_policy_view",
+				"Roles": "admin,Internal/creator,Internal/publisher,Internal/observer"
 			},
 			{
-				"Roles": "admin,Internal/publisher,Internal/creator,Internal/analytics",
-				"Name": "apim:throttling_policy_manage"
+				"Name": "apim:comment_view",
+				"Roles": "admin,Internal/creator,Internal/publisher"
+			},
+			{
+				"Name": "apim:comment_write",
+				"Roles": "admin,Internal/creator,Internal/publisher"
+			},
+			{
+				"Name": "apim:comment_manage",
+				"Roles": "admin,Internal/creator,Internal/publisher"
+			},
+			{
+				"Name": "apim:throttling_policy_manage",
+				"Roles": "admin,Internal/publisher,Internal/creator,Internal/analytics"
+			},
+			{
+				"Name": "apim:admin_application_view",
+				"Roles": "admin"
+			},
+			{
+				"Name": "apim:api_list_view",
+				"Roles": "Internal/integration_dev"
+			},
+			{
+				"Name": "apim:api_definition_view",
+				"Roles": "Internal/integration_dev"
+			},
+			{
+				"Name": "apim:common_operation_policy_view",
+				"Roles": "admin,Internal/creator,Internal/publisher,Internal/observer"
+			},
+			{
+				"Name": "apim:common_operation_policy_manage",
+				"Roles": "admin,Internal/creator"
 			}
 		]
 	},
 	"SelfSignUp": {
-	  "SignUpRoles": [
-		"Internal/subscriber"
-	  ]
+		"SignUpRoles": [
+			"Internal/subscriber"
+		]
 	}
 }

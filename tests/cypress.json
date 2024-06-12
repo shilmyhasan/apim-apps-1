@@ -19,6 +19,10 @@
         "reportPageTitle": "custom-title"
       }
     },
+    "retries": {
+      "runMode": 2,
+      "openMode": 0
+    },
     "video": false,
     "scrollBehavior" : "nearest",
     "e2e": {

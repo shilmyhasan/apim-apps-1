@@ -20,20 +20,20 @@ import Utils from "@support/utils";
 
 describe("Create new revision and deploy", () => {
     const { publisher, password, } = Utils.getUserInfo();
-
+    let testApiId;
     before(function () {
         cy.loginToPublisher(publisher, password);
     })
 
     it.only("Create new revision and deploy", () => {
         Utils.addAPIWithEndpoints({}).then((apiId) => {
+            testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/overview`);
             // Going to deployments page
             cy.get('#left-menu-itemdeployments').click();
 
             // Deploying
-            cy.get('#add-description-btn')
-                .scrollIntoView().click({ "force": true });
+            cy.get('#add-description-btn').click();
             cy.get('#add-description').click({ "force": true });
             cy.get('#add-description').type('test');
             cy.get('#deploy-btn').should('not.have.class', 'Mui-disabled').click();
@@ -47,7 +47,10 @@ describe("Create new revision and deploy", () => {
             cy.get('[data-testid="Publish-btn"]').click();
 
             cy.get('button[data-testid="Demote to Created-btn"]').should('exist');
-            Utils.deleteAPI(apiId);
         });
     });
+
+    after(() => {
+        Utils.deleteAPI(testApiId);
+    })
 });

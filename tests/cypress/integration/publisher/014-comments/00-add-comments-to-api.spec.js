@@ -37,8 +37,8 @@ describe("adding comment", () => {
             testApiId = apiId;
             cy.intercept('**/comments?limit=5&offset=0').as('commentsGet');
             cy.visit(`/publisher/apis/${apiId}/comments`);
-            cy.wait('@commentsGet', {timeout: 30000}).then(() => {
-                cy.get('#standard-multiline-flexible').click();
+            cy.wait('@commentsGet', {timeout: 30000}).wait(3000).then(() => {
+                cy.get('#standard-multiline-flexible').wait(2000).click();
                 cy.get('#standard-multiline-flexible').type(comment);
                 cy.get('#add-comment-btn').click();
     
