@@ -38,7 +38,7 @@ describe("Add key manager", () => {
         const claimValueRegex2 = 'claimValueRegex2';
 
         cy.get('[data-testid="Key Managers"]').click();
-        cy.get('.MuiButton-label').contains('Add Key Manager').click();
+        cy.get('[data-testid="add-key-manager-button"]').contains('Add Key Manager').click();     
         cy.get('input[name="name"]').type(km);
         cy.get('input[name="displayName"]').type(km);
         cy.get('[data-testid="key-manager-type-select"]').click();
@@ -46,7 +46,7 @@ describe("Add key manager", () => {
         cy.get('input[name="wellKnownEndpoint"]').type(wellKnowUrl);
         // importing config'
         cy.intercept('**/key-managers/discover').as('importConfig');
-        cy.get('button span.MuiButton-label').contains('Import').click();
+        cy.get('#import-button').contains('Import').click();
         cy.wait('@importConfig', { timeout: 3000 }).then(() => {
             // filing the tokens
             cy.get('input[name="introspectionEndpoint"]').clear().type(introspectionEp);

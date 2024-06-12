@@ -135,8 +135,8 @@ describe("publisher-019-00 : Verify that read only user cannot create updte api"
         cy.get('#storeVisibility-selector').get('[aria-disabled="true"]').should('exist');
         cy.get('#tags').should('be.disabled');
         cy.get('#APICategories').get('[aria-disabled="true"]').should('exist');
-        cy.get('#github').should('not.be.visible');
-        cy.get('#slack').should('not.be.visible');
+        cy.get('#github').should('be.disabled');
+        cy.get('#slack').should('be.disabled');
         cy.get('input').get('[name="advertised"]').get('[value="true"').should('be.disabled');
         cy.get('input').get('[name="advertised"]').get('[value="false"]').should('be.disabled');
         cy.get('input').get('[name="defaultVersion"]').get('[value="true"').should('be.disabled');
@@ -289,8 +289,7 @@ describe("publisher-019-00 : Verify that read only user cannot create updte api"
         cy.get('[data-testid="save-api-properties-btn"]').should('be.disabled');
 
         //15. Deployments
-        cy.get('#react-root').scrollTo('bottom');
-        cy.get('#left-menu-itemdeployments').click();
+        cy.get('#left-menu-itemdeployments').scrollIntoView().click();
         cy.contains('button', 'Deploy New Revision').should('be.disabled');
         cy.contains('button', 'Restore').should('be.disabled');
         cy.contains('button', 'Delete').should('be.disabled');

@@ -21,6 +21,8 @@ function getSuperTenantEmail(username) {
     return `${username}@test.com`;
 }
 
+Cypress.config('pageLoadTimeout', 150000)
+
 describe("Self SignUp", () => {
     const {publisher, password, carbonUsername, carbonPassword} = Utils.getUserInfo();
     const testTenant = 'wso2.com';

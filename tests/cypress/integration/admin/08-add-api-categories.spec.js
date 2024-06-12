@@ -43,7 +43,7 @@ describe("Add API Categories and assign via publisher portal", () => {
 
         // Go to publisher
         cy.wait(500);
-        cy.visit(`/publisher/apis`);
+        cy.visit(`/publisher/apis`).wait(2000);
         Utils.addAPI({}).then((apiId) => {
             testApiId = apiId;
             cy.visit(`/publisher/apis/${apiId}/configuration`);

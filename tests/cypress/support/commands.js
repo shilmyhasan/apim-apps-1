@@ -153,7 +153,7 @@ Cypress.Commands.add('deleteApi', (name, version) => {
     cy.intercept('**/apis*').as('getApis');
     cy.visit(`/publisher/apis`);
     cy.wait('@getApis', {timeout: Cypress.config().largeTimeout}).then(() => {
-        cy.get(`[data-testid="${cardName}"]`).get(`[data-testid="${actionCardName}"]`).within(($panel) => {
+        cy.get(`[data-testid="${cardName}"]`).find(`[data-testid="${actionCardName}"]`).within(($panel) => {
             cy.get("#itest-id-deleteapi-icon-button", { timeout: 30000 }).click();
         }) 
         cy.get("#itest-id-deleteconf", { timeout:30000 }).click();

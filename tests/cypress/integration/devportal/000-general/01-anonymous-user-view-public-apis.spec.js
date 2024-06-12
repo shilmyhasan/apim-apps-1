@@ -71,7 +71,7 @@ describe("Anonymous view apis", () => {
     it.only("Download swagger", () => {
         cy.visit(`/devportal/apis?tenant=carbon.super`);
         cy.url().should('contain', '/apis?tenant=carbon.super');
-
+        cy.wait(3000)
         // intercepting overview page network calls
         cy.intercept('GET', '**/apis/**/comments**').as('getComments');
         cy.intercept('GET', '**/apis/**/documents').as('getDocuments');
