@@ -102,7 +102,8 @@ describe("publisher-013-04 : Life cycle support for API Products", () => {
 
                         //Demote to create
                         cy.get('[data-testid="Demote to Created-btn"]').click();
-
+                        cy.wait(3000);
+                        
                         //publish as a prototype
                         cy.get('[data-testid="Deploy as a Prototype-btn"]').click();
 

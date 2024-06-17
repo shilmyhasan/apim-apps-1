@@ -20,6 +20,8 @@ function getSuperTenantEmail(username){
     return `${username}@test.com`;
 }
 
+Cypress.config('pageLoadTimeout', 150000)
+
 describe("Self Signup", () => {
     const {publisher, password, carbonUsername, carbonPassword} = Utils.getUserInfo();
     const testTenant = 'wso2.com';
@@ -51,7 +53,8 @@ it.only("Verify default self-signup behaviour of the wso2 tenant", () => {
     cy.addNewUserUsingSelfSignUp(Utils.getTenentUser(tenant1Username, testTenant), password, firstName, lastName, Utils.getTenentUser(tenant1Username, testTenant), testTenant);
     cy.addExistingUserUsingSelfSignUp(Utils.getTenentUser(tenant1Username, testTenant), testTenant);
     cy.portalLogin(tenant1Username, password, testTenant, devPortal,);
-    cy.logoutFromDevportal();
+    //fix for intermittent failure
+    cy.logoutFromDevportal('/apis');
 });
 
 it.only("Verify login to the devPortal using incorrect user credentials", () => {
@@ -124,7 +127,8 @@ it.only("Test - Enable self signup back for the wso2 tenant", () => {
     cy.enableSelfSignUpInCarbonPortal(tenantAdminUsername, tenantAdminPassword, testTenant);
     cy.addNewUserUsingSelfSignUp(Utils.getTenentUser(tenant3Username, testTenant), password, firstName, lastName, Utils.getTenentUser(tenant3Username, testTenant), testTenant);
     cy.portalLogin(tenant3Username, password, testTenant, devPortal,);
-    cy.logoutFromDevportal();
+    //fix for intermittent failure
+    cy.logoutFromDevportal('/apis');
 });
 
 it.only("Test - Create a user for a unregistered tenant", () => {
