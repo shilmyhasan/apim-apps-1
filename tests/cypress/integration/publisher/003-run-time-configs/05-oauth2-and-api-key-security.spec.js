@@ -38,6 +38,7 @@ describe("publisher-003-05 : Runtime configuration - OAuth2 and api key security
             cy.get('#api-security-api-key-checkbox').click();
 
             cy.get('#save-runtime-configurations').click();
+            cy.wait(3000);
             cy.get('#save-runtime-configurations').then(() => {
                 cy.get('#applicationLevel').click();
                 cy.wait(2000);

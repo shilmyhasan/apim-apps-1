@@ -24,7 +24,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
     const { superTenant} = Utils.getUserInfo();
     const userName = 'admin';
     const password = 'admin';
-    const apiName= Utils.generateName();
+    const apiName= Utils.generateName().replace(/-/g, '_'); //temporary fix as search not working with '-' in query
     const apiVersion='1.0.0';
     let testApiId;
 
@@ -88,6 +88,7 @@ describe("publisher-020-00 : prototype apis with security disabled", () => {
             //login to dev portal as Developer
             cy.loginToDevportal(userName, password, tenant);
             cy.wait(5000)
+            cy.get('input[placeholder="Search APIs"]').click().type(apiName + "{enter}");
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`).contains('.api-thumb-chip-main','PRE-RELEASED').should('exist');
             cy.get('table > tbody > tr',{timeout: Cypress.config().largeTimeout}).get(`[area-label="Go to ${apiName}"]`, {timeout: 30000}).click();
             cy.contains('a',"Try out",{timeout: Cypress.config().largeTimeout}).click();
