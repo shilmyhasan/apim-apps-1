@@ -32,27 +32,10 @@ import { useAppContext } from 'AppComponents/Shared/AppContext';
  * @returns {JSX} Loading animation.
  */
 function Delete({ updateList, dataRow, isDisabled }) {
-    const [deletaData, setDeleteData] = React.useState(true);
     const { id, type, isGlobal } = dataRow;
     const { isSuperTenant, user: { _scopes } } = useAppContext();
     const isSuperAdmin = isSuperTenant && _scopes.includes('apim:admin_settings');
-    const fetchData = () => {
-        const restApi = new API();
-        restApi.getKeyManagerUsages(id)
-            .then((result) => {
-                if (result.body.apiCount === 0 && result.body.applicationCount === 0) {
-                    setDeleteData(false);
-                }
-            })
-            .catch((error) => {
-                const { status } = error;
-                throw (error);
-            });
-    };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
     const formSaveCallback = () => {
         // todo: don't create a new promise
         const promiseAPICall = new Promise((resolve, reject) => {
