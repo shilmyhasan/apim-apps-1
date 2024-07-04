@@ -27,6 +27,7 @@
     app.context = appUtils.getTenantBaseStoreContext();
     var utils = Packages.org.wso2.carbon.apimgt.impl.utils.APIUtil;
     var appContext = appUtils.getAppContextForServerUrl();
+    var URLDecoder = Packages.java.net.URLDecoder;
 
     var serverUrl = "";
     var forwarded_for = request.getHeader(app.customUrl.forwardedHeader);
@@ -59,8 +60,20 @@
     if (postLogoutRedirectURI == null) {
          postLogoutRedirectURI = serverUrl + appContext + LOGOUT_CALLBACK_URL_SUFFIX;
     }
+    var isAnonymousEnabled = false;
     if (request.getParameter("error") === "login_required" ) {
-            response.sendRedirect(postLogoutRedirectURI + "?referrer=" + referrer);
+        if (state != null) {
+            state = URLDecoder.decode(state, "UTF-8");
+            if (state.contains("/apis") || state.contains("/home")) {
+                isAnonymousEnabled = true;
+            }
+        }
+        if ((state != null) && (isAnonymousEnabled == true)) {
+            log.debug("Redirecting to: " + state);
+            response.sendRedirect(postLogoutRedirectURI + "?referrer=" + state);
+        } else {
+            response.sendRedirect(postLogoutRedirectURI);
+        }
     } else if (request.getParameter("code") != null) {
         var loginCallbackUrl = appUtils.getTenantBasedLoginCallBack();
         if (loginCallbackUrl == null) {
