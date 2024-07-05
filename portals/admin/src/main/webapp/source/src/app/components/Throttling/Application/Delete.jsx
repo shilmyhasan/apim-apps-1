@@ -50,11 +50,11 @@ function Delete(props) {
                 );
             })
             .catch(() => {
-                Alert.error (
+                Alert.error(
                     <FormattedMessage
                         id='Throttling.Application.Policy.policy.delete.error'
                         defaultMessage='Application Rate Limiting Policy could not be deleted.'
-                    />
+                    />,
                 );
                 return false;
             });

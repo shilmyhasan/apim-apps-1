@@ -50,11 +50,11 @@ function Delete(props) {
                 );
             })
             .catch(() => {
-                Alert.error (
+                Alert.error(
                     <FormattedMessage
                         id='Throttling.Blacklist.Policy.policy.delete.error'
                         defaultMessage='Deny Policy could not be deleted.'
-                    />
+                    />,
                 );
                 return false;
             });
