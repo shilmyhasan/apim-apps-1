@@ -50,11 +50,11 @@ function Delete(props) {
                 );
             })
             .catch(() => {
-                Alert.error (
+                Alert.error(
                     <FormattedMessage
                         id='Throttling.Custom.Policy.policy.delete.error'
                         defaultMessage='Custom Policy could not be deleted.'
-                    />
+                    />,
                 );
                 return false;
             });
