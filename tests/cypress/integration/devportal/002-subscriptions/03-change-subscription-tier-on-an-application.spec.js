@@ -32,8 +32,8 @@ describe("devportal-002-03 : Change subscription tier of an application", () => 
             testApiId = apiId;
             Utils.publishAPI(apiId).then(() => {
                 
-                cy.visit(`/publisher/apis/${apiId}/subscriptions`, {retryOnStatusCodeFailure: true});
-                cy.get('[data-testid="policy-checkbox-silver"]', {timeout: Cypress.config().largeTimeout});
+                cy.visit(`/publisher/apis/${apiId}/subscriptions`, { retryOnStatusCodeFailure: true });
+                cy.get('[data-testid="policy-checkbox-silver"]', { timeout: Cypress.config().largeTimeout});
                 cy.get('[data-testid="policy-checkbox-silver"]').click();
                 cy.get('#subscriptions-save-btn').click();
                 // TODO: Proper error handling here instead of cypress wait
