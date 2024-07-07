@@ -33,9 +33,9 @@ describe("publisher-005-00 : Upload thumbnail", () => {
             wait(1000);
             cy.visit(`/publisher/apis/${apiId}/overview`);
             testApiID = apiId;
-            cy.get('#itest-api-details-portal-config-acc', {timeout: 25000}).click();
+            cy.get('#itest-api-details-portal-config-acc', { timeout: 25000 }).click();
             cy.get('#left-menu-itemDesignConfigurations').click();
-            cy.get('#edit-api-thumbnail-btn').children('button').click({force:true});
+            cy.get('#edit-api-thumbnail-btn').children('button').click({ force:true });
             cy.get('#edit-api-thumbnail-upload').click();
 
             // upload the image
