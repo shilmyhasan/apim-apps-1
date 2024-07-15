@@ -18,9 +18,6 @@
 
 import Utils from "@support/utils";
 import 'cypress-file-upload';
-
-
-
 import AddNewRoleEnterDetailsPage from "./pages/carbon/AddNewRoleEnterDetailsPage";
 import AddNewRoleSelectPermissionPage from "./pages/carbon/AddNewRoleSelectPermissionPage";
 import RolesManagementPage from "./pages/carbon/RolesManagementPage";
@@ -388,9 +385,7 @@ Cypress.Commands.add('createResource', (ratelimitlevel, limitinglevel, httpverb,
 })
 
 
-Cypress.Commands.add('addProperty', (name, value, ifSendToDevPortal) => {
-    
-    
+Cypress.Commands.add('addProperty', (name, value, ifSendToDevPortal) => {  
     cy.wait(5000);
     cy.get('#left-menu-itemproperties', { timeout: Cypress.config().largeTimeout }).click();
     cy.get('#add-new-property', { timeout: Cypress.config().largeTimeout }).click({force : true});
@@ -814,8 +809,5 @@ Cypress.Commands.add('deleteRole', (roleName) => {
     RolesManagementPage.getDialogYesButton().click();
     cy.wait(3000)
     RolesManagementPage.getDialogOkButton(1).click(); // ok button of "No matching users found" dialog
-    //cy.get('#messagebox-info p').contains(`User ${userNametoDelete} is deleted successfully.`).should('exist');
     RolesManagementPage.getDialogOkButton(0).click(); // OK button of user delted successfully dialog box
 })
-
-
