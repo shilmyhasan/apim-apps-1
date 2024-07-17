@@ -222,7 +222,7 @@ const OperationPolicy: FC<OperationPolicyProps> = ({
                     </ExpansionPanelSummary>
                 }
                 <Divider light className={classes.customDivider} />
-                {!isChoreoConnectEnabled && (
+                {!isChoreoConnectEnabled && expandedResource === verb + target && (
                     <PoliciesExpansion
                         target={target}
                         verb={verb}
