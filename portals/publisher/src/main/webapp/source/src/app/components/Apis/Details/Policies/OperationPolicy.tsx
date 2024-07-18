@@ -179,14 +179,16 @@ const OperationPolicy: FC<OperationPolicyProps> = ({
                     </Grid>
                 </ExpansionPanelSummary>
                 <Divider light className={classes.customDivider} />
-                <PoliciesExpansion
-                    target={target}
-                    verb={verb}
-                    allPolicies={allPolicies}
-                    isChoreoConnectEnabled={isChoreoConnectEnabled}
-                    policyList={policyList}
-                    isAPILevelPolicy={false}
-                />
+                {expandedResource === verb + target && (
+                    <PoliciesExpansion
+                        target={target}
+                        verb={verb}
+                        allPolicies={allPolicies}
+                        isChoreoConnectEnabled={isChoreoConnectEnabled}
+                        policyList={policyList}
+                        isAPILevelPolicy={false}
+                    />
+                )}
             </ExpansionPanel>
         </>
     );
