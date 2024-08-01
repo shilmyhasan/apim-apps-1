@@ -4233,6 +4233,9 @@
   "Scopes.Usage.Usage.usage.cancel": {
     "defaultMessage": "Cancel"
   },
+  "Scopes.Usage.UsageView.resource.revision": {
+    "defaultMessage": "Revision"
+  },
   "Scopes.Usage.UsageView.resource.target": {
     "defaultMessage": "Target"
   },
